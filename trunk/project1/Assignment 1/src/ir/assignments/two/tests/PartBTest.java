@@ -25,19 +25,6 @@ public class PartBTest {
 		expected.add(new Frequency("word", 1));
 		
 		// Can't use assertArrayEquals because we want to compare the objects (not the object references)
-		compareFrequencyLists(expected, frequencies);
+		TestUtils.compareFrequencyLists(expected, frequencies);
 	}
-	
-	private void compareFrequencyLists(List<Frequency> expected, List<Frequency> actual) {
-		assertEquals(expected.size(), actual.size());
-		
-		for (int i = 0; i < expected.size(); i++)
-		{
-			Frequency expectedFreq = expected.get(i);
-			Frequency actualFreq = actual.get(i);
-			
-			assertEquals(expectedFreq.getText(), actualFreq.getText());
-			assertEquals(expectedFreq.getFrequency(), actualFreq.getFrequency());
-		}
-	}	
 }
