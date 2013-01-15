@@ -26,7 +26,7 @@ public class PartA {
 	}
 
 	private String[] tokenize(String content) {
-		File file = getTempFile("asdf");
+		File file = getTempFile(content);
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		deleteTempFile(file);
 		return words.toArray(new String[words.size()]);

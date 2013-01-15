@@ -1,12 +1,13 @@
 package ir.assignments.two.a;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A collection of utility methods for text processing.
  */
+
 public class Utilities {
 	/**
 	 * Reads the input text file and splits it into alphanumeric tokens.
@@ -27,14 +28,45 @@ public class Utilities {
 	 * 
 	 * @param input The file to read in and tokenize.
 	 * @return The list of tokens (words) from the input file, ordered by occurrence.
+	 * @throws FileNotFoundException 
 	 */
 	public static ArrayList<String> tokenizeFile(File input) {
 		// TODO Write body!
-		ArrayList<String> test = new ArrayList<String>();
-		test.add("one");
-		return test;
+
+		String strLine;
+		String[] tokens;
+		ArrayList<String> tokenize=new ArrayList<String>();
+		
+		try{
+		FileInputStream fstream = new FileInputStream(input);
+		DataInputStream in = new DataInputStream(fstream);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		
+			while((strLine=br.readLine()) != null)
+			{
+				strLine = strLine.toLowerCase();
+				String delims = "[^a-zA-Z0-9']+";
+				tokens = strLine.split(delims);
+				int tokenLength = tokens.length;
+
+				for (int j = 1; j <= tokenLength; j++)
+				{
+					System.out.println(tokens[j-1]);
+					tokenize.add(tokens[j-1]);
+				}
+				
+			}
+
+			br.close();
+			in.close();
+		}
+		catch (Exception e)	{
+			System.err.println("Error: " + e.getMessage());
+		}
+
+		return tokenize;
 	}
-	
+
 	/**
 	 * Takes a list of {@link Frequency}s and prints it to standard out. It also
 	 * prints out the total number of items, and the total number of unique items.
