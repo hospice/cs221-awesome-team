@@ -30,7 +30,9 @@ public class Utilities {
 	 */
 	public static ArrayList<String> tokenizeFile(File input) {
 		// TODO Write body!
-		return null;
+		ArrayList<String> test = new ArrayList<String>();
+		test.add("one");
+		return test;
 	}
 	
 	/**
