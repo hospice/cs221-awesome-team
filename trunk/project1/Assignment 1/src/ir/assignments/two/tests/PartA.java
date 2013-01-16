@@ -39,13 +39,12 @@ public class PartA {
 		String output = getPrintedFrequencies(frequencies);
 		String expected = getExpectedOutput(new String[] 
    		                                    { 
-   												"Total item count: 6",
-   												"Unique item count: 5",
+   												"Total item count: 5",
+   												"Unique item count: 4",
    												"",
    												"sentence   2",
    												"the        1",
    												"this       1",
-   												"repeats    1",
    												"word       1"
    		                                    });
 
@@ -96,7 +95,7 @@ public class PartA {
 		// Capture the output stream
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(baos));
-
+		
 		Utilities.printFrequencies(frequencies);
 
 		// Restore output stream to console window
