@@ -5,14 +5,18 @@ import ir.assignments.two.a.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class PalindromeFrequencyCounter {
 	/**
 	 * This class should not be instantiated.
 	 */
-	private PalindromeFrequencyCounter() {}
-	
+	private PalindromeFrequencyCounter() {
+	}
+
 	/**
 	 * Takes the input list of words and processes it, returning a list
 	 * of {@link Frequency}s.
@@ -43,11 +47,38 @@ public class PalindromeFrequencyCounter {
 	 * @return A list of palindrome frequencies, ordered by decreasing frequency.
 	 */
 	private static List<Frequency> computePalindromeFrequencies(ArrayList<String> words) {
-		// TODO Write body!
-		// You will likely want to create helper methods / classes to help implement this functionality
-		return null;
+		ArrayList<Frequency> freqs = new ArrayList<Frequency>();
+		if (words == null)
+			return freqs;
+
+		HashMap<String, Integer> palindromeDict = new HashMap<String, Integer>();
+		for (int i = 0; i < words.size(); i++) {
+			// Combine with all sequential words to find palindromes
+			String currentWords = "";
+			for (int j = i; j < words.size(); j++) { // start at i to check if single word is palindrome
+				currentWords += " " + words.get(j);
+				currentWords = currentWords.trim();
+				if (StringHelpers.isPalindrome(currentWords)) {
+					// Add to dictionary or increase frequency
+					int currentFreq = palindromeDict.containsKey(currentWords) ? palindromeDict.get(currentWords) : 0;
+					palindromeDict.put(currentWords, currentFreq + 1);
+				}
+			}
+		}
+
+		// Convert the dictionary to an array
+		for (String key : palindromeDict.keySet()) {
+			Frequency freq = new Frequency(key, palindromeDict.get(key));
+			freqs.add(freq);
+		}
+
+		// Order by string length (desc), then by freq, then by alphabetical order
+		PalindromeFrequencyComparator comparator = new PalindromeFrequencyComparator();
+		Collections.sort(freqs, comparator);
+
+		return freqs;
 	}
-	
+
 	/**
 	 * Runs the 2-gram counter. The input should be the path to a text file.
 	 * 
@@ -58,5 +89,31 @@ public class PalindromeFrequencyCounter {
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computePalindromeFrequencies(words);
 		Utilities.printFrequencies(frequencies);
+	}
+
+	private static class PalindromeFrequencyComparator implements Comparator<Frequency> {
+		@Override
+		public int compare(Frequency x, Frequency y) {
+			// Order by frequency decreasing
+			if (x.getText().length() < y.getText().length()) {
+				return 1;
+			}
+			else if (x.getText().length() > y.getText().length()) {
+				return -1;
+			}
+			else {
+				// Order by frequency on ties
+				if (x.getFrequency() < y.getFrequency()) {
+					return -1;
+				}
+				else if (x.getFrequency() > y.getFrequency()) {
+					return 1;
+				}
+				else {
+					// Alphabetical order for ties
+					return x.getText().compareTo(y.getText());
+				}
+			}
+		}
 	}
 }
