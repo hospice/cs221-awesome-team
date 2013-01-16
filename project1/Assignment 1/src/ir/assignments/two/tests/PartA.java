@@ -34,17 +34,19 @@ public class PartA {
 		frequencies.add(new Frequency("sentence", 2));
 		frequencies.add(new Frequency("the", 1));
 		frequencies.add(new Frequency("this", 1));
+		frequencies.add(new Frequency("repeats", 1));
 		frequencies.add(new Frequency("word", 1));
 
 		String output = getPrintedFrequencies(frequencies);
 		String expected = getExpectedOutput(new String[] 
    		                                    { 
-   												"Total item count: 5",
-   												"Unique item count: 4",
+   												"Total item count: 6",
+   												"Unique item count: 5",
    												"",
    												"sentence   2",
    												"the        1",
    												"this       1",
+   												"repeats    1",
    												"word       1"
    		                                    });
 
