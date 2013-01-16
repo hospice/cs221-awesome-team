@@ -5,7 +5,11 @@ import ir.assignments.two.a.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Count the total number of 2-grams and their frequencies in a text file.
@@ -44,8 +48,33 @@ public final class TwoGramFrequencyCounter {
 	 * @return A list of two gram frequencies, ordered by decreasing frequency.
 	 */
 	private static List<Frequency> computeTwoGramFrequencies(ArrayList<String> words) {
-		// TODO Write body!
-		return null;
+		ArrayList<Frequency> freqs = new ArrayList<Frequency>();
+		if (words == null)
+			return freqs;
+
+		// Form 2-grams by combining each entry with the following entry
+		HashMap<String, Integer> dictionary = new HashMap<String, Integer>();		
+		for (int i = 0; i < words.size() - 1; i++) {
+			String current = words.get(i);
+			String next = words.get(i + 1);
+			
+			//Either add a new entry in the dictionary or increase the frequency by 1
+			String twoGram = current + " " + next;
+			int currentValue = dictionary.containsKey(twoGram) ? dictionary.get(twoGram) : 0;
+			dictionary.put(twoGram, currentValue + 1);
+		}
+		
+		// Convert the dictionary to an array
+		for (String key : dictionary.keySet()) {
+			Frequency freq = new Frequency(key, dictionary.get(key));
+			freqs.add(freq);
+		}
+		
+		// Order by frequency (desc) and break ties with alphabetical order (asc)
+		FrequencyComparator comparator = new FrequencyComparator();
+		Collections.sort(freqs, comparator);
+		
+		return freqs;
 	}
 	
 	/**
@@ -58,5 +87,24 @@ public final class TwoGramFrequencyCounter {
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeTwoGramFrequencies(words);
 		Utilities.printFrequencies(frequencies);
+	}
+	
+	private static class FrequencyComparator implements Comparator<Frequency>
+	{
+	    @Override
+	    public int compare(Frequency x, Frequency y)
+	    {
+	    	// Order by frequency decreasing
+	    	if (x.getFrequency() < y.getFrequency()) {
+	    		return 1;
+	    	}
+	    	else if (x.getFrequency() > y.getFrequency()) {
+	    		return -1;
+	    	}
+	    	else {
+	    		// Alphabetical order for ties
+	    		return x.getText().compareTo(y.getText());
+	    	}
+	    }
 	}
 }

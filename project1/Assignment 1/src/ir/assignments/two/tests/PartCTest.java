@@ -34,6 +34,14 @@ public class PartCTest {
 		TestUtils.compareFrequencyLists(expected, actual);
 	}
 	
+	@Test
+	public void testComputerTwoGramFrequenciesNull() {
+		List<Frequency> actual = computeTwoGramFrequencies(null);
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		
+		TestUtils.compareFrequencyLists(expected, actual);
+	}
+	
 	private List<Frequency> computeTwoGramFrequencies(ArrayList<String> words) {
 		//Since the computeTwoGramFrequencies method is private, have to use reflection to call it
 		try {
