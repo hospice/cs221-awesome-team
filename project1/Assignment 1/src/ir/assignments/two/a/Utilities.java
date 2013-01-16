@@ -36,12 +36,12 @@ public class Utilities {
 		String strLine;
 		String[] tokens;
 		ArrayList<String> tokenize=new ArrayList<String>();
-		
+
 		try{
-		FileInputStream fstream = new FileInputStream(input);
-		DataInputStream in = new DataInputStream(fstream);
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		
+			FileInputStream fstream = new FileInputStream(input);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
 			while((strLine=br.readLine()) != null)
 			{
 				strLine = strLine.toLowerCase();
@@ -54,7 +54,7 @@ public class Utilities {
 					System.out.println(tokens[j-1]);
 					tokenize.add(tokens[j-1]);
 				}
-				
+
 			}
 
 			br.close();
@@ -108,5 +108,33 @@ public class Utilities {
 	 */
 	public static void printFrequencies(List<Frequency> frequencies) {
 		// TODO Write body!
+		String s;
+		int n;
+		int total=0;
+		int count=0;
+
+		for(int i=0; i<=frequencies.size()-1;i++){
+			n = frequencies.get(i).getFrequency();
+			total = total + n;
+			count = count + 1;
+		}
+
+		s = frequencies.get(0).getText();
+		
+		if(s.contains(" ")){		
+		System.out.println("Total 2-gram count: " + total);
+		System.out.println("Unique 2-gram count: " + count + "\n");
+		}
+		else{
+			System.out.println("Total item count: " + total);
+			System.out.println("Unique item count: " + count + "\n");
+		}
+		
+		for(int i=0; i<=frequencies.size()-1;i++){
+			s = frequencies.get(i).getText();
+			n = frequencies.get(i).getFrequency();
+			System.out.println(s +" \t"+ n);
+		}
+
 	}
 }
