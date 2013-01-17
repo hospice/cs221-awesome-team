@@ -31,8 +31,6 @@ public class Utilities {
 	 * @throws FileNotFoundException 
 	 */
 	public static ArrayList<String> tokenizeFile(File input) {
-		// TODO Write body!
-
 		String strLine;
 		String[] tokens;
 		ArrayList<String> tokenize=new ArrayList<String>();
@@ -44,6 +42,7 @@ public class Utilities {
 
 			while((strLine=br.readLine()) != null)
 			{
+				// Convert the input data string to lower case and then tokenize it
 				strLine = strLine.toLowerCase();
 				String delims = "[^a-zA-Z0-9']+";
 				tokens = strLine.split(delims);
@@ -107,34 +106,36 @@ public class Utilities {
 	 * @param frequencies A list of frequencies.
 	 */
 	public static void printFrequencies(List<Frequency> frequencies) {
-		// TODO Write body!
 		String s;
 		int n;
 		int total=0;
 		int count=0;
 
+		// Count total number and number of unique elements in string
 		for(int i=0; i<=frequencies.size()-1;i++){
 			n = frequencies.get(i).getFrequency();
 			total = total + n;
 			count = count + 1;
 		}
 
+		// Print total number and number of unique item or 2-grams to standard out
 		s = frequencies.get(0).getText();
-		
 		if(s.contains(" ")){		
 		System.out.println("Total 2-gram count: " + total);
-		System.out.println("Unique 2-gram count: " + count + "\n");
+		System.out.println("Unique 2-gram count: " + count);
+		System.out.println("");
 		}
 		else{
 			System.out.println("Total item count: " + total);
-			System.out.println("Unique item count: " + count + "\n");
+			System.out.println("Unique item count: " + count);
+			System.out.println("");
 		}
 		
+		// Print the string and its frequency count to standard out
 		for(int i=0; i<=frequencies.size()-1;i++){
 			s = frequencies.get(i).getText();
 			n = frequencies.get(i).getFrequency();
-			System.out.println(s +" \t"+ n);
-		}
-
+			System.out.println(String.format("%-9s %2d", s, n));
+		    }
 	}
 }
