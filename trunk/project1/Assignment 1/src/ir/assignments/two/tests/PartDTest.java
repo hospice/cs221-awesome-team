@@ -66,10 +66,7 @@ public class PartDTest {
 	private List<Frequency> computePalindromeFrequencies(ArrayList<String> words) {
 		//Since the computePalindromeFrequencies method is private, have to use reflection to call it
 		try {
-			Class params[] = new Class[] { ArrayList.class };
-			Method method = PalindromeFrequencyCounter.class.getDeclaredMethod("computePalindromeFrequencies", params);
-			method.setAccessible(true);
-			return (List<Frequency>) method.invoke(null, words);
+			return TestUtils.callPrivateStaticMethod(PalindromeFrequencyCounter.class, "computePalindromeFrequencies", new Object[] { words });
 		}
 		catch (SecurityException e) {
 			e.printStackTrace();

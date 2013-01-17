@@ -23,41 +23,40 @@ public class PartCTest {
 	public void testComputerTwoGramFrequencies() {
 		ArrayList<String> words = new ArrayList<String>(Arrays.asList(new String[] { "you", "think", "you", "know", "how", "you", "think" }));
 		List<Frequency> actual = computeTwoGramFrequencies(words);
-		
+
 		ArrayList<Frequency> expected = new ArrayList<Frequency>();
 		expected.add(new Frequency("you think", 2));
 		expected.add(new Frequency("how you", 1));
 		expected.add(new Frequency("know how", 1));
 		expected.add(new Frequency("think you", 1));
 		expected.add(new Frequency("you know", 1));
-		
+
 		TestUtils.compareFrequencyLists(expected, actual);
 	}
-	
+
 	@Test
 	public void testComputerTwoGramFrequencies_Null() {
 		List<Frequency> actual = computeTwoGramFrequencies(null);
 		ArrayList<Frequency> expected = new ArrayList<Frequency>();
-		
+
 		TestUtils.compareFrequencyLists(expected, actual);
 	}
-	
+
 	private List<Frequency> computeTwoGramFrequencies(ArrayList<String> words) {
 		//Since the computeTwoGramFrequencies method is private, have to use reflection to call it
 		try {
-			Class params[] = new Class[] { ArrayList.class };
-			Method method = TwoGramFrequencyCounter.class.getDeclaredMethod("computeTwoGramFrequencies", params);
-			method.setAccessible(true);
-			return (List<Frequency>)method.invoke(null, words);
-		} catch (SecurityException e) {
+			return TestUtils.callPrivateStaticMethod(TwoGramFrequencyCounter.class, "computeTwoGramFrequencies", new Object[] { words });
+		}
+		catch (IllegalArgumentException e) {
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
+		}
+		catch (NoSuchMethodException e) {
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		}
+		catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		
