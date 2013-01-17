@@ -67,8 +67,8 @@ public class PalindromeFrequencyCounter {
 		}
 
 		// Convert the dictionary to an array
-		for (String key : palindromeDict.keySet()) {
-			Frequency freq = new Frequency(key, palindromeDict.get(key));
+		for (String palindrome : palindromeDict.keySet()) {
+			Frequency freq = new Frequency(palindrome, palindromeDict.get(palindrome));
 			freqs.add(freq);
 		}
 
@@ -94,7 +94,7 @@ public class PalindromeFrequencyCounter {
 	private static class PalindromeFrequencyComparator implements Comparator<Frequency> {
 		@Override
 		public int compare(Frequency x, Frequency y) {
-			// Order by frequency decreasing
+			// Order by string length (descending)
 			if (x.getText().length() < y.getText().length()) {
 				return 1;
 			}
@@ -102,15 +102,15 @@ public class PalindromeFrequencyCounter {
 				return -1;
 			}
 			else {
-				// Order by frequency on ties
+				// Order by frequency on ties (descending)
 				if (x.getFrequency() < y.getFrequency()) {
-					return -1;
-				}
-				else if (x.getFrequency() > y.getFrequency()) {
 					return 1;
 				}
+				else if (x.getFrequency() > y.getFrequency()) {
+					return -1;
+				}
 				else {
-					// Alphabetical order for ties
+					// Alphabetical order for ties (ascending)
 					return x.getText().compareTo(y.getText());
 				}
 			}
