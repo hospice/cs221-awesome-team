@@ -53,20 +53,20 @@ public final class TwoGramFrequencyCounter {
 			return freqs;
 
 		// Form 2-grams by combining each entry with the following entry
-		HashMap<String, Integer> dictionary = new HashMap<String, Integer>();		
+		HashMap<String, Integer> palindromeDict = new HashMap<String, Integer>();		
 		for (int i = 0; i < words.size() - 1; i++) {
 			String current = words.get(i);
 			String next = words.get(i + 1);
 			
 			//Either add a new entry in the dictionary or increase the frequency by 1
 			String twoGram = current + " " + next;
-			int currentValue = dictionary.containsKey(twoGram) ? dictionary.get(twoGram) : 0;
-			dictionary.put(twoGram, currentValue + 1);
+			int currentValue = palindromeDict.containsKey(twoGram) ? palindromeDict.get(twoGram) : 0;
+			palindromeDict.put(twoGram, currentValue + 1);
 		}
 		
 		// Convert the dictionary to an array
-		for (String key : dictionary.keySet()) {
-			Frequency freq = new Frequency(key, dictionary.get(key));
+		for (String palindrome : palindromeDict.keySet()) {
+			Frequency freq = new Frequency(palindrome, palindromeDict.get(palindrome));
 			freqs.add(freq);
 		}
 		
@@ -94,7 +94,7 @@ public final class TwoGramFrequencyCounter {
 	    @Override
 	    public int compare(Frequency x, Frequency y)
 	    {
-	    	// Order by frequency decreasing
+	    	// Order by frequency (descending)
 	    	if (x.getFrequency() < y.getFrequency()) {
 	    		return 1;
 	    	}
@@ -102,7 +102,7 @@ public final class TwoGramFrequencyCounter {
 	    		return -1;
 	    	}
 	    	else {
-	    		// Alphabetical order for ties
+	    		// Alphabetical order for ties (ascending)
 	    		return x.getText().compareTo(y.getText());
 	    	}
 	    }

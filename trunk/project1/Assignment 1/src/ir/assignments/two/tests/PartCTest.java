@@ -35,7 +35,7 @@ public class PartCTest {
 	}
 	
 	@Test
-	public void testComputerTwoGramFrequenciesNull() {
+	public void testComputerTwoGramFrequencies_Null() {
 		List<Frequency> actual = computeTwoGramFrequencies(null);
 		ArrayList<Frequency> expected = new ArrayList<Frequency>();
 		
