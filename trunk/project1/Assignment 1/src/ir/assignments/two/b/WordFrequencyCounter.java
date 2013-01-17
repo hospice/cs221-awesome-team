@@ -4,7 +4,13 @@ import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Counts the total number of words and their frequencies in a text file.
@@ -44,7 +50,27 @@ public final class WordFrequencyCounter {
 	 */
 	public static List<Frequency> computeWordFrequencies(List<String> words) {
 		// TODO Write body!
-		return null;
+		
+		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
+		if (words == null)
+			return frequencies;
+
+		HashMap<String, Integer> map = new HashMap<String, Integer>();		
+		for (int i = 0; i < words.size(); i++) {
+			String wordstring = words.get(i);
+			int frequencycount = map.containsKey(wordstring) ? map.get(wordstring) : 0;
+			map.put(wordstring, frequencycount + 1);
+		}
+		
+		for (String st : map.keySet()) {
+			Frequency frequency = new Frequency(st, map.get(st));
+			frequencies.add(frequency);
+		}
+		
+		FrequencyComparator comparator = new FrequencyComparator();
+		Collections.sort(frequencies, comparator);
+		
+		return frequencies;
 	}
 	
 	/**
@@ -55,7 +81,27 @@ public final class WordFrequencyCounter {
 	public static void main(String[] args) {
 		File file = new File(args[0]);
 		List<String> words = Utilities.tokenizeFile(file);
+		//List<String> words = Arrays.asList(new String[] { "this", "sentence", "repeats", "the", "word", "sentence", "repeats", "repeats" });
 		List<Frequency> frequencies = computeWordFrequencies(words);
 		Utilities.printFrequencies(frequencies);
+	}
+	
+	private static class FrequencyComparator implements Comparator<Frequency>
+	{
+	    @Override
+	    public int compare(Frequency x, Frequency y)
+	    {
+	    	// Order by frequency (descending)
+	    	if (x.getFrequency() < y.getFrequency()) {
+	    		return 1;
+	    	}
+	    	else if (x.getFrequency() > y.getFrequency()) {
+	    		return -1;
+	    	}
+	    	else {
+	    		// Alphabetical order for ties (ascending)
+	    		return x.getText().compareTo(y.getText());
+	    	}
+	    }
 	}
 }

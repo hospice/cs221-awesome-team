@@ -19,9 +19,9 @@ public class PartBTest {
 		List<Frequency> frequencies = WordFrequencyCounter.computeWordFrequencies(words);
 		ArrayList<Frequency> expected = new ArrayList<Frequency>();
 		expected.add(new Frequency("sentence", 2));
+		expected.add(new Frequency("repeats", 1));
 		expected.add(new Frequency("the", 1));
 		expected.add(new Frequency("this", 1));
-		expected.add(new Frequency("repeats", 1));
 		expected.add(new Frequency("word", 1));
 		
 		// Can't use assertArrayEquals because we want to compare the objects (not the object references)
