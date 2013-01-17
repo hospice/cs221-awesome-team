@@ -49,7 +49,7 @@ public final class WordFrequencyCounter {
 	 * @return A list of word frequencies, ordered by decreasing frequency.
 	 */
 	public static List<Frequency> computeWordFrequencies(List<String> words) {
-		// TODO Write body!
+		
 		
 		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
 		if (words == null)
@@ -58,15 +58,19 @@ public final class WordFrequencyCounter {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();		
 		for (int i = 0; i < words.size(); i++) {
 			String wordstring = words.get(i);
+			
+			//Either add a new entry in the dictionary or increase the frequency by 1
 			int frequencycount = map.containsKey(wordstring) ? map.get(wordstring) : 0;
 			map.put(wordstring, frequencycount + 1);
 		}
 		
+		// Convert the dictionary to an array
 		for (String st : map.keySet()) {
 			Frequency frequency = new Frequency(st, map.get(st));
 			frequencies.add(frequency);
 		}
 		
+		// Order by frequency (desc) and break ties with alphabetical order (asc)
 		FrequencyComparator comparator = new FrequencyComparator();
 		Collections.sort(frequencies, comparator);
 		
@@ -81,7 +85,6 @@ public final class WordFrequencyCounter {
 	public static void main(String[] args) {
 		File file = new File(args[0]);
 		List<String> words = Utilities.tokenizeFile(file);
-		//List<String> words = Arrays.asList(new String[] { "this", "sentence", "repeats", "the", "word", "sentence", "repeats", "repeats" });
 		List<Frequency> frequencies = computeWordFrequencies(words);
 		Utilities.printFrequencies(frequencies);
 	}
