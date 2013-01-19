@@ -3,6 +3,10 @@ package ir.assignments.two.tests;
 import static org.junit.Assert.assertEquals;
 import ir.assignments.two.a.Frequency;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -41,5 +45,27 @@ public class TestUtils {
 		Object result = matchingMethod.invoke(null, params);
 		
 		return (K)result;
+	}
+	
+	public static File getTempFile(String content) {
+		File tmpFile = null;
+
+		try {
+			tmpFile = File.createTempFile("test", ".tmp");
+			FileWriter fstream = new FileWriter(tmpFile);
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(content);
+			// Close the output stream
+			out.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return tmpFile;
+	}
+
+	public static void deleteTempFile(File file) {
+		file.delete();
 	}
 }

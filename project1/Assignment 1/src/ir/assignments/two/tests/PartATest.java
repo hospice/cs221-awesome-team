@@ -3,6 +3,7 @@ package ir.assignments.two.tests;
 import static org.junit.Assert.*;
 import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
+import ir.assignments.two.d.StringHelpers;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -18,14 +19,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class PartA {
+public class PartATest {
 	private String lineSeparator = System.getProperty("line.separator");
 
 	@Test
 	public void testTokenizeFile() {
 		String[] words = tokenize("An input string, this is! (or is it?)");
-		assertArrayEquals(new String[] { "an", "input", "string", "this", "is",
-				"or", "is", "it" }, words);
+		String[] expected = new String[] { "an", "input", "string", "this", "is", "or", "is", "it" };
+		assertArrayEquals(expected, words);
 	}
 
 	@Test
@@ -38,7 +39,7 @@ public class PartA {
 		frequencies.add(new Frequency("word", 1));
 
 		String output = getPrintedFrequencies(frequencies);
-		String expected = getExpectedOutput(new String[] 
+		String expected = StringHelpers.join(new String[] 
    		                                    { 
    												"Total item count: 6",
    												"Unique item count: 5",
@@ -48,7 +49,7 @@ public class PartA {
    												"this      1",
    												"repeats   1",
    												"word      1"
-   		                                    });
+   		                                    }, lineSeparator);
 
 		assertEquals(expected, output);
 	}
@@ -63,7 +64,7 @@ public class PartA {
 		frequencies.add(new Frequency("you know", 1));
 
 		String output = getPrintedFrequencies(frequencies);
-		String expected = getExpectedOutput(new String[] 
+		String expected = StringHelpers.join(new String[]
 		                                    { 
 												"Total 2-gram count: 6",
 												"Unique 2-gram count: 5",
@@ -73,24 +74,23 @@ public class PartA {
 												"know how   1",
 												"think you  1",
 												"you know   1"
-		                                    });
+		                                    }, lineSeparator);
 		assertEquals(expected, output);
 	}
 
 	private String[] tokenize(String content) {
-		File file = getTempFile(content);
-		ArrayList<String> words = Utilities.tokenizeFile(file);
-		deleteTempFile(file);
-		return words.toArray(new String[words.size()]);
-	}
-
-	private String getExpectedOutput(String[] lines) {
-		String output = "";
-		for (String line : lines)
-		{
-			output += line + lineSeparator;
+		// Tokenize the string by creating a temporary file to pass to the tokenize function
+		File file = TestUtils.getTempFile(content);
+		ArrayList<String> words = null;
+		
+		try {
+			words = Utilities.tokenizeFile(file);
 		}
-		return output;
+		finally {
+			TestUtils.deleteTempFile(file);
+		}
+		
+		return words.toArray(new String[words.size()]);
 	}
 
 	private String getPrintedFrequencies(ArrayList<Frequency> frequencies) {
@@ -98,33 +98,12 @@ public class PartA {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(baos));
 		
+		// Run the print
 		Utilities.printFrequencies(frequencies);
 
 		// Restore output stream to console window
 		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 
 		return baos.toString();
-	}
-
-	private File getTempFile(String content) {
-		File tmpFile = null;
-
-		try {
-			tmpFile = File.createTempFile("test", ".tmp");
-			FileWriter fstream = new FileWriter(tmpFile);
-			BufferedWriter out = new BufferedWriter(fstream);
-			out.write(content);
-			// Close the output stream
-			out.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return tmpFile;
-	}
-
-	private void deleteTempFile(File file) {
-		file.delete();
 	}
 }

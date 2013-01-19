@@ -19,4 +19,14 @@ public class StringHelpers {
 		
 		return true;
 	}
+	
+	public static String join(String[] strs, String separator) {
+		// Join the separate strings into one string with the given separator
+		String output = "";
+		for (String str : strs)
+		{
+			output += str + separator;
+		}
+		return output;
+	}
 }
