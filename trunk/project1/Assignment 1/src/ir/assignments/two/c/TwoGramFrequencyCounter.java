@@ -74,7 +74,6 @@ public final class TwoGramFrequencyCounter {
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
 		FrequencyComparator comparator = new FrequencyComparator();
 		Collections.sort(freqs, comparator);
-		Utilities.printFrequencies(freqs);
 
 		return freqs;
 	}
