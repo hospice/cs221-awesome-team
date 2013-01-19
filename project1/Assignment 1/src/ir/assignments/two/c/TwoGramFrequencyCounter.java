@@ -2,6 +2,7 @@ package ir.assignments.two.c;
 
 import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
+import ir.assignments.two.b.FrequencyComparator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,24 +88,5 @@ public final class TwoGramFrequencyCounter {
 		ArrayList<String> words = Utilities.tokenizeFile(file);
 		List<Frequency> frequencies = computeTwoGramFrequencies(words);
 		Utilities.printFrequencies(frequencies);
-	}
-	
-	private static class FrequencyComparator implements Comparator<Frequency>
-	{
-	    @Override
-	    public int compare(Frequency x, Frequency y)
-	    {
-	    	// Order by frequency (descending)
-	    	if (x.getFrequency() < y.getFrequency()) {
-	    		return 1;
-	    	}
-	    	else if (x.getFrequency() > y.getFrequency()) {
-	    		return -1;
-	    	}
-	    	else {
-	    		// Alphabetical order for ties (ascending)
-	    		return x.getText().compareTo(y.getText());
-	    	}
-	    }
 	}
 }
