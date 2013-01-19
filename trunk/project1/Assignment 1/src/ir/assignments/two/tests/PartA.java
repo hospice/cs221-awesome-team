@@ -43,11 +43,11 @@ public class PartA {
    												"Total item count: 6",
    												"Unique item count: 5",
    												"",
-   												"sentence   2",
-   												"the        1",
-   												"this       1",
-   												"repeats    1",
-   												"word       1"
+   												"sentence  2",
+   												"the       1",
+   												"this      1",
+   												"repeats   1",
+   												"word      1"
    		                                    });
 
 		assertEquals(expected, output);
@@ -68,11 +68,11 @@ public class PartA {
 												"Total 2-gram count: 6",
 												"Unique 2-gram count: 5",
 												"",
-												"you think      2",
-												"how you        1",
-												"know how       1",
-												"think you      1",
-												"you know       1"
+												"you think  2",
+												"how you    1",
+												"know how   1",
+												"think you  1",
+												"you know   1"
 		                                    });
 		assertEquals(expected, output);
 	}
