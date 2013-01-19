@@ -50,7 +50,6 @@ public class Utilities {
 
 				for (int j = 1; j <= tokenLength; j++)
 				{
-					System.out.println(tokens[j-1]);
 					tokenize.add(tokens[j-1]);
 				}
 
