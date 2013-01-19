@@ -19,5 +19,5 @@ Assumptions:
 
 
 Team Members:
-1) Armando Pensado <apensado@uci.edu>
+1) Armando Pensado Valle <apensado@uci.edu>
 2) Vibhor Mathur <mathurv@uci.edu>
