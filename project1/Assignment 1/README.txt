@@ -16,3 +16,8 @@ Assumptions:
       - sort by decreasing word length first
       - sort by decreasing frequency next (on ties)
       - sort by increasing alphabetical order last (on ties)
+
+
+Team Members:
+1) Armando Pensado <apensado@uci.edu>
+2) Vibhor Mathur <mathurv@uci.edu>
