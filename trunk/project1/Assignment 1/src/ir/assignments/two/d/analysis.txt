@@ -1,5 +1,3 @@
-Please place your analysis of the runtime complexity of your palindrome algorithm in this file.
-
 Below is the pseudocode for the palindrome algorithm with the corresponding runtime analysis:
 
 // Find palindromes

@@ -19,8 +19,9 @@ public final class WordFrequencyCounter {
 	/**
 	 * This class should not be instantiated.
 	 */
-	private WordFrequencyCounter() {}
-	
+	private WordFrequencyCounter() {
+	}
+
 	/**
 	 * Takes the input list of words and processes it, returning a list
 	 * of {@link Frequency}s.
@@ -49,34 +50,32 @@ public final class WordFrequencyCounter {
 	 * @return A list of word frequencies, ordered by decreasing frequency.
 	 */
 	public static List<Frequency> computeWordFrequencies(List<String> words) {
-		
-		
 		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
 		if (words == null)
 			return frequencies;
 
-		HashMap<String, Integer> map = new HashMap<String, Integer>();		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		for (int i = 0; i < words.size(); i++) {
 			String wordstring = words.get(i);
-			
+
 			//Either add a new entry in the dictionary or increase the frequency by 1
 			int frequencycount = map.containsKey(wordstring) ? map.get(wordstring) : 0;
 			map.put(wordstring, frequencycount + 1);
 		}
-		
+
 		// Convert the dictionary to an array
 		for (String st : map.keySet()) {
 			Frequency frequency = new Frequency(st, map.get(st));
 			frequencies.add(frequency);
 		}
-		
+
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
 		FrequencyComparator comparator = new FrequencyComparator();
 		Collections.sort(frequencies, comparator);
-		
+
 		return frequencies;
 	}
-	
+
 	/**
 	 * Runs the word frequency counter. The input should be the path to a text file.
 	 * 
