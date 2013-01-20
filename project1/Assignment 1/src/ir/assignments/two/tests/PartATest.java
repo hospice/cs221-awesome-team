@@ -28,6 +28,13 @@ public class PartATest {
 		String[] expected = new String[] { "an", "input", "string", "this", "is", "or", "is", "it" };
 		assertArrayEquals(expected, words);
 	}
+	
+	@Test
+	public void testTokenizeFile_Empty() {
+		String[] words = tokenize("");
+		String[] expected = new String[0];
+		assertArrayEquals(expected, words);
+	}
 
 	@Test
 	public void testPrintFrequencies_Words() {

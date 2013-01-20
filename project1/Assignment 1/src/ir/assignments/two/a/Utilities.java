@@ -35,6 +35,9 @@ public class Utilities {
 		String[] tokens;
 		ArrayList<String> tokenize = new ArrayList<String>();
 
+		if (input == null)
+			return tokenize;
+		
 		try {
 			FileInputStream fstream = new FileInputStream(input);
 			DataInputStream in = new DataInputStream(fstream);
