@@ -37,7 +37,7 @@ public class Utilities {
 
 		if (input == null)
 			return tokenize;
-		
+
 		try {
 			FileInputStream fstream = new FileInputStream(input);
 			DataInputStream in = new DataInputStream(fstream);
@@ -108,7 +108,7 @@ public class Utilities {
 	public static void printFrequencies(List<Frequency> frequencies) {
 		if (frequencies == null)
 			return;
-		
+
 		String s;
 		int freq;
 		int total = 0;
@@ -118,10 +118,10 @@ public class Utilities {
 		// and the get longest word length
 		for (int i = 0; i < frequencies.size(); i++) {
 			Frequency freqObj = frequencies.get(i);
-			
+
 			freq = freqObj.getFrequency();
 			total = total + freq;
-			
+
 			if (freqObj.getText().length() > longestLength)
 				longestLength = freqObj.getText().length();
 		}
@@ -138,12 +138,12 @@ public class Utilities {
 			System.out.println("Unique item count: " + frequencies.size());
 			System.out.println("");
 		}
-		
+
 		// Print the string and its frequency count to standard out
 		for (int i = 0; i <= frequencies.size() - 1; i++) {
 			s = frequencies.get(i).getText();
 			freq = frequencies.get(i).getFrequency();
-			
+
 			// Left justify numbers
 			System.out.println(String.format("%-" + longestLength + "s %2d", s, freq));
 		}
