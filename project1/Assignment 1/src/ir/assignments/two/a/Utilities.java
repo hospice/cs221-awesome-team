@@ -107,13 +107,20 @@ public class Utilities {
 			return;
 		
 		String s;
-		int n;
+		int freq;
 		int total = 0;
+		int longestLength = 0;
 
 		// Count total number and number of unique elements in string
+		// and the get longest word length
 		for (int i = 0; i < frequencies.size(); i++) {
-			n = frequencies.get(i).getFrequency();
-			total = total + n;
+			Frequency freqObj = frequencies.get(i);
+			
+			freq = freqObj.getFrequency();
+			total = total + freq;
+			
+			if (freqObj.getText().length() > longestLength)
+				longestLength = freqObj.getText().length();
 		}
 
 		// Print total number and number of unique item or 2-grams to standard out
@@ -128,12 +135,14 @@ public class Utilities {
 			System.out.println("Unique item count: " + frequencies.size());
 			System.out.println("");
 		}
-
+		
 		// Print the string and its frequency count to standard out
 		for (int i = 0; i <= frequencies.size() - 1; i++) {
 			s = frequencies.get(i).getText();
-			n = frequencies.get(i).getFrequency();
-			System.out.println(String.format("%-9s %2d", s, n));
+			freq = frequencies.get(i).getFrequency();
+			
+			// Left justify numbers
+			System.out.println(String.format("%-" + longestLength + "s %2d", s, freq));
 		}
 	}
 }
