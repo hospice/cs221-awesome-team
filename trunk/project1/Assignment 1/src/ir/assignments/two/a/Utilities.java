@@ -33,24 +33,22 @@ public class Utilities {
 	public static ArrayList<String> tokenizeFile(File input) {
 		String strLine;
 		String[] tokens;
-		ArrayList<String> tokenize=new ArrayList<String>();
+		ArrayList<String> tokenize = new ArrayList<String>();
 
-		try{
+		try {
 			FileInputStream fstream = new FileInputStream(input);
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-			while((strLine=br.readLine()) != null)
-			{
+			while ((strLine = br.readLine()) != null) {
 				// Convert the input data string to lower case and then tokenize it
 				strLine = strLine.toLowerCase();
 				String delims = "[^a-zA-Z0-9']+";
 				tokens = strLine.split(delims);
 				int tokenLength = tokens.length;
 
-				for (int j = 1; j <= tokenLength; j++)
-				{
-					tokenize.add(tokens[j-1]);
+				for (int j = 1; j <= tokenLength; j++) {
+					tokenize.add(tokens[j - 1]);
 				}
 
 			}
@@ -58,7 +56,7 @@ public class Utilities {
 			br.close();
 			in.close();
 		}
-		catch (Exception e)	{
+		catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
 
@@ -105,36 +103,37 @@ public class Utilities {
 	 * @param frequencies A list of frequencies.
 	 */
 	public static void printFrequencies(List<Frequency> frequencies) {
+		if (frequencies == null)
+			return;
+		
 		String s;
 		int n;
-		int total=0;
-		int count=0;
+		int total = 0;
 
 		// Count total number and number of unique elements in string
-		for(int i=0; i<=frequencies.size()-1;i++){
+		for (int i = 0; i < frequencies.size(); i++) {
 			n = frequencies.get(i).getFrequency();
 			total = total + n;
-			count = count + 1;
 		}
 
 		// Print total number and number of unique item or 2-grams to standard out
-		s = frequencies.get(0).getText();
-		if(s.contains(" ")){		
-		System.out.println("Total 2-gram count: " + total);
-		System.out.println("Unique 2-gram count: " + count);
-		System.out.println("");
-		}
-		else{
-			System.out.println("Total item count: " + total);
-			System.out.println("Unique item count: " + count);
+		s = (frequencies.size() > 0) ? frequencies.get(0).getText() : "";
+		if (s.contains(" ")) {
+			System.out.println("Total 2-gram count: " + total);
+			System.out.println("Unique 2-gram count: " + frequencies.size());
 			System.out.println("");
 		}
-		
+		else {
+			System.out.println("Total item count: " + total);
+			System.out.println("Unique item count: " + frequencies.size());
+			System.out.println("");
+		}
+
 		// Print the string and its frequency count to standard out
-		for(int i=0; i<=frequencies.size()-1;i++){
+		for (int i = 0; i <= frequencies.size() - 1; i++) {
 			s = frequencies.get(i).getText();
 			n = frequencies.get(i).getFrequency();
 			System.out.println(String.format("%-9s %2d", s, n));
-		    }
+		}
 	}
 }

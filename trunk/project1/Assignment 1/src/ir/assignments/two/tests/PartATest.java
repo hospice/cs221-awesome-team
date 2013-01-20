@@ -30,7 +30,7 @@ public class PartATest {
 	}
 
 	@Test
-	public void testPrintFrequenciesWords() {
+	public void testPrintFrequencies_Words() {
 		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
 		frequencies.add(new Frequency("sentence", 2));
 		frequencies.add(new Frequency("the", 1));
@@ -55,7 +55,7 @@ public class PartATest {
 	}
 
 	@Test
-	public void testPrintFrequencies2Gram() {
+	public void testPrintFrequencies_2Gram() {
 		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
 		frequencies.add(new Frequency("you think", 2));
 		frequencies.add(new Frequency("how you", 1));
@@ -75,6 +75,25 @@ public class PartATest {
 												"think you  1",
 												"you know   1"
 		                                    }, lineSeparator);
+		assertEquals(expected, output);
+	}
+	
+	@Test
+	public void testPrintFrequencies_Null() {
+		String output = getPrintedFrequencies(null);
+		String expected = "";
+		assertEquals(expected, output);
+	}
+	
+	@Test
+	public void testPrintFrequencies_EmptyList() {
+		String output = getPrintedFrequencies(new ArrayList<Frequency>());
+		String expected = StringHelpers.join(new String[]
+                { 
+					"Total item count: 0",
+					"Unique item count: 0",
+					""
+                }, lineSeparator);
 		assertEquals(expected, output);
 	}
 
