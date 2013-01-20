@@ -27,4 +27,23 @@ public class PartBTest {
 		// Can't use assertArrayEquals because we want to compare the objects (not the object references)
 		TestUtils.compareFrequencyLists(expected, frequencies);
 	}
+	
+	@Test
+	public void testComputeWordFrequencies_Null() {
+		List<Frequency> frequencies = WordFrequencyCounter.computeWordFrequencies(null);
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		
+		// Can't use assertArrayEquals because we want to compare the objects (not the object references)
+		TestUtils.compareFrequencyLists(expected, frequencies);
+	}
+	
+	@Test
+	public void testComputeWordFrequencies_EmptyList() {
+		List<String> words = Arrays.asList(new String[0]);
+		List<Frequency> frequencies = WordFrequencyCounter.computeWordFrequencies(words);
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		
+		// Can't use assertArrayEquals because we want to compare the objects (not the object references)
+		TestUtils.compareFrequencyLists(expected, frequencies);
+	}
 }
