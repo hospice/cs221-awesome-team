@@ -28,7 +28,7 @@ public class UrlStatisticsTest {
 	}
 
 	@Test
-	public void testCountUniquePages_2() {
+	public void testCountUniquePages_QueriesAndTags() {
 		List<String> urls = Arrays.asList(new String[] 
 				                          {
 											"http://www.example.com/page.php", 
@@ -89,6 +89,20 @@ public class UrlStatisticsTest {
 		expected.add(new Frequency("http://vision.ics.uci.edu", 3));
 		
 		List<Frequency> actual = UrlStatistics.countSubdomains(urls);
+		TestUtils.compareFrequencyLists(expected, actual);
+	}
+	
+	@Test
+	public void testCountSubdomains_Null() {
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		List<Frequency> actual = UrlStatistics.countSubdomains(null);
+		TestUtils.compareFrequencyLists(expected, actual);
+	}
+	
+	@Test
+	public void testCountSubdomains_EmptyList() {
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		List<Frequency> actual = UrlStatistics.countSubdomains(new ArrayList<String>());
 		TestUtils.compareFrequencyLists(expected, actual);
 	}
 
