@@ -22,18 +22,26 @@ public class Crawler {
 	 * General code structure borrowed from: http://code.google.com/p/crawler4j/source/browse/src/test/java/edu/uci/ics/crawler4j/examples/basic/BasicCrawlController.java 
 	 */
 	public static Collection<String> crawl(String seedURL) {
+		return crawl(seedURL, "/intermediateStorage", "/docStorage", 2, 10); //TODO: change to -1 in final version (unlimited depth and docs)		
+	}
+	
+	public static Collection<String> crawl(String seedURL, String intermediateStoragePath, String finalStoragePath, int maxDepth, int maxPages) {
 		HashSet<String> crawledUrls = new HashSet<String>();
 
 		try {
-
 			// Setup the crawler configuration
 			CrawlConfig config = new CrawlConfig();
-			config.setCrawlStorageFolder("/crawlStorage");
+			config.setCrawlStorageFolder(intermediateStoragePath);
 			config.setPolitenessDelay(300);
-			config.setMaxDepthOfCrawling(2); //TODO: set to -1 after testing 
-			config.setMaxPagesToFetch(10); //TODO: set to -1 after testing
+			config.setMaxDepthOfCrawling(maxDepth); 
+			config.setMaxPagesToFetch(maxPages);
 			config.setResumableCrawling(true);
 			config.setUserAgentString("UCI IR crawler 34043453 10902614");
+			
+			ICSCrawlerParameters params = new ICSCrawlerParameters();
+			params.setSeedUrl(seedURL);
+			params.setIntermediateStoragePath(intermediateStoragePath);
+			params.setFinalStoragePath(finalStoragePath);
 
 			// Instantiate controller
 			PageFetcher pageFetcher = new PageFetcher(config);
@@ -41,11 +49,13 @@ public class Crawler {
 			RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 
-			// Start crawling
 			controller.addSeed(seedURL);
-			controller.start(ICSCrawler.class, 1); //TODO: increase 1?
+			controller.setCustomData(params);
+			
+			// Start crawling
+			controller.start(ICSCrawler.class, 1); //TODO: increase 1?			
 
-			// Return list of crawled URLs
+			// Get list of crawled URLs for each crawler
 			List<Object> crawlersLocalData = controller.getCrawlersLocalData();
 
 			for (Object localData : crawlersLocalData) {
