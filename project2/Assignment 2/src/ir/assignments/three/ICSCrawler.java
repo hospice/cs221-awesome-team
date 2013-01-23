@@ -14,19 +14,31 @@ public class ICSCrawler extends WebCrawler {
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g" + "|png|tiff?|mid|mp2|mp3|mp4" + "|wav|avi|mov|mpeg|ram|m4v|pdf" + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
 	private ICSCrawlerStatistics stats = new ICSCrawlerStatistics();
+	private ICSCrawlerParameters params;
 
+    @Override
+    public void onStart() {
+    	// Get the parameters
+    	this.params = (ICSCrawlerParameters)myController.getCustomData();
+    }
+	
 	@Override
 	public boolean shouldVisit(WebURL url) {
-		// Only crawl ics.uci.edu and its subdomains
-
-		// TODO: use getDomain maybe?
+		// Don't crawl non-HTML pages
 		String href = url.getURL().toLowerCase(); // Turns http://www.ics.uci.edu/somepage.php -> http://www.ics.uci.edu/
-		return !FILTERS.matcher(href).matches() && href.endsWith("ics.uci.edu"); //TODO: / needed?
+		if (FILTERS.matcher(href).matches())
+			return false;
+		
+		// Only crawl within the domain of the seed URL
+		if (!url.getDomain().endsWith(this.params.getSeedUrl())) //TODO: this doesn't work
+			return false;
+		
+		return true;
 	}
 
 	@Override
 	public void visit(Page page) {
-		// Get url of crawled page
+		// Keep track of visited URLs
 		String url = page.getWebURL().getURL();
 		stats.addCrawledPageUrl(url);
 
@@ -35,7 +47,7 @@ public class ICSCrawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText(); // get rid of HTML tags
 
-			DocumentStorage.storeDocument(url, text);
+			new DocumentStorage(this.params.getFinalStoragePath()).storeDocument(url, text);
 		}
 	}
 
