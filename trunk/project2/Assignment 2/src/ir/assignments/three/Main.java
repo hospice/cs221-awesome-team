@@ -12,7 +12,8 @@ public class Main {
 		
 		long startTime = 0; //TODO: get current system time
 		
-		Collection<String> crawledUrls = Crawler.crawl("http://www.ics.uci.edu");
+		DocumentStorage documentStorage = new DocumentStorage("/docStorage"); 
+		Collection<String> crawledUrls = Crawler.crawl("http://www.ics.uci.edu", documentStorage);
 		
 		// Question 1
 		long endTime = 0; //TODO: get current system time
@@ -26,12 +27,12 @@ public class Main {
 		Utilities.printFrequencies(subdomains);
 		
 		// Question 4
-		String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls);
+		String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls, documentStorage);
 		
 		// Question 5
-		List<String> mostCommonWord = UrlStatistics.getMostCommonWords(crawledUrls);
+		List<String> mostCommonWord = UrlStatistics.getMostCommonWords(crawledUrls, documentStorage);
 		
 		// Question 6
-		List<String> mostCommon2Gram = UrlStatistics.getMostCommonWords(crawledUrls);
+		List<String> mostCommon2Gram = UrlStatistics.getMostCommon2Grams(crawledUrls, documentStorage);
 	}
 }

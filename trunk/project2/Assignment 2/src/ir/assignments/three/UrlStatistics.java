@@ -17,17 +17,17 @@ public class UrlStatistics {
 		return null;
 	}
 	
-	public static String getLongestPage(Collection<String> urls) {
+	public static String getLongestPage(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get the page with the most terms (including or excluding stop words?)
 		return null;
 	}
 	
-	public static List<String> getMostCommonWords(Collection<String> urls) {
+	public static List<String> getMostCommonWords(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get top 500 most common words across all documents (excluding stop words)
 		return null;
 	}
 	
-	public static List<String> getMostCommon2Grams(Collection<String> urls) {
+	public static List<String> getMostCommon2Grams(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get top 20 2-grams excluding stop words
 		return null;
 	}

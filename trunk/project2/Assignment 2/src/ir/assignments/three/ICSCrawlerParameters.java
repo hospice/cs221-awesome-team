@@ -2,8 +2,7 @@ package ir.assignments.three;
 
 public class ICSCrawlerParameters {
 	private String seedUrl;
-	private String intermediateStoragePath;
-	private String finalStoragePath;
+	private IDocumentStorage docStorage;	
 	
 	public String getSeedUrl() { 
 		return this.seedUrl;
@@ -13,19 +12,11 @@ public class ICSCrawlerParameters {
 		this.seedUrl = url;
 	}
 	
-	public String getIntermediateStoragePath() { 
-		return this.intermediateStoragePath;
+	public IDocumentStorage getDocumentStorage() {
+		return this.docStorage;
 	}
 	
-	public void setIntermediateStoragePath(String path) { 
-		this.intermediateStoragePath = path;
-	}
-	
-	public String getFinalStoragePath() { 
-		return this.finalStoragePath;
-	}
-	
-	public void setFinalStoragePath(String path) { 
-		this.finalStoragePath = path;
+	public void setDocumentStorage(IDocumentStorage docStorage) {
+		this.docStorage = docStorage;
 	}
 }

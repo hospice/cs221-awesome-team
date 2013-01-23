@@ -1,6 +1,6 @@
 package ir.assignments.three;
 
-public class DocumentStorage {
+public class DocumentStorage implements IDocumentStorage {
 	private String storagePath;
 	
 	public DocumentStorage(String storagePath) { 
