@@ -47,7 +47,7 @@ public class ICSCrawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText(); // get rid of HTML tags
 
-			new DocumentStorage(this.params.getFinalStoragePath()).storeDocument(url, text);
+			this.params.getDocumentStorage().storeDocument(url, text);
 		}
 	}
 
