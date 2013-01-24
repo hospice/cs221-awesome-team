@@ -10,14 +10,16 @@ import java.util.List;
 public class Main {
 	public static void main(String[] args) {
 		
-		long startTime = 0; //TODO: get current system time
+		// Keep track of crawl time
+		StopWatch watch = new StopWatch();
+		watch.start();
 		
 		DocumentStorage documentStorage = new DocumentStorage("/docStorage"); 
 		Collection<String> crawledUrls = Crawler.crawl("http://www.ics.uci.edu", documentStorage);
 		
 		// Question 1
-		long endTime = 0; //TODO: get current system time
-		long timeElapsed = endTime - startTime;
+		watch.stop();
+		double secondsElapsed = watch.getTotalElapsedSeconds();
 		
 		// Question 2
 		int uniquePages = UrlStatistics.countUniquePages(crawledUrls);
