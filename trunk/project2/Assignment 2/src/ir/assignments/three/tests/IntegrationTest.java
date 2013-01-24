@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import ir.assignments.three.Crawler;
 import ir.assignments.three.DocumentStorage;
 import ir.assignments.three.MemoryDocumentStorage;
+import ir.assignments.three.StopWatch;
 import ir.assignments.three.UrlStatistics;
 import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
@@ -26,7 +27,8 @@ public class IntegrationTest {
 	@Test
 	public void testCrawl() {
 		// Do an actual crawl of www.vcskicks.com (Armando's website)
-		long startTime = 0; //TODO: get current system time
+		StopWatch watch = new StopWatch();
+		watch.start();
 
 		Collection<String> crawledUrls = new ArrayList<String>();
 		DocumentStorage documentStorage = null;
@@ -47,8 +49,8 @@ public class IntegrationTest {
 		}
 
 		// Question 1
-		long endTime = 0; //TODO: get current system time
-		long timeElapsed = endTime - startTime;
+		watch.stop();
+		double secondsElapsed = watch.getTotalElapsedSeconds();
 		//TODO: check that it was a reasonable time
 
 		// Question 2
