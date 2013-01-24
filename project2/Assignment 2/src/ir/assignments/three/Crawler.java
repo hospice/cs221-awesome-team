@@ -67,7 +67,7 @@ public class Crawler {
 			}
 		}
 		catch (Exception ex) {
-			System.out.println("Error: " + ex.getMessage());
+			System.out.println("Error: " + ex.getMessage());			
 		}
 
 		return crawledUrls;

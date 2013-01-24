@@ -3,9 +3,11 @@ package ir.assignments.three.tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
 
+import ir.assignments.three.MemoryDocumentStorage;
 import ir.assignments.three.UrlStatistics;
 import ir.assignments.two.a.Frequency;
 import ir.assignments.two.tests.TestUtils;
@@ -108,17 +110,63 @@ public class UrlStatisticsTest {
 
 	@Test
 	public void testGetLongestPage() {
-		fail("Not yet implemented");
+		// Setup the (fake) URLs to check
+		List<String> urls = getTestDocumentUrls();
+
+		// Setup up the test in-memory document storage
+		MemoryDocumentStorage docStorage = getTestDocumentStorage();
+		
+		// Get the longest page
+		String actualLongestPageUrl = UrlStatistics.getLongestPage(urls, docStorage);
+		String expectedLongestPageUrl = "http://www.fake.com/page2.php";
+		
+		assertEquals(expectedLongestPageUrl, actualLongestPageUrl);
 	}
 
 	@Test
 	public void testGetMostCommonWords() {
-		fail("Not yet implemented");
+		// Setup the (fake) URLs to check
+		List<String> urls = getTestDocumentUrls();
+
+		// Setup up the test in-memory document storage
+		MemoryDocumentStorage docStorage = getTestDocumentStorage();
+		
+		// Get the most common words
+		String[] actualMostCommonWords = toStringArray(UrlStatistics.getMostCommonWords(urls, docStorage));
+		String[] expectedMostCommonWords = new String[] { "word1", "word2", "word3" }; // Order matters (sorted by freq) //TODO: common words
+		
+		assertArrayEquals(expectedMostCommonWords, actualMostCommonWords);
 	}
 
 	@Test
 	public void testGetMostCommon2Grams() {
-		fail("Not yet implemented");
+		// Setup the (fake) URLs to check
+		List<String> urls = getTestDocumentUrls();
+
+		// Setup up the test in-memory document storage
+		MemoryDocumentStorage docStorage = getTestDocumentStorage();
+		
+		// Get the most common words
+		String[] actualMostCommon2Grams = toStringArray(UrlStatistics.getMostCommon2Grams(urls, docStorage));
+		String[] expectedMostCommon2Grams = new String[] { "one two", "three four" }; // Order matters (sorted by freq) //TODO: common 2 grams
+		
+		assertArrayEquals(expectedMostCommon2Grams, actualMostCommon2Grams);
+	}
+	
+	private List<String> getTestDocumentUrls() {
+		return Arrays.asList(new String[] { "http://www.fake.com/page1.php", "http://www.fake.com/page2.php", "http://www.fake.com/page3.php" });
 	}
 
+	private MemoryDocumentStorage getTestDocumentStorage() {
+		HashMap<String, String> urlPageDictionary = new HashMap<String, String>();
+		urlPageDictionary.put("http://www.fake.com/page1.php", ""); //TODO: some html
+		urlPageDictionary.put("http://www.fake.com/page2.php", "");
+		urlPageDictionary.put("http://www.fake.com/page3.php", "");
+		
+		return new MemoryDocumentStorage(urlPageDictionary);
+	}
+	
+	private String[] toStringArray(List<String> elements) {
+		return elements.toArray(new String[elements.size()]);
+	}
 }
