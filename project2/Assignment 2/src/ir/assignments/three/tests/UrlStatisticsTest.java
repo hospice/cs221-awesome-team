@@ -158,12 +158,12 @@ public class UrlStatisticsTest {
 	}
 
 	private MemoryDocumentStorage getTestDocumentStorage() {
-		HashMap<String, String> urlPageDictionary = new HashMap<String, String>();
-		urlPageDictionary.put("http://www.fake.com/page1.php", ""); //TODO: some text
-		urlPageDictionary.put("http://www.fake.com/page2.php", "");
-		urlPageDictionary.put("http://www.fake.com/page3.php", "");
+		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
+		docStorage.storeDocument("http://www.fake.com/page1.php", ""); //TODO: some text
+		docStorage.storeDocument("http://www.fake.com/page2.php", "");
+		docStorage.storeDocument("http://www.fake.com/page3.php", "");
 		
-		return new MemoryDocumentStorage(urlPageDictionary);
+		return docStorage;
 	}
 	
 	private String[] toStringArray(List<String> elements) {
