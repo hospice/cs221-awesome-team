@@ -47,6 +47,8 @@ public class IntegrationTest {
 		catch (IOException ex) {
 			fail("IOException: " + ex.getMessage());
 		}
+		
+		//TODO: check crawled URLs
 
 		// Question 1
 		watch.stop();
