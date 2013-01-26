@@ -22,11 +22,11 @@ public class Crawler {
 	 * General code structure borrowed from: http://code.google.com/p/crawler4j/source/browse/src/test/java/edu/uci/ics/crawler4j/examples/basic/BasicCrawlController.java 
 	 */
 	public static Collection<String> crawl(String seedURL) {
-		return crawl(seedURL, new DocumentStorage("/docStorage"));		
+		return crawl(seedURL, new DocumentStorage("docStorage"));		
 	}
 	
 	public static Collection<String> crawl(String seedURL, IDocumentStorage docStorage) {
-		return crawl(seedURL, "/intermediateStorage", docStorage, 2, 10); //TODO: change to -1 in final version (unlimited depth and docs)
+		return crawl(seedURL, "intermediateStorage", docStorage, 2, 10); //TODO: change to -1 in final version (unlimited depth and docs)
 	}
 	
 	public static Collection<String> crawl(String seedURL, String intermediateStoragePath, IDocumentStorage documentStorage, int maxDepth, int maxPages) {
