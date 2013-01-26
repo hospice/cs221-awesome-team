@@ -14,7 +14,7 @@ public class Main {
 		StopWatch watch = new StopWatch();
 		watch.start();
 		
-		DocumentStorage documentStorage = new DocumentStorage("/docStorage"); 
+		DocumentStorage documentStorage = new DocumentStorage("docStorage"); 
 		Collection<String> crawledUrls = Crawler.crawl("http://www.ics.uci.edu", documentStorage);
 		
 		// Question 1
