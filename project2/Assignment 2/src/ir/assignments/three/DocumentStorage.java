@@ -67,7 +67,7 @@ public class DocumentStorage implements IDocumentStorage {
 			return null;
 		}
 	}
-	
+
 	private Object getUrlLock(String url) {
 		// Lock based on the global instance of a string (unique_id + URL hash value)
 		// The unique id is to coincidences that would lock on unintended strings
@@ -99,7 +99,9 @@ public class DocumentStorage implements IDocumentStorage {
 			String content = "";
 			String currentLine = "";
 			while ((currentLine = reader.readLine()) != null) {
-				content += currentLine + lineSeparator;
+				content += currentLine;
+				if (reader.ready())
+					content += lineSeparator;
 			}
 
 			return content;
