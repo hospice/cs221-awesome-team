@@ -22,7 +22,7 @@ import org.junit.rules.TemporaryFolder;
 
 public class IntegrationTest {
 	@Rule
-	TemporaryFolder tmpFolder = new TemporaryFolder();
+	public TemporaryFolder tmpFolder = new TemporaryFolder();
 
 	@Test
 	public void testCrawl() {
@@ -39,7 +39,7 @@ public class IntegrationTest {
 			String intermediateStoragePath = tmpFolder.newFolder().getAbsolutePath();
 			String documentStoragePath = tmpFolder.newFolder().getAbsolutePath();
 			int maxDepth = 1;
-			int maxPages = -1; //unlimited
+			int maxPages = 10; //unlimited
 
 			documentStorage = new DocumentStorage(documentStoragePath);
 			crawledUrls = Crawler.crawl(seedURL, intermediateStoragePath, documentStorage, maxDepth, maxPages);
