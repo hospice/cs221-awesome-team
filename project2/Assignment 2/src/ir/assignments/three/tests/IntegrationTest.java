@@ -1,19 +1,14 @@
 package ir.assignments.three.tests;
 
 import static org.junit.Assert.*;
-import ir.assignments.three.Crawler;
-import ir.assignments.three.DocumentStorage;
-import ir.assignments.three.MemoryDocumentStorage;
-import ir.assignments.three.StopWatch;
-import ir.assignments.three.UrlStatistics;
+import ir.assignments.three.*;
 import ir.assignments.two.a.Frequency;
-import ir.assignments.two.a.Utilities;
+import ir.assignments.two.tests.TestUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Rule;
@@ -28,7 +23,6 @@ public class IntegrationTest {
 	public void testCrawl() {
 		// Do an actual crawl of www.vcskicks.com (Armando's website)
 		StopWatch watch = new StopWatch();
-		watch.start();
 
 		Collection<String> crawledUrls = new ArrayList<String>();
 		DocumentStorage documentStorage = null;
@@ -39,40 +33,39 @@ public class IntegrationTest {
 			String intermediateStoragePath = tmpFolder.newFolder().getAbsolutePath();
 			String documentStoragePath = tmpFolder.newFolder().getAbsolutePath();
 			int maxDepth = 1;
-			int maxPages = 10; //unlimited
+			int maxPages = -1; //unlimited
 
 			documentStorage = new DocumentStorage(documentStoragePath);
+			
+			watch.start();
 			crawledUrls = Crawler.crawl(seedURL, intermediateStoragePath, documentStorage, maxDepth, maxPages);
+			watch.stop();
 		}
 		catch (IOException ex) {
 			fail("IOException: " + ex.getMessage());
 		}
 		
-		//TODO: check crawled URLs
+		System.out.println("Crawled " + crawledUrls.size() + " pages(s)");
+		
+		// Check something was crawled
+		assertTrue(crawledUrls.size() >= 10);
 
 		// Question 1
-		watch.stop();
 		double secondsElapsed = watch.getTotalElapsedSeconds();
-		//TODO: check that it was a reasonable time
+		assertTrue(secondsElapsed >= 30); // any faster and something probably not right
 
 		// Question 2
-		int uniquePages = UrlStatistics.countUniquePages(crawledUrls);
-		//TODO: check that number within some range
+		int uniquePageCount = UrlStatistics.countUniquePages(crawledUrls);
+		assertTrue(uniquePageCount >= 17 && uniquePageCount <= 25);
 
 		// Question 3
 		List<Frequency> subdomains = UrlStatistics.countSubdomains(crawledUrls);
-		//TODO: check expected frequencies
+		ArrayList<Frequency> expectedSubdomains = new ArrayList<Frequency>();
+		expectedSubdomains.add(new Frequency("http://www.vcskicks.com", uniquePageCount));
+		TestUtils.compareFrequencyLists(expectedSubdomains, subdomains);
 
 		// Question 4
 		String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls, documentStorage);
-		//TODO: check expected
-
-		// Question 5
-		List<String> mostCommonWord = UrlStatistics.getMostCommonWords(crawledUrls, documentStorage);
-		//TODO: check expected (maybe only top 10 or something)
-
-		// Question 6
-		List<String> mostCommon2Gram = UrlStatistics.getMostCommon2Grams(crawledUrls, documentStorage);
-		//TODO: check expected (maybe only top 10 or something)
+		assertEquals("http://www.vcskicks.com/csharp-programming.php", longestPageUrlString);
 	}
 }
