@@ -133,7 +133,7 @@ public class UrlStatisticsTest {
 		
 		// Get the most common words
 		String[] actualMostCommonWords = toStringArray(UrlStatistics.getMostCommonWords(urls, docStorage));
-		String[] expectedMostCommonWords = new String[] { "word1", "word2", "word3" }; // Order matters (sorted by freq) //TODO: common words
+		String[] expectedMostCommonWords = new String[] { "word", "page", "test", "one", "another", "two", "three", "yet" }; // Order matters (sorted by freq)
 		
 		assertArrayEquals(expectedMostCommonWords, actualMostCommonWords);
 	}
@@ -148,7 +148,7 @@ public class UrlStatisticsTest {
 		
 		// Get the most common words
 		String[] actualMostCommon2Grams = toStringArray(UrlStatistics.getMostCommon2Grams(urls, docStorage));
-		String[] expectedMostCommon2Grams = new String[] { "one two", "three four" }; // Order matters (sorted by freq) //TODO: common 2 grams
+		String[] expectedMostCommon2Grams = new String[] { "one two", "three four" }; // Order matters (sorted by freq)
 		
 		assertArrayEquals(expectedMostCommon2Grams, actualMostCommon2Grams);
 	}
@@ -159,11 +159,15 @@ public class UrlStatisticsTest {
 
 	private MemoryDocumentStorage getTestDocumentStorage() {
 		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
-		docStorage.storeDocument("http://www.fake.com/page1.php", ""); //TODO: some text
-		docStorage.storeDocument("http://www.fake.com/page2.php", "");
-		docStorage.storeDocument("http://www.fake.com/page3.php", "");
+		docStorage.storeDocument("http://www.fake.com/page1.php", toHtml("Test Page", "This is a test page")); // Stop words
+		docStorage.storeDocument("http://www.fake.com/page2.php", toHtml("Another Test Page", "One two one two One three")); // 2-grams 
+		docStorage.storeDocument("http://www.fake.com/page3.php", toHtml("Yet Another Test Page", "Word word word word word word word")); // high frequency word 
 		
 		return docStorage;
+	}
+	
+	private String toHtml(String title, String body) {
+		return "<html><title>" + title + "</title><body>" + body + "</body></html>";
 	}
 	
 	private String[] toStringArray(List<String> elements) {
