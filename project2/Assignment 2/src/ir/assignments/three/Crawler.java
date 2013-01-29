@@ -26,7 +26,7 @@ public class Crawler {
 	}
 	
 	public static Collection<String> crawl(String seedURL, IDocumentStorage docStorage) {
-		return crawl(seedURL, "intermediateStorage", docStorage, 2, 10); //TODO: change to -1 in final version (unlimited depth and docs)
+		return crawl(seedURL, "intermediateStorage", docStorage, -1, -1); //TODO: change to -1 in final version (unlimited depth and docs)
 	}
 	
 	public static Collection<String> crawl(String seedURL, String intermediateStoragePath, IDocumentStorage documentStorage, int maxDepth, int maxPages) {
@@ -36,8 +36,8 @@ public class Crawler {
 			// Setup the crawler configuration
 			CrawlConfig config = new CrawlConfig();
 			config.setCrawlStorageFolder(intermediateStoragePath);
-			config.setPolitenessDelay(300);
-			config.setMaxDepthOfCrawling(maxDepth); 
+			config.setPolitenessDelay(400);
+			config.setMaxDepthOfCrawling(maxDepth);
 			config.setMaxPagesToFetch(maxPages);
 			config.setResumableCrawling(true);
 			config.setUserAgentString("UCI IR crawler 34043453 10902614");
