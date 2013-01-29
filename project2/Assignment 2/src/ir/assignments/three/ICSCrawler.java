@@ -32,23 +32,30 @@ public class ICSCrawler extends WebCrawler {
 			return false;
 
 		// Only crawl within the domain of the seed URL
-		try {
-			URI currentUri = new URI(url.getURL());
-			String currentUrlHost = currentUri.getHost();
-
-			URI seedUri = new URI(this.params.getSeedUrl());
-			String seedUrlHost = seedUri.getHost();
-
-			if (!currentUrlHost.endsWith(seedUrlHost))
-				return false;
-		}
-		catch (URISyntaxException e) {
-			System.out.println("Error on url: " + url.getURL());
-			System.out.println("Error: " + e.getMessage());
+		String currentUrlDomain = getDomain(url.getURL());
+		String seedUrlDomain = getDomain(this.params.getSeedUrl());
+		if (!currentUrlDomain.endsWith(seedUrlDomain))
 			return false;
-		}
 
 		return true;
+	}
+	
+	private String getDomain(String url)
+	{
+		try {
+			URI uri = new URI(url);
+			String host = uri.getHost().toLowerCase();
+			if (host.startsWith("www."))
+				host = host.substring("www.".length());
+			
+			return host;
+		}
+		catch (URISyntaxException e) {
+			System.out.println("Error on url: " + url);
+			System.out.println("Error: " + e.getMessage());
+		}
+		
+		return null;
 	}
 
 	@Override
