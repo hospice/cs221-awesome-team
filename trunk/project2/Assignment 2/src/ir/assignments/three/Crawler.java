@@ -11,6 +11,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Crawler {
+	private static final int MAX = -1;
+	
 	/**
 	 * This method is for testing purposes only. It does not need to be used
 	 * to answer any of the questions in the assignment. However, it must
@@ -22,11 +24,11 @@ public class Crawler {
 	 * General code structure borrowed from: http://code.google.com/p/crawler4j/source/browse/src/test/java/edu/uci/ics/crawler4j/examples/basic/BasicCrawlController.java 
 	 */
 	public static Collection<String> crawl(String seedURL) {
-		return crawl(seedURL, new DocumentStorage("docStorage"));		
+		return crawl(seedURL, new DocumentStorage("docStorage"));
 	}
 	
 	public static Collection<String> crawl(String seedURL, IDocumentStorage docStorage) {
-		return crawl(seedURL, "intermediateStorage", docStorage, -1, -1); //TODO: change to -1 in final version (unlimited depth and docs)
+		return crawl(seedURL, "intermediateStorage", docStorage, MAX, MAX);
 	}
 	
 	public static Collection<String> crawl(String seedURL, String intermediateStoragePath, IDocumentStorage documentStorage, int maxDepth, int maxPages) {
