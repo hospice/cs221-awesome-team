@@ -20,6 +20,7 @@ public class Main {
 		// Question 1
 		watch.stop();
 		double secondsElapsed = watch.getTotalElapsedSeconds();
+		System.out.println("Seconds elapsed: " + secondsElapsed);
 		
 		// Question 2
 		int uniquePages = UrlStatistics.countUniquePages(crawledUrls);

@@ -43,6 +43,7 @@ public class ICSCrawler extends WebCrawler {
 				return false;
 		}
 		catch (URISyntaxException e) {
+			System.out.println("Error on url: " + url.getURL());
 			System.out.println("Error: " + e.getMessage());
 			return false;
 		}
