@@ -1,31 +1,43 @@
 package ir.assignments.three;
 
 import ir.assignments.two.a.*;
+import ir.assignments.two.b.FrequencyComparator;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.net.*;
 
 public class UrlStatistics {
 	public static int countUniquePages(Collection<String> urls) {
 		// Count the number of unique pages in the URL list (e.g. http://www.example.com/test.php and http://www.example.com/test.php?param are 2 URLs but 1 page
 		HashSet<String> hm = new HashSet<String>();
 		Iterator<String> iterator;
-		int numbersOfUniquePages ;
+		int numbersOfUniquePages = 0;
 
-		iterator = urls.iterator();     
-		while (iterator.hasNext()){
-			String a = (String) iterator.next();
-			if(a.contains("?")){
-				int i=a.indexOf("?");
-				a = a.substring(0, i);
+		if(urls != null){
+
+			iterator = urls.iterator();   
+
+			while (iterator.hasNext()){
+				URL url=null;
+				try {
+					url = new URL((String) iterator.next());
+				}
+				catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String a = url.getProtocol()+"://"+url.getAuthority()+url.getPath();
+				hm.add(a);
 			}
-			System.out.println(a);
-			hm.add(a);
+			numbersOfUniquePages = hm.size();
 		}
-		numbersOfUniquePages = hm.size();
-		
+
 		return numbersOfUniquePages ;  
 
 	}
@@ -33,7 +45,57 @@ public class UrlStatistics {
 	public static List<Frequency> countSubdomains(Collection<String> urls) {
 		// http://vision.ics.uci.edu, 10
 		// etc.
-		return null;
+		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
+		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+		HashSet<String> hset = new HashSet<String>();
+		Iterator<String> iterator;
+
+		if(urls != null){
+			iterator = urls.iterator();   
+
+			while (iterator.hasNext()){
+				URL url=null;
+				try {
+					url = new URL((String) iterator.next());
+				}
+				catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String a = url.getProtocol()+"://"+url.getAuthority()+url.getPath();
+				hset.add(a);
+			}
+
+			iterator = hset.iterator();   
+
+			while (iterator.hasNext()){
+				URL url=null;
+				try {
+					url = new URL(iterator.next());
+				}
+				catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				String b = url.getProtocol()+"://"+url.getAuthority();
+				int count = hmap.containsKey(b) ? hmap.get(b) : 0;
+				hmap.put(b, count + 1);
+
+			}
+			
+			for (String st : hmap.keySet()) {
+				Frequency frequency = new Frequency(st, hmap.get(st));
+				frequencies.add(frequency);
+
+			}
+		}
+
+		// Order by frequency (desc) and break ties with alphabetical order (asc)
+		FrequencyComparator comparator = new FrequencyComparator();
+		Collections.sort(frequencies, comparator);
+
+		return frequencies;
 	}
 
 	public static String getLongestPage(Collection<String> urls, IDocumentStorage docStorage) {

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import ir.assignments.three.MemoryDocumentStorage;
 import ir.assignments.three.UrlStatistics;
 import ir.assignments.two.a.Frequency;
+import ir.assignments.two.a.Utilities;
 import ir.assignments.two.tests.TestUtils;
 
 import org.junit.Test;
@@ -69,10 +70,11 @@ public class UrlStatisticsTest {
 											"http://vision.ics.uci.edu/page.php?query",
 											"http://other.ics.uci.edu/",
 											"http://other.ics.uci.edu/page.php" });
+							    
 		
 		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		expected.add(new Frequency("http://other.ics.uci.edu", 2));
 		expected.add(new Frequency("http://vision.ics.uci.edu", 2));
-		expected.add(new Frequency("http://other.ics.uci.edu", 2));		
 		
 		List<Frequency> actual = UrlStatistics.countSubdomains(urls);
 		TestUtils.compareFrequencyLists(expected, actual);
