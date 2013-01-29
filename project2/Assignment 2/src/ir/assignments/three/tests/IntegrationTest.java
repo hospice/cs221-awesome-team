@@ -66,5 +66,13 @@ public class IntegrationTest {
 		// Question 4
 		String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls, documentStorage);
 		assertEquals("http://www.vcskicks.com/csharp-programming.php", longestPageUrlString);
+		
+		// Question 5
+		List<String> mostCommonWords = UrlStatistics.getMostCommonWords(crawledUrls, documentStorage);
+		assertTrue(mostCommonWords.size() >= 20 && mostCommonWords.size() <= 500);
+		
+		// Question 6
+		List<String> mostCommon2Grams = UrlStatistics.getMostCommon2Grams(crawledUrls, documentStorage);
+		assertTrue(mostCommon2Grams.size() >= 2 && mostCommon2Grams.size() <= 20);
 	}
 }
