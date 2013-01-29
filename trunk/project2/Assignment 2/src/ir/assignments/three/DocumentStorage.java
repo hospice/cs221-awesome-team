@@ -43,7 +43,7 @@ public class DocumentStorage implements IDocumentStorage {
 		}
 	}
 
-	public String getDocument(String url) {
+	public HtmlDocument getDocument(String url) {
 		synchronized (getUrlLock(url)) {
 			// Make sure storage path exists
 			File storageDir = new File(this.storagePath);
@@ -54,7 +54,7 @@ public class DocumentStorage implements IDocumentStorage {
 			try {
 				File urlDoc = getDocumentFromUrl(storageDir, url);
 				if (urlDoc != null)
-					return readDocument(urlDoc);
+					return new HtmlDocument(readDocument(urlDoc));
 			}
 			catch (FileNotFoundException e) {
 				System.out.println("Error: " + e.getMessage());
