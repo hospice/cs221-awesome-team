@@ -9,8 +9,8 @@ import java.util.Arrays;
 
 import ir.assignments.three.MemoryDocumentStorage;
 import ir.assignments.three.UrlStatistics;
+import ir.assignments.three.Utilities;
 import ir.assignments.two.a.Frequency;
-import ir.assignments.two.a.Utilities;
 import ir.assignments.two.tests.TestUtils;
 
 import org.junit.Test;
@@ -117,10 +117,10 @@ public class UrlStatisticsTest {
 
 		// Setup up the test in-memory document storage
 		MemoryDocumentStorage docStorage = getTestDocumentStorage();
-		
+
 		// Get the longest page
 		String actualLongestPageUrl = UrlStatistics.getLongestPage(urls, docStorage);
-		String expectedLongestPageUrl = "http://www.fake.com/page2.php";
+		String expectedLongestPageUrl = "http://www.fake.com/page3.php";
 		
 		assertEquals(expectedLongestPageUrl, actualLongestPageUrl);
 	}
