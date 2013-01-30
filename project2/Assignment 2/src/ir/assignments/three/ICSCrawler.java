@@ -36,6 +36,10 @@ public class ICSCrawler extends WebCrawler {
 		String seedUrlDomain = getDomain(this.params.getSeedUrl());
 		if (!currentUrlDomain.endsWith(seedUrlDomain))
 			return false;
+		
+		// Don't crawl the same pages too many times (avoid infinite loops)
+		if (!stats.intendToVisit(url.getURL()))
+			return false;
 
 		return true;
 	}
@@ -62,7 +66,7 @@ public class ICSCrawler extends WebCrawler {
 	public void visit(Page page) {
 		// Keep track of visited URLs
 		String url = page.getWebURL().getURL();
-		stats.addCrawledPageUrl(url);
+		stats.addCrawledUrl(url);
 		System.out.println("Crawled: " + url);
 
 		// Get the page terms and store them locally
@@ -70,7 +74,7 @@ public class ICSCrawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String html = htmlParseData.getHtml();
 			
-			// Store the html
+			// Store the HTML
 			this.params.getDocumentStorage().storeDocument(url, html);
 		}
 	}
