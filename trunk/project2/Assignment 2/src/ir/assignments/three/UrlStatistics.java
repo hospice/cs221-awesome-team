@@ -1,6 +1,6 @@
 package ir.assignments.three;
 
-import ir.assignments.two.a.*;
+import ir.assignments.two.a.Frequency;
 import ir.assignments.two.b.FrequencyComparator;
 
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.io.*;
 import java.net.*;
 
 public class UrlStatistics {
@@ -100,7 +101,49 @@ public class UrlStatistics {
 
 	public static String getLongestPage(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get the page with the most terms (including or excluding stop words?)
-		return null;
+		HtmlDocument readHtml=null;
+		StopWord stopWord = new StopWord();
+		Iterator<String> iterator;
+		ArrayList<String> tokens = new ArrayList<String>();
+		ArrayList<String> stopWords = new ArrayList<String>();
+
+		int maxLength = 0;
+		String maxLengthURL = "";
+
+		if(urls != null){
+			iterator = urls.iterator();   
+
+			while (iterator.hasNext()){
+				String it = iterator.next();
+				readHtml = docStorage.getDocument(it);
+				if(readHtml != null){
+					String data = readHtml.getAllText();
+					System.out.println("Reached 1");
+					tokens = Utilities.tokenizeFile(data);
+					System.out.println(data);
+
+					System.out.println("Reached 2");
+
+					int count =0;
+					for (int i = 0; i < tokens.size(); i++) {
+						if(!StopWord.isStopWord(tokens.get(i))){
+							count++;
+						}
+					}
+
+					if(count > maxLength){
+						maxLength = count;
+						System.out.println("Max length So far: "+maxLength);
+						maxLengthURL = it;
+					}
+
+				}
+			}
+		}
+		System.out.println("Max length : "+maxLength);
+		System.out.println("Max length url: "+maxLengthURL);
+
+		return maxLengthURL;
 	}
 
 	public static List<String> getMostCommonWords(Collection<String> urls, IDocumentStorage docStorage) {
