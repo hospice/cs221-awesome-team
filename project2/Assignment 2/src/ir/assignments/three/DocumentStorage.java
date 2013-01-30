@@ -1,17 +1,12 @@
 package ir.assignments.three;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 
 public class DocumentStorage implements IDocumentStorage {
 	private String storagePath;
-	private String lineSeparator = System.getProperty("line.separator");
 	private static final String UNIQUE_ID = "e6ff0549-d27b-4ada-adaf-71e671b0a93f";
 
 	public DocumentStorage(String storagePath) {
@@ -34,7 +29,8 @@ public class DocumentStorage implements IDocumentStorage {
 				}
 
 				// Write to the file
-				writeDocument(urlFile, url, text);
+				String[] lines = new String[] { url, text };
+				FileHelper.writeFile(urlFile, lines);
 			}
 			catch (IOException e) {
 				System.out.println("Error: " + e.getMessage());
@@ -53,8 +49,10 @@ public class DocumentStorage implements IDocumentStorage {
 			// Find the URL file by 1) hash in the filename and 2) URL in the contents
 			try {
 				File urlDoc = getDocumentFromUrl(storageDir, url);
-				if (urlDoc != null)
-					return new HtmlDocument(readDocument(urlDoc));
+				if (urlDoc != null) {
+					String docContent = FileHelper.readFile(urlDoc, 1); // skip first line (URL)
+					return new HtmlDocument(docContent);
+				}
 			}
 			catch (FileNotFoundException e) {
 				System.out.println("Error: " + e.getMessage());
@@ -78,50 +76,8 @@ public class DocumentStorage implements IDocumentStorage {
 		return Math.abs(url.hashCode()) + "";
 	}
 
-	private void writeDocument(File file, String url, String text) throws IOException {
-		FileWriter stream = new FileWriter(file);
-		BufferedWriter writer = new BufferedWriter(stream);
-		writer.write(url + lineSeparator); // first line is URL
-		writer.write(text); // rest is URL content
-		writer.flush();
-		writer.close();
-	}
-
-	private String readDocument(File file) throws IOException, FileNotFoundException {
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(file));
-
-			// Skip the first line (the URL)
-			reader.readLine();
-
-			// Read the rest
-			String content = "";
-			String currentLine = "";
-			while ((currentLine = reader.readLine()) != null) {
-				content += currentLine;
-				if (reader.ready())
-					content += lineSeparator;
-			}
-
-			return content;
-		}
-		finally {
-			if (reader != null)
-				reader.close();
-		}
-	}
-
 	private String getUrlFromDocument(File file) throws IOException {
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			return reader.readLine();
-		}
-		finally {
-			if (reader != null)
-				reader.close();
-		}
+		return FileHelper.readFirstLine(file);
 	}
 
 	private File getDocumentFromUrl(File directory, String url) throws IOException {
