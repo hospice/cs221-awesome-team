@@ -153,7 +153,6 @@ public class UrlStatistics {
 				readHtml = docStorage.getDocument(it);
 				if(readHtml != null){
 					String data = readHtml.getAllText();
-					//	tokens = Utilities.tokenizeFile(data);
 
 					for (int i = 0; i < Utilities.tokenizeFile(data).size(); i++) {
 						if(!StopWord.isStopWord(Utilities.tokenizeFile(data).get(i))){
@@ -185,7 +184,6 @@ public class UrlStatistics {
 		List<Frequency> frequency = new ArrayList<Frequency>();
 		List<String> commom2grams = new ArrayList<String>();
 
-		//	ArrayList<String> tokens = new ArrayList<String>();
 		if(urls != null){
 			iterator = urls.iterator();   
 
@@ -195,7 +193,6 @@ public class UrlStatistics {
 				if(readHtml != null){
 					String data = readHtml.getAllText();
 					tokens = Utilities.tokenizeFile(data);
-					//				frequency = WordFrequencyCounter.computeWordFrequencies(tokens);
 
 					for (int i = 0; i < TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).size(); i++) {
 						Frequency temp = TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).get(i);
@@ -206,7 +203,6 @@ public class UrlStatistics {
 
 							for(Frequency f:frequency){
 								if(f.getText().equals(temp.getText())){
-									System.out.println("Already exists, increasing frequency");
 									temp.incrementFrequency();
 									flag=1;
 									break;
