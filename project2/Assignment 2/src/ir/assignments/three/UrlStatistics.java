@@ -1,7 +1,8 @@
 package ir.assignments.three;
 
-import ir.assignments.two.a.Frequency;
-import ir.assignments.two.b.FrequencyComparator;
+import ir.assignments.two.a.*;
+import ir.assignments.two.b.*;
+import ir.assignments.two.c.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,7 +85,7 @@ public class UrlStatistics {
 				hmap.put(b, count + 1);
 
 			}
-			
+
 			for (String st : hmap.keySet()) {
 				Frequency frequency = new Frequency(st, hmap.get(st));
 				frequencies.add(frequency);
@@ -137,11 +138,100 @@ public class UrlStatistics {
 
 	public static List<String> getMostCommonWords(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get top 500 most common words across all documents (excluding stop words)
-		return null;
+		HtmlDocument readHtml=null;
+		StopWord stopWord = new StopWord();
+		Iterator<String> iterator;
+		ArrayList<String> totalWords = new ArrayList<String>();
+		List<Frequency> frequency = new ArrayList<Frequency>();
+		List<String> commomWords = new ArrayList<String>();
+
+		if(urls != null){
+			iterator = urls.iterator();   
+
+			while (iterator.hasNext()){
+				String it = iterator.next();
+				readHtml = docStorage.getDocument(it);
+				if(readHtml != null){
+					String data = readHtml.getAllText();
+					//	tokens = Utilities.tokenizeFile(data);
+
+					for (int i = 0; i < Utilities.tokenizeFile(data).size(); i++) {
+						if(!StopWord.isStopWord(Utilities.tokenizeFile(data).get(i))){
+							totalWords.add(Utilities.tokenizeFile(data).get(i));
+						}
+					}
+				}
+			}
+		}
+
+		frequency = WordFrequencyCounter.computeWordFrequencies(totalWords);
+
+		for (int i = 0; i < frequency.size(); i++) {
+			if(i>500){
+				break;
+			}
+			commomWords.add(frequency.get(i).getText());
+		}
+
+		return commomWords;
 	}
 
 	public static List<String> getMostCommon2Grams(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get top 20 2-grams excluding stop words
-		return null;
+		HtmlDocument readHtml=null;
+		StopWord stopWord = new StopWord();
+		Iterator<String> iterator;
+		ArrayList<String> tokens = new ArrayList<String>();
+		List<Frequency> frequency = new ArrayList<Frequency>();
+		List<String> commom2grams = new ArrayList<String>();
+
+		//	ArrayList<String> tokens = new ArrayList<String>();
+		if(urls != null){
+			iterator = urls.iterator();   
+
+			while (iterator.hasNext()){
+				String it = iterator.next();
+				readHtml = docStorage.getDocument(it);
+				if(readHtml != null){
+					String data = readHtml.getAllText();
+					tokens = Utilities.tokenizeFile(data);
+					//				frequency = WordFrequencyCounter.computeWordFrequencies(tokens);
+
+					for (int i = 0; i < TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).size(); i++) {
+						Frequency temp = TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).get(i);
+
+						if(!StopWord.isStopWord(Utilities.tokenizeFile(temp.getText()).get(0)) && !StopWord.isStopWord(Utilities.tokenizeFile(temp.getText()).get(1)))
+						{
+							int flag=0;
+
+							for(Frequency f:frequency){
+								if(f.getText().equals(temp.getText())){
+									System.out.println("Already exists, increasing frequency");
+									temp.incrementFrequency();
+									flag=1;
+									break;
+								}
+							}
+							if(flag==0)
+								frequency.add(temp);
+
+						}
+					}
+				}
+			}
+		}
+
+		// Order by frequency (desc) and break ties with alphabetical order (asc)
+		FrequencyComparator comparator = new FrequencyComparator();
+		Collections.sort(frequency, comparator);
+
+		for (int i = 0; i < frequency.size(); i++) {
+			if(i>20){
+				break;
+			}
+			commom2grams.add(frequency.get(i).getText());
+		}
+
+		return commom2grams;	
 	}
 }

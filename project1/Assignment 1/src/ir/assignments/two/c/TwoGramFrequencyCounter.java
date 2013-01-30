@@ -48,7 +48,7 @@ public final class TwoGramFrequencyCounter {
 	 * @param words A list of words.
 	 * @return A list of two gram frequencies, ordered by decreasing frequency.
 	 */
-	private static List<Frequency> computeTwoGramFrequencies(ArrayList<String> words) {
+	public static List<Frequency> computeTwoGramFrequencies(ArrayList<String> words) {
 		ArrayList<Frequency> freqs = new ArrayList<Frequency>();
 		if (words == null)
 			return freqs;
@@ -74,7 +74,6 @@ public final class TwoGramFrequencyCounter {
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
 		FrequencyComparator comparator = new FrequencyComparator();
 		Collections.sort(freqs, comparator);
-
 		return freqs;
 	}
 	
