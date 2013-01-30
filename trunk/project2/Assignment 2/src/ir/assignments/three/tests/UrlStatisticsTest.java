@@ -149,7 +149,7 @@ public class UrlStatisticsTest {
 		
 		// Get the most common words
 		String[] actualMostCommon2Grams = toStringArray(UrlStatistics.getMostCommon2Grams(urls, docStorage));
-		String[] expectedMostCommon2Grams = new String[] { "word word", "one two", "test page", "two one", "another test", "one three", "page one", "page word", "test page", "yet another"  }; // Order matters (sorted by freq)
+		String[] expectedMostCommon2Grams = new String[] { "word word", "one two", "test page", "two one", "another test", "one three", "page one", "page word", "yet another"  }; // Order matters (sorted by freq)
 		
 		assertArrayEquals(expectedMostCommon2Grams, actualMostCommon2Grams);
 	}
