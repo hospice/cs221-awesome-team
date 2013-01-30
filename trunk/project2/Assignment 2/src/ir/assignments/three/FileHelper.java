@@ -68,4 +68,17 @@ public class FileHelper {
 			writer.close();
 		}
 	}
+	
+	public static void appendToFile(File file, String line) throws IOException {
+		FileWriter stream = new FileWriter(file, true);
+		BufferedWriter writer = new BufferedWriter(stream);
+
+		try {
+			writer.write(lineSeparator + line);
+		}
+		finally {
+			writer.flush();
+			writer.close();
+		}
+	}
 }
