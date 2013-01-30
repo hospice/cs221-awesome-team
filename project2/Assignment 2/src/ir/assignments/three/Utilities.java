@@ -7,7 +7,6 @@ public class Utilities {
 	public static ArrayList<String> tokenizeFile(String input) {
 		String[] tokens;
 		ArrayList<String> tokenize = new ArrayList<String>();
-		System.out.println("Reached 3");
 
 		if (input == null)
 			return tokenize;

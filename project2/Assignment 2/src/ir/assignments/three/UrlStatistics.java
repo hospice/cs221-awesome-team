@@ -105,8 +105,6 @@ public class UrlStatistics {
 		StopWord stopWord = new StopWord();
 		Iterator<String> iterator;
 		ArrayList<String> tokens = new ArrayList<String>();
-		ArrayList<String> stopWords = new ArrayList<String>();
-
 		int maxLength = 0;
 		String maxLengthURL = "";
 
@@ -118,12 +116,7 @@ public class UrlStatistics {
 				readHtml = docStorage.getDocument(it);
 				if(readHtml != null){
 					String data = readHtml.getAllText();
-					System.out.println("Reached 1");
 					tokens = Utilities.tokenizeFile(data);
-					System.out.println(data);
-
-					System.out.println("Reached 2");
-
 					int count =0;
 					for (int i = 0; i < tokens.size(); i++) {
 						if(!StopWord.isStopWord(tokens.get(i))){
@@ -132,16 +125,12 @@ public class UrlStatistics {
 					}
 
 					if(count > maxLength){
-						maxLength = count;
-						System.out.println("Max length So far: "+maxLength);
 						maxLengthURL = it;
 					}
 
 				}
 			}
 		}
-		System.out.println("Max length : "+maxLength);
-		System.out.println("Max length url: "+maxLengthURL);
 
 		return maxLengthURL;
 	}
