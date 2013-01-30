@@ -38,7 +38,7 @@ public class Crawler {
 			// Setup the crawler configuration
 			CrawlConfig config = new CrawlConfig();
 			config.setCrawlStorageFolder(intermediateStoragePath);
-			config.setPolitenessDelay(400);
+			config.setPolitenessDelay(300);
 			config.setMaxDepthOfCrawling(maxDepth);
 			config.setMaxPagesToFetch(maxPages);
 			config.setResumableCrawling(true);
