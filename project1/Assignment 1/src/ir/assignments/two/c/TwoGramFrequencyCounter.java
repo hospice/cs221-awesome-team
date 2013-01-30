@@ -1,7 +1,7 @@
 package ir.assignments.two.c;
 
-import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
+import ir.assignments.two.a.Frequency;
 import ir.assignments.two.b.FrequencyComparator;
 
 import java.io.File;

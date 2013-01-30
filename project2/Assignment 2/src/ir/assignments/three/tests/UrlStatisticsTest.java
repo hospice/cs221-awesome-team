@@ -9,8 +9,7 @@ import java.util.Arrays;
 
 import ir.assignments.three.MemoryDocumentStorage;
 import ir.assignments.three.UrlStatistics;
-import ir.assignments.three.Utilities;
-import ir.assignments.two.a.Frequency;
+import ir.assignments.two.a.*;
 import ir.assignments.two.tests.TestUtils;
 
 import org.junit.Test;

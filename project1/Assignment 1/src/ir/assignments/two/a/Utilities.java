@@ -1,5 +1,7 @@
 package ir.assignments.two.a;
 
+import ir.assignments.two.a.Frequency;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,16 +46,17 @@ public class Utilities {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
 			while ((strLine = br.readLine()) != null) {
-				// Convert the input data string to lower case and then tokenize it
-				strLine = strLine.toLowerCase();
-				String delims = "[^a-zA-Z0-9']+";
-				tokens = strLine.split(delims);
-				int tokenLength = tokens.length;
+				if ( strLine.trim().length() != 0) {
+					// Convert the input data string to lower case and then tokenize it
+					strLine = strLine.toLowerCase();
+					String delims = "[^a-zA-Z0-9']+";
+					tokens = strLine.split(delims);
+					int tokenLength = tokens.length;
 
-				for (int j = 1; j <= tokenLength; j++) {
-					tokenize.add(tokens[j - 1]);
+					for (int j = 1; j <= tokenLength; j++) {
+						tokenize.add(tokens[j - 1]);
+					}
 				}
-
 			}
 
 			br.close();

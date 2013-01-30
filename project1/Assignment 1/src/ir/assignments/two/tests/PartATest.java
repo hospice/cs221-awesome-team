@@ -1,8 +1,8 @@
 package ir.assignments.two.tests;
 
 import static org.junit.Assert.*;
-import ir.assignments.two.a.Frequency;
 import ir.assignments.two.a.Utilities;
+import ir.assignments.two.a.Frequency;
 import ir.assignments.two.d.StringHelpers;
 
 import java.io.BufferedWriter;
