@@ -85,17 +85,19 @@ public class UrlStatistics {
 				hmap.put(b, count + 1);
 
 			}
-
+			
 			for (String st : hmap.keySet()) {
 				Frequency frequency = new Frequency(st, hmap.get(st));
 				frequencies.add(frequency);
 
 			}
+				
 		}
 
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
-		FrequencyComparator comparator = new FrequencyComparator();
-		Collections.sort(frequencies, comparator);
+			FrequencyComparator comparator = new FrequencyComparator();
+			Collections.sort(frequencies, comparator);
+
 
 		return frequencies;
 	}
@@ -107,6 +109,7 @@ public class UrlStatistics {
 		Iterator<String> iterator;
 		ArrayList<String> tokens = new ArrayList<String>();
 		int maxLength = 0;
+		int count=0;
 		String maxLengthURL = "";
 
 		if(urls != null){
@@ -118,17 +121,17 @@ public class UrlStatistics {
 				if(readHtml != null){
 					String data = readHtml.getAllText();
 					tokens = Utilities.tokenizeFile(data);
-					int count =0;
+					count =0;
 					for (int i = 0; i < tokens.size(); i++) {
 						if(!StopWord.isStopWord(tokens.get(i))){
 							count++;
 						}
 					}
+				}
 
-					if(count > maxLength){
-						maxLengthURL = it;
-					}
-
+				if(count > maxLength){
+					maxLength=count;
+					maxLengthURL = it;
 				}
 			}
 		}
@@ -193,6 +196,8 @@ public class UrlStatistics {
 				if(readHtml != null){
 					String data = readHtml.getAllText();
 					tokens = Utilities.tokenizeFile(data);
+					
+					System.out.println("Putting tokens in, to make 2 grams and add after checking: "+tokens.size());
 
 					for (int i = 0; i < TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).size(); i++) {
 						Frequency temp = TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).get(i);
@@ -218,8 +223,9 @@ public class UrlStatistics {
 		}
 
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
-		FrequencyComparator comparator = new FrequencyComparator();
-		Collections.sort(frequency, comparator);
+			FrequencyComparator comparator = new FrequencyComparator();
+			Collections.sort(frequency, comparator);
+
 
 		for (int i = 0; i < frequency.size(); i++) {
 			if(i>20){

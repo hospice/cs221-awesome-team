@@ -33,7 +33,9 @@ public class HtmlDocument {
 	}
 
 	public String getBody() {
-		return this.parsedDoc.body().text();
+		if(this.parsedDoc.body() != null)
+			return this.parsedDoc.body().text();
+		return ""; 
 	}
 
 	public String getAllText() {
