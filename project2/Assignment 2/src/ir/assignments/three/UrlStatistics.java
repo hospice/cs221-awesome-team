@@ -98,7 +98,6 @@ public class UrlStatistics {
 		FrequencyComparator comparator = new FrequencyComparator();
 		Collections.sort(frequencies, comparator);
 
-
 		return frequencies;
 	}
 
@@ -122,14 +121,15 @@ public class UrlStatistics {
 		String maxLengthURL = "";
 		int maxLength = 0;
 		int count=0;
-
+		
+		// Iterate through the URL Collection
 		if(urls != null){
 			iterator = urls.iterator();   
 
 			while (iterator.hasNext()){
 				String it = iterator.next();
 				readHtml = docStorage.getDocument(it);
-				
+
 				if(readHtml != null){
 					String data = readHtml.getAllText();
 					tokens = Utilities.tokenizeFile(data);
@@ -221,6 +221,7 @@ public class UrlStatistics {
 		r.setLongestPageUrlString(maxLengthURL);
 		r.setMostCommonWords(commonWords);
 		r.setMostCommon2Grams(common2grams);
+		
 		return r;		
 	}
 }
