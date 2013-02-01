@@ -24,4 +24,9 @@ public class Utilities {
 		}
 		return tokenize;
 	}
+	
+	//Checks if a given String 	is a number
+	public static Boolean isNumber(String str){
+	    return str.matches("\\d*");
+	}
 }

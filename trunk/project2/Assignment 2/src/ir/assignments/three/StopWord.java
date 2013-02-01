@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -22,7 +23,8 @@ import java.util.ArrayList;
 public class StopWord {
 
 	private static final String stopListFile = System.getProperty("user.dir") + File.separator + "StopWordList.txt";
-	private static List<String> stopList = new ArrayList<String>();
+	//	private static List<String> stopList = new ArrayList<String>();
+	private static HashMap<String,String> stopMap = new HashMap<String,String>(); 
 
 	/*
 	 * Static class load - one-time file IO for reading in the
@@ -41,7 +43,8 @@ public class StopWord {
 				while ((line = input.readLine()) != null){
 					//System.out.println(line);
 					if (line != null)
-						stopList.add(line.trim().toLowerCase());
+						stopMap.put(line.trim().toLowerCase(), "true");
+					//stopList.add(line.trim().toLowerCase());
 				}
 			}
 			finally {
@@ -65,16 +68,19 @@ public class StopWord {
 	 * @return              Boolean denoting if the word is a stop word
 	 */
 	public static boolean isStopWord(String word) {
-		return stopList.contains(word.trim().toLowerCase());
+		//return stopList.contains(word.trim().toLowerCase());
+		if(stopMap.containsKey(word))
+			return true;
+		return false;
 	}
 
 	/**
 	 * Access method of the stopList
 	 * @return      The stop word list
 	 */
-	public static List<String> getList() {
+/*	public static List<String> getList() {
 		return stopList;
 	}
-
+*/
 }
 
