@@ -14,7 +14,7 @@ public class Utilities {
 		if ( input.trim().length() != 0) {
 			// Convert the input data string to lower case and then tokenize it
 			input = input.toLowerCase();
-			String delims = "[^a-zA-Z0-9']+";
+			String delims = "[^a-zA-Z0-9'-]+";
 			tokens = input.split(delims);
 			int tokenLength = tokens.length;
 
@@ -27,6 +27,6 @@ public class Utilities {
 	
 	//Checks if a given String 	is a number
 	public static Boolean isNumber(String str){
-	    return str.matches("\\d*");
+	    return str.matches(".*\\d.*");
 	}
 }
