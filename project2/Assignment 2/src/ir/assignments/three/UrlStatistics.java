@@ -85,32 +85,43 @@ public class UrlStatistics {
 				hmap.put(b, count + 1);
 
 			}
-			
+
 			for (String st : hmap.keySet()) {
 				Frequency frequency = new Frequency(st, hmap.get(st));
 				frequencies.add(frequency);
 
 			}
-				
+
 		}
 
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
-			FrequencyComparator comparator = new FrequencyComparator();
-			Collections.sort(frequencies, comparator);
+		FrequencyComparator comparator = new FrequencyComparator();
+		Collections.sort(frequencies, comparator);
 
 
 		return frequencies;
 	}
 
-	public static String getLongestPage(Collection<String> urls, IDocumentStorage docStorage) {
+
+
+	public static Result calculations(Collection<String> urls, IDocumentStorage docStorage) {
 		// Get the page with the most terms (including or excluding stop words?)
 		HtmlDocument readHtml=null;
+		Result r=new Result();
 		StopWord stopWord = new StopWord();
 		Iterator<String> iterator;
 		ArrayList<String> tokens = new ArrayList<String>();
+		HashMap<String, Integer> tokenMap = new HashMap<String,Integer>();
+		HashMap<String, Integer> gramMap = new HashMap<String,Integer>();
+		ArrayList<String> tokens2gram = new ArrayList<String>();
+		ArrayList<String> totalWords = new ArrayList<String>();
+		List<Frequency> frequency = new ArrayList<Frequency>();
+		List<String> commonWords = new ArrayList<String>();
+		List<Frequency> frequency1 = new ArrayList<Frequency>();
+		List<String> common2grams = new ArrayList<String>();
+		String maxLengthURL = "";
 		int maxLength = 0;
 		int count=0;
-		String maxLengthURL = "";
 
 		if(urls != null){
 			iterator = urls.iterator();   
@@ -118,17 +129,58 @@ public class UrlStatistics {
 			while (iterator.hasNext()){
 				String it = iterator.next();
 				readHtml = docStorage.getDocument(it);
+				
 				if(readHtml != null){
 					String data = readHtml.getAllText();
 					tokens = Utilities.tokenizeFile(data);
+
+					// Placing the words in the HashMap with Value=1 for Stop word and Value=0 for Non-Stop word
+					for (String s: tokens){
+						if(!Utilities.isNumber(s))
+							tokenMap.put(s,1);
+					}
+
+					// Counting the number of words in this page
 					count =0;
 					for (int i = 0; i < tokens.size(); i++) {
-						if(!StopWord.isStopWord(tokens.get(i))){
-							count++;
+						if(!Utilities.isNumber(tokens.get(i))){
+							if(tokenMap.get(tokens.get(i)) == 1 ){
+								if(!StopWord.isStopWord(tokens.get(i))){
+									totalWords.add(tokens.get(i));
+									tokenMap.put(tokens.get(i),0);
+									count++;
+								}
+								else{
+									tokenMap.put(tokens.get(i),2);
+								}
+							}
+							else{
+								if(tokenMap.get(tokens.get(i)) != 2 ){
+									totalWords.add(tokens.get(i));
+									count++;
+								}
+							}
+						}
+						else count++;
+					}
+
+					// Creating and finding the frequency of 2-grams
+					frequency = TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens);
+					for (int i = 0; i < frequency.size(); i++) {
+						Frequency temp = frequency.get(i);
+						String text = temp.getText();
+						tokens2gram = Utilities.tokenizeFile(text);
+						if(!Utilities.isNumber(tokens2gram.get(0)) && !Utilities.isNumber(tokens2gram.get(1))){
+							if(tokenMap.get(tokens2gram.get(0)) == 0 && tokenMap.get(tokens2gram.get(1)) == 0)
+							{
+								int currentValue = gramMap.containsKey(text) ? gramMap.get(text) : 0;
+								gramMap.put(text, temp.getFrequency() + currentValue);
+							}
 						}
 					}
 				}
 
+				// Checking if existing word count is greater than the word count for this page
 				if(count > maxLength){
 					maxLength=count;
 					maxLengthURL = it;
@@ -136,104 +188,39 @@ public class UrlStatistics {
 			}
 		}
 
-		return maxLengthURL;
-	}
 
-	public static List<String> getMostCommonWords(Collection<String> urls, IDocumentStorage docStorage) {
-		// Get top 500 most common words across all documents (excluding stop words)
-		HtmlDocument readHtml=null;
-		StopWord stopWord = new StopWord();
-		Iterator<String> iterator;
-		ArrayList<String> totalWords = new ArrayList<String>();
-		List<Frequency> frequency = new ArrayList<Frequency>();
-		List<String> commomWords = new ArrayList<String>();
-
-		if(urls != null){
-			iterator = urls.iterator();   
-
-			while (iterator.hasNext()){
-				String it = iterator.next();
-				readHtml = docStorage.getDocument(it);
-				if(readHtml != null){
-					String data = readHtml.getAllText();
-
-					for (int i = 0; i < Utilities.tokenizeFile(data).size(); i++) {
-						if(!StopWord.isStopWord(Utilities.tokenizeFile(data).get(i))){
-							totalWords.add(Utilities.tokenizeFile(data).get(i));
-						}
-					}
-				}
-			}
-		}
-
+		// Finding the frequency of words from all pages
 		frequency = WordFrequencyCounter.computeWordFrequencies(totalWords);
 
+		// Getting top 500 most common words
 		for (int i = 0; i < frequency.size(); i++) {
-			if(i>500){
+			if(i>=500){
 				break;
 			}
-			commomWords.add(frequency.get(i).getText());
+			commonWords.add(frequency.get(i).getText());
 		}
 
-		return commomWords;
-	}
-
-	public static List<String> getMostCommon2Grams(Collection<String> urls, IDocumentStorage docStorage) {
-		// Get top 20 2-grams excluding stop words
-		HtmlDocument readHtml=null;
-		StopWord stopWord = new StopWord();
-		Iterator<String> iterator;
-		ArrayList<String> tokens = new ArrayList<String>();
-		List<Frequency> frequency = new ArrayList<Frequency>();
-		List<String> commom2grams = new ArrayList<String>();
-
-		if(urls != null){
-			iterator = urls.iterator();   
-
-			while (iterator.hasNext()){
-				String it = iterator.next();
-				readHtml = docStorage.getDocument(it);
-				if(readHtml != null){
-					String data = readHtml.getAllText();
-					tokens = Utilities.tokenizeFile(data);
-					
-					System.out.println("Putting tokens in, to make 2 grams and add after checking: "+tokens.size());
-
-					for (int i = 0; i < TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).size(); i++) {
-						Frequency temp = TwoGramFrequencyCounter.computeTwoGramFrequencies(tokens).get(i);
-
-						if(!StopWord.isStopWord(Utilities.tokenizeFile(temp.getText()).get(0)) && !StopWord.isStopWord(Utilities.tokenizeFile(temp.getText()).get(1)))
-						{
-							int flag=0;
-
-							for(Frequency f:frequency){
-								if(f.getText().equals(temp.getText())){
-									temp.incrementFrequency();
-									flag=1;
-									break;
-								}
-							}
-							if(flag==0)
-								frequency.add(temp);
-
-						}
-					}
-				}
-			}
+		// Convert the 2-gram dictionary to an array
+		for (String str : gramMap.keySet()) {
+			Frequency freq = new Frequency(str, gramMap.get(str));
+			frequency1.add(freq);
 		}
 
 		// Order by frequency (desc) and break ties with alphabetical order (asc)
-			FrequencyComparator comparator = new FrequencyComparator();
-			Collections.sort(frequency, comparator);
+		FrequencyComparator comparator = new FrequencyComparator();
+		Collections.sort(frequency1, comparator);
 
-
-		for (int i = 0; i < frequency.size(); i++) {
-			if(i>20){
+		// Getting the top 20 most common 2-grams
+		for (int i = 0; i < frequency1.size(); i++) {
+			if(i>=20){
 				break;
 			}
-			commom2grams.add(frequency.get(i).getText());
+			common2grams.add(frequency1.get(i).getText());
 		}
 
-		return commom2grams;	
+		r.setLongestPageUrlString(maxLengthURL);
+		r.setMostCommonWords(commonWords);
+		r.setMostCommon2Grams(common2grams);
+		return r;		
 	}
 }

@@ -36,17 +36,23 @@ public class AnswerQuestions {
 		Collections.sort(subdomainsDisplay); // sort alphabetically
 		store(subdomains, subdomainsDisplay);
 
+		Result result = UrlStatistics.calculations(crawledUrls, documentStorage); // Calling calculations method for test processing 
+		
 		// Question 4
-		String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls, documentStorage);
+		//String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls, documentStorage);
+		String longestPageUrlString = result.getLongestPageUrlString();
 		displayAndStore(answers, "Longest page: " + longestPageUrlString);
 
 		// Question 5
-		List<String> mostCommonWords = UrlStatistics.getMostCommonWords(crawledUrls, documentStorage);
+		//List<String> mostCommonWords = UrlStatistics.getMostCommonWords(crawledUrls, documentStorage);
+		List<String> mostCommonWords = result.getMostCommonWords();
 		store(commonWords, mostCommonWords);
 
 		// Question 6
-		List<String> mostCommon2Grams = UrlStatistics.getMostCommon2Grams(crawledUrls, documentStorage);
+		//List<String> mostCommon2Grams = UrlStatistics.getMostCommon2Grams(crawledUrls, documentStorage);
+		List<String> mostCommon2Grams = result.getMostCommon2Grams();
 		store(common2Grams, mostCommon2Grams);
+	
 	}
 
 	private static void displayAndStore(File file, String line) {
