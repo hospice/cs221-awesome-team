@@ -45,6 +45,7 @@ public class UrlStatistics {
 	}
 
 	public static List<Frequency> countSubdomains(Collection<String> urls) {
+		// Count the number of Subdomains
 		// http://vision.ics.uci.edu, 10
 		// etc.
 		ArrayList<Frequency> frequencies = new ArrayList<Frequency>();
@@ -89,7 +90,6 @@ public class UrlStatistics {
 			for (String st : hmap.keySet()) {
 				Frequency frequency = new Frequency(st, hmap.get(st));
 				frequencies.add(frequency);
-
 			}
 
 		}
@@ -104,7 +104,7 @@ public class UrlStatistics {
 
 
 	public static Result calculations(Collection<String> urls, IDocumentStorage docStorage) {
-		// Get the page with the most terms (including or excluding stop words?)
+		// Find the longest page, most common words and most common 2-grams
 		HtmlDocument readHtml=null;
 		Result r=new Result();
 		StopWord stopWord = new StopWord();
@@ -121,7 +121,7 @@ public class UrlStatistics {
 		String maxLengthURL = "";
 		int maxLength = 0;
 		int count=0;
-		
+
 		// Iterate through the URL Collection
 		if(urls != null){
 			iterator = urls.iterator();   
@@ -134,16 +134,16 @@ public class UrlStatistics {
 					String data = readHtml.getAllText();
 					tokens = Utilities.tokenizeFile(data);
 
-					// Placing the words in the HashMap with Value=1 for Stop word and Value=0 for Non-Stop word
+					// Placing the words in HashMap with Value=1 for Stop word and Value=0 for Non-Stop word for later reference
 					for (String s: tokens){
-						if(!Utilities.isNumber(s))
+						if(!Utilities.isNumber(s) && s.length()>1 && !s.matches(".*\\d.*"))
 							tokenMap.put(s,1);
 					}
 
 					// Counting the number of words in this page
 					count =0;
 					for (int i = 0; i < tokens.size(); i++) {
-						if(!Utilities.isNumber(tokens.get(i))){
+						if(!Utilities.isNumber(tokens.get(i)) && tokens.get(i).length()>2){
 							if(tokenMap.get(tokens.get(i)) == 1 ){
 								if(!StopWord.isStopWord(tokens.get(i))){
 									totalWords.add(tokens.get(i));
@@ -170,7 +170,7 @@ public class UrlStatistics {
 						Frequency temp = frequency.get(i);
 						String text = temp.getText();
 						tokens2gram = Utilities.tokenizeFile(text);
-						if(!Utilities.isNumber(tokens2gram.get(0)) && !Utilities.isNumber(tokens2gram.get(1))){
+						if(!Utilities.isNumber(tokens2gram.get(0)) && !Utilities.isNumber(tokens2gram.get(1)) && tokens2gram.get(0).length()>2 && tokens2gram.get(1).length()>2){
 							if(tokenMap.get(tokens2gram.get(0)) == 0 && tokenMap.get(tokens2gram.get(1)) == 0)
 							{
 								int currentValue = gramMap.containsKey(text) ? gramMap.get(text) : 0;
@@ -221,7 +221,7 @@ public class UrlStatistics {
 		r.setLongestPageUrlString(maxLengthURL);
 		r.setMostCommonWords(commonWords);
 		r.setMostCommon2Grams(common2grams);
-		
+
 		return r;		
 	}
 }
