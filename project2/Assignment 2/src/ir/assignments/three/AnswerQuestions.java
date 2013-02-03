@@ -37,8 +37,6 @@ public class AnswerQuestions {
 		Collections.sort(subdomainsDisplay); // sort alphabetically
 		store(txtSubdomains, subdomainsDisplay);
 		
-		if (true) return;
-		
 		// Analyze document content (Questions 4-6)
 		DocumentStatistics docStats = new DocumentStatistics();
 		docStats.runStats(documentStorage);
