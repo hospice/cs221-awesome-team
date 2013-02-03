@@ -49,7 +49,7 @@ public class DocumentStatisticsTest {
 			docStats.runStats(docStorage, tmpFolder.newFile().getAbsolutePath(), tmpFolder.newFile().getAbsolutePath());
 
 			String[] actualMostCommonWords = toStringArray(docStats.getMostCommonWords());
-			String[] expectedMostCommonWords = new String[] { "word", "page", "test", "one", "another", "two", "three", "yet" }; // Order matters (sorted by freq)
+			String[] expectedMostCommonWords = new String[] { "word", "page", "test", "another", "three" }; // Order matters (sorted by freq)
 
 			assertArrayEquals(expectedMostCommonWords, actualMostCommonWords);
 		}
@@ -65,7 +65,7 @@ public class DocumentStatisticsTest {
 			docStats.runStats(docStorage, tmpFolder.newFile().getAbsolutePath(), tmpFolder.newFile().getAbsolutePath());
 
 			String[] actualMostCommon2Grams = toStringArray(docStats.getMostCommonTwoGrams());
-			String[] expectedMostCommon2Grams = new String[] { "word word", "test page", "another test", "one two", "two one", "one three", "page one", "page word", "yet another" }; // Order matters (sorted by freq)
+			String[] expectedMostCommon2Grams = new String[] { "word word", "test page", "another test", "page word" }; // Order matters (sorted by freq)
 
 			assertArrayEquals(expectedMostCommon2Grams, actualMostCommon2Grams);
 		}
