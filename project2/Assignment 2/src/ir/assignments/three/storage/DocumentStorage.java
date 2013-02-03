@@ -14,6 +14,7 @@ public class DocumentStorage implements IDocumentStorage {
 	private ObjectContainer database;
 
 	public DocumentStorage(String storagePath) {
+		// Use db4o (http://www.db4o.com/) as an embedded database		
 		// Configure database
 		EmbeddedConfiguration dbConfig = Db4oEmbedded.newConfiguration();
 		dbConfig.common().objectClass(CrawledDocument.class).objectField("url").indexed(true);
