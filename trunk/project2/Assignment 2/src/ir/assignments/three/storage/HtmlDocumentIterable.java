@@ -1,22 +1,24 @@
-package ir.assignments.three;
+package ir.assignments.three.storage;
+
+import ir.assignments.three.CrawledDocument;
 
 import java.util.Iterator;
 
 import com.db4o.ObjectSet;
 
-public class UrlIterable implements Iterable<String> {
+public class HtmlDocumentIterable implements Iterable<HtmlDocument> {
 	private ObjectSet<CrawledDocument> results;
 
-	public UrlIterable(ObjectSet<CrawledDocument> results) {
+	public HtmlDocumentIterable(ObjectSet<CrawledDocument> results) {
 		this.results = results;
 	}
 	
 	@Override
-	public Iterator<String> iterator() {
+	public Iterator<HtmlDocument> iterator() {
 		return new HtmlDocumentIterator(results);
 	}
 	
-	public class HtmlDocumentIterator implements Iterator<String> {
+	public class HtmlDocumentIterator implements Iterator<HtmlDocument> {
 		private ObjectSet<CrawledDocument> results;
 
 		public HtmlDocumentIterator(ObjectSet<CrawledDocument> results) {
@@ -29,14 +31,15 @@ public class UrlIterable implements Iterable<String> {
 		}
 
 		@Override
-		public String next() {
+		public HtmlDocument next() {
 			CrawledDocument doc = results.next();
-			return doc.url;
+			return new HtmlDocument(doc.url, doc.content);
 		}
 
 		@Override
 		public void remove() {
 			// TODO Auto-generated method stub
+
 		}
 	}
 }

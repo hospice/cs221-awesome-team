@@ -1,4 +1,4 @@
-package ir.assignments.three;
+package ir.assignments.three.helpers;
 
 public class StopWatch {
 	private long startTime;

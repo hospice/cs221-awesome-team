@@ -1,4 +1,7 @@
-package ir.assignments.three;
+package ir.assignments.three.storage;
+
+
+import ir.assignments.three.CrawledDocument;
 
 import java.util.List;
 
