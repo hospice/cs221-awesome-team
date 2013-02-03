@@ -41,7 +41,7 @@ public class DocumentStatistics {
 		RecordManager twoGramManager = null;
 		
 		try {
-			// Initialize a file-based tree map for tokens and 2-grams. 
+			// Initialize a file-based tree map (using jdbm2 [https://code.google.com/p/jdbm2/]) for tokens and 2-grams.
 			// Using a tree map gives faster insert performance since the tokens (keys) are pretty small (hashmap has too many collisions).
 			File statsDir = new File("stats");
 			statsDir.mkdir();			
@@ -175,7 +175,7 @@ public class DocumentStatistics {
 			return tokenize;
 
 		input = input.toLowerCase();
-		String[] parts = input.split("\\W+"); // alphanumeric words 
+		String[] parts = input.split("[^a-zA-Z0-9'-]+"); // alphanumeric words 
 		return new ArrayList<String>(Arrays.asList(parts));
 	}
 

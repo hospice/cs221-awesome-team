@@ -12,13 +12,15 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
+ * Original code structure borrowed from: http://code.google.com/p/jrawler/source/browse/trunk/src/com/barkerton/crawler/parser/StopWords.java?r=9
+ * 
  * Class maintains an in-memory list of available stop words
  * used in removing unnecessary words form the parsing indexer.
  * Words we don't care to utilize for frequency weights in
  * determining probability.
  *
  * @author CJ_Barker
- * General code structure borrowed from: http://code.google.com/p/jrawler/source/browse/trunk/src/com/barkerton/crawler/parser/StopWords.java?r=9
+ *  
  *
  * Copyright (c) 2008 C. J. Barker. All rights reserved.
  */
