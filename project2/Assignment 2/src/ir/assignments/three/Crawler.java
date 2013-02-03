@@ -1,5 +1,11 @@
 package ir.assignments.three;
 
+import ir.assignments.three.crawling.ICSCrawler;
+import ir.assignments.three.crawling.ICSCrawlerParameters;
+import ir.assignments.three.crawling.ICSCrawlerStatistics;
+import ir.assignments.three.storage.DocumentStorage;
+import ir.assignments.three.storage.IDocumentStorage;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;

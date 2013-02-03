@@ -1,4 +1,5 @@
-package ir.assignments.three;
+package ir.assignments.three.storage;
+
 
 public interface IDocumentStorage {	
 	void storeDocument(String url, String text);	

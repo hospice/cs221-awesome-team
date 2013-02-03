@@ -1,4 +1,4 @@
-package ir.assignments.three;
+package ir.assignments.three.helpers;
 
 
 import java.io.BufferedReader;

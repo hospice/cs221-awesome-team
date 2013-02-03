@@ -8,9 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
 
-import ir.assignments.three.MemoryDocumentStorage;
-import ir.assignments.three.Result;
-import ir.assignments.three.UrlStatistics;
+import ir.assignments.three.stats.UrlStatistics;
+import ir.assignments.three.storage.MemoryDocumentStorage;
 import ir.assignments.two.a.*;
 import ir.assignments.two.tests.TestUtils;
 

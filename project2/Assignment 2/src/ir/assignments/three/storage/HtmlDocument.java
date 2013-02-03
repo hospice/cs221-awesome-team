@@ -1,4 +1,4 @@
-package ir.assignments.three;
+package ir.assignments.three.storage;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

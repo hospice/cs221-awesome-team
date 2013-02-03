@@ -1,4 +1,6 @@
-package ir.assignments.three;
+package ir.assignments.three.crawling;
+
+import ir.assignments.three.storage.IDocumentStorage;
 
 public class ICSCrawlerParameters {
 	private String seedUrl;

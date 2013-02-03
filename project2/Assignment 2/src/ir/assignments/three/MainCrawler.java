@@ -1,5 +1,7 @@
 package ir.assignments.three;
 
+import ir.assignments.three.storage.DocumentStorage;
+
 import java.util.Collection;
 
 public class MainCrawler {

@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 
-import ir.assignments.three.DocumentStorage;
-import ir.assignments.three.HtmlDocument;
+import ir.assignments.three.storage.DocumentStorage;
+import ir.assignments.three.storage.HtmlDocument;
 
 import org.junit.Rule;
 import org.junit.Test;
