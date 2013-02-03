@@ -1,6 +1,7 @@
 package ir.assignments.three.storage;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class MemoryDocumentStorage implements IDocumentStorage {
 	}
 	
 	public List<String> getCrawledUrls() {
-		return null; //TODO
+		ArrayList<String> urls = new ArrayList<String>();
+		for (HtmlDocument doc : this.urlPageDictionary) {
+			urls.add(doc.getUrl());
+		}
+		
+		return urls;
 	}
 }

@@ -30,7 +30,7 @@ public class UrlStatistics {
 	}
 
 	public void runStats(IDocumentStorage docStorage) {
-
+		
 		// Keep track of all pages and unique pages (don't count different URL queries as different pages)
 		long totalCount = 0;
 		HashSet<String> uniquePages = new HashSet<String>();
