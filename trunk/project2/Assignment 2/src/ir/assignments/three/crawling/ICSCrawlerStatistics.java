@@ -1,5 +1,7 @@
 package ir.assignments.three.crawling;
 
+import ir.assignments.three.helpers.URLHelper;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public class ICSCrawlerStatistics {
 
 	public boolean intendToVisit(String url) {
 		// Determine if the page has been visited too many times (might be infinite loop)
-		String urlWithoutQuery = removeQuery(url);
+		String urlWithoutQuery = URLHelper.removeQuery(url);
 		if (urlWithoutQuery == null)
 			return true;
 
@@ -35,18 +37,5 @@ public class ICSCrawlerStatistics {
 		this.pagesToCrawl.put(urlWithoutQuery, count + 1);
 
 		return true;
-	}
-
-	private String removeQuery(String url) {
-		try {
-			URI uri = new URI(url);
-			return uri.getAuthority() + uri.getPath();
-		}
-		catch (URISyntaxException e) {
-			System.out.println("Error removing query from: " + url);
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 }
