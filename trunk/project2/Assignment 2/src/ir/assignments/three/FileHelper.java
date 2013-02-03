@@ -35,15 +35,15 @@ public class FileHelper {
 			}
 
 			// Read the rest
-			String content = "";
+			StringBuilder content = new StringBuilder();
 			String currentLine = "";
 			while ((currentLine = reader.readLine()) != null) {
-				content += currentLine;
+				content.append(currentLine);
 				if (reader.ready())
-					content += lineSeparator;
+					content.append(lineSeparator);
 			}
 
-			return content;
+			return content.toString();
 		}
 		finally {
 			if (reader != null)

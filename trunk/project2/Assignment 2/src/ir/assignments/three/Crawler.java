@@ -43,6 +43,7 @@ public class Crawler {
 			config.setMaxPagesToFetch(maxPages);
 			config.setResumableCrawling(true);
 			config.setUserAgentString("UCI IR crawler 34043453 10902614");
+			config.setIncludeBinaryContentInCrawling(false);
 			
 			ICSCrawlerParameters params = new ICSCrawlerParameters();
 			params.setSeedUrl(seedURL);
@@ -58,7 +59,7 @@ public class Crawler {
 			controller.setCustomData(params);
 			
 			// Start crawling
-			controller.start(ICSCrawler.class, 2); //TODO: increase 1?
+			controller.start(ICSCrawler.class, 1); //TODO: increase 1?
 
 			// Get list of crawled URLs for each crawler
 			List<Object> crawlersLocalData = controller.getCrawlersLocalData();
