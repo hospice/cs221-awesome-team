@@ -112,9 +112,6 @@ public class DocumentStatistics {
 			this.longestDocumentUrl = longestDocumentUrl;
 			this.mostCommonWords = getTopMostCommon(tokenMap, 500); // top 500 most common words
 			this.mostCommonTwoGrams = getTopMostCommon(twoGramMap, 20); // top 20 most common words
-
-			tokenManager.close();
-			twoGramManager.close();
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
