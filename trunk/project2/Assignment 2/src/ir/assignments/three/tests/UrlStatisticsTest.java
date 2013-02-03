@@ -13,173 +13,101 @@ import ir.assignments.three.storage.MemoryDocumentStorage;
 import ir.assignments.two.a.*;
 import ir.assignments.two.tests.TestUtils;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class UrlStatisticsTest {
+	private UrlStatistics urlStats;
 
-//	@Test
-//	public void testCountUniquePages() {
-//		List<String> urls = Arrays.asList(new String[] 
-//				{ 
-//				"http://www.example.com", 
-//				"http://www.example.com/", 
-//				"http://www.otherexample.com" });
-//		int expectedCount = 3;
-//		int actualCount = UrlStatistics.countUniquePages(urls);
-//
-//		assertEquals(expectedCount, actualCount);
-//	}
-//
-//	@Test
-//	public void testCountUniquePages_QueriesAndTags() {
-//		List<String> urls = Arrays.asList(new String[] 
-//				{
-//				"http://www.example.com/page.php", 
-//				"http://www.example.com/page.php?query=1", 
-//				"http://www.example.com/page.php?query=1&query=2&query=3",
-//				"http://www.example.com/page.php#tag",
-//				"http://www.example.com/page.php?query#tag" });
-//		int expectedCount = 1;
-//		int actualCount = UrlStatistics.countUniquePages(urls);
-//
-//		assertEquals(expectedCount, actualCount);
-//	}
-//
-//	@Test
-//	public void testCountUniquePages_Null() {
-//		int expectedCount = 0;
-//		int actualCount = UrlStatistics.countUniquePages(null);
-//
-//		assertEquals(expectedCount, actualCount);
-//	}
-//
-//	@Test
-//	public void testCountUniquePages_Empty() {
-//		int expectedCount = 0;
-//		int actualCount = UrlStatistics.countUniquePages(Arrays.asList(new String[0]));
-//
-//		assertEquals(expectedCount, actualCount);
-//	}
-//
-//	@Test
-//	public void testCountSubdomains() {
-//		List<String> urls = Arrays.asList(new String[] 
-//				{
-//				"http://vision.ics.uci.edu/",
-//				"http://vision.ics.uci.edu/page.php",
-//				"http://vision.ics.uci.edu/page.php?query",
-//				"http://other.ics.uci.edu/",
-//				"http://other.ics.uci.edu/page.php" });
-//
-//
-//		ArrayList<Frequency> expected = new ArrayList<Frequency>();
-//		expected.add(new Frequency("http://other.ics.uci.edu", 2));
-//		expected.add(new Frequency("http://vision.ics.uci.edu", 2));
-//
-//		List<Frequency> actual = UrlStatistics.countSubdomains(urls);
-//		TestUtils.compareFrequencyLists(expected, actual);
-//	}
-//
-//	@Test
-//	public void testCountSubdomains_Tricky() {
-//		List<String> urls = Arrays.asList(new String[] 
-//				{
-//				"http://vision.ics.uci.edu", // <--- no slash
-//				"http://vision.ics.uci.edu/", // <--- yes slash (two separate pages)
-//				"http://vision.ics.uci.edu/page.php",
-//				"http://vision.ics.uci.edu/page.php?query" });
-//
-//		ArrayList<Frequency> expected = new ArrayList<Frequency>();
-//		expected.add(new Frequency("http://vision.ics.uci.edu", 3));
-//
-//		List<Frequency> actual = UrlStatistics.countSubdomains(urls);
-//		TestUtils.compareFrequencyLists(expected, actual);
-//	}
-//
-//	@Test
-//	public void testCountSubdomains_Null() {
-//		ArrayList<Frequency> expected = new ArrayList<Frequency>();
-//		List<Frequency> actual = UrlStatistics.countSubdomains(null);
-//		TestUtils.compareFrequencyLists(expected, actual);
-//	}
-//
-//	@Test
-//	public void testCountSubdomains_EmptyList() {
-//		ArrayList<Frequency> expected = new ArrayList<Frequency>();
-//		List<Frequency> actual = UrlStatistics.countSubdomains(new ArrayList<String>());
-//		TestUtils.compareFrequencyLists(expected, actual);
-//	}
-//
-//	@Test
-//	public void testGetLongestPage() {
-////		// Setup the (fake) URLs to check
-////		Result rt = new Result();
-////		List<String> urls = getTestDocumentUrls();
-////		// Setup up the test in-memory document storage
-////		MemoryDocumentStorage docStorage = getTestDocumentStorage();
-////
-////		// Get the longest page
-////		rt=UrlStatistics.calculations(urls, docStorage);
-////		String actualLongestPageUrl = rt.getLongestPageUrlString();
-////		System.out.println("longest page: "+actualLongestPageUrl);
-////		String expectedLongestPageUrl = "http://www.fake.com/page3.php";
-////
-////		assertEquals(expectedLongestPageUrl, actualLongestPageUrl);
-//	}
-//
-//	@Test
-//	public void testGetMostCommonWords() {
-////		// Setup the (fake) URLs to check
-////		List<String> urls = getTestDocumentUrls();
-////		Result rt = new Result();
-////
-////		// Setup up the test in-memory document storage
-////		MemoryDocumentStorage docStorage = getTestDocumentStorage();
-////
-////		// Get the most common words
-////		rt=UrlStatistics.calculations(urls, docStorage);
-////		String[] actualMostCommonWords = toStringArray(rt.getMostCommonWords());
-////
-////		String[] expectedMostCommonWords = new String[] { "word", "page", "test", "one", "another", "two", "three", "yet" }; // Order matters (sorted by freq)
-////
-////		assertArrayEquals(expectedMostCommonWords, actualMostCommonWords);
-//	}
-//
-//	@Test
-//	public void testGetMostCommon2Grams() {
-////		// Setup the (fake) URLs to check
-////		List<String> urls = getTestDocumentUrls();
-////		Result rt = new Result();
-////
-////		// Setup up the test in-memory document storage
-////		MemoryDocumentStorage docStorage = getTestDocumentStorage();
-////
-////		// Get the most common words
-////		rt=UrlStatistics.calculations(urls, docStorage);
-////		String[] actualMostCommon2Grams = toStringArray(rt.getMostCommon2Grams());
-////
-////		String[] expectedMostCommon2Grams = new String[] { "word word","test page", "another test", "one two", "two one", "one three", "page one",  "page word", "yet another"  }; // Order matters (sorted by freq)
-////		assertArrayEquals(expectedMostCommon2Grams, actualMostCommon2Grams);
-//	}
-
-	private List<String> getTestDocumentUrls() {
-		return Arrays.asList(new String[] { "http://www.fake.com/page1.php", "http://www.fake.com/page2.php", "http://www.fake.com/page3.php" });
+	@Before
+	public void setup() {
+		urlStats = new UrlStatistics();
 	}
 
-	private MemoryDocumentStorage getTestDocumentStorage() {
+	@Test
+	public void testCountUniquePages() {
 		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
-		docStorage.storeDocument("http://www.fake.com/page1.php", toHtml("Test Page", "This is a test page")); // Stop words
-		docStorage.storeDocument("http://www.fake.com/page2.php", toHtml("Another Test Page", "One two one two One three")); // 2-grams 
-		docStorage.storeDocument("http://www.fake.com/page3.php", toHtml("Yet Another Test Page", "Word word word word word word")); // high frequency word 
+		docStorage.storeDocument("http://www.example.com", "");
+		docStorage.storeDocument("http://www.example.com/", "");
+		docStorage.storeDocument("http://www.otherexample.com", "");
 
-		return docStorage;
+		urlStats.runStats(docStorage);
+		long expectedCount = 3;
+		long actualCount = urlStats.getTotalUniquePages();
+
+		assertEquals(expectedCount, actualCount);
 	}
 
-	private String toHtml(String title, String body) {
-		return "<html><title>" + title + "</title><body>" + body + "</body></html>";
+	@Test
+	public void testCountUniquePages_QueriesAndTags() {
+		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
+		docStorage.storeDocument("http://www.example.com/page.php", "");
+		docStorage.storeDocument("http://www.example.com/page.php?query=1", "");
+		docStorage.storeDocument("http://www.example.com/page.php?query=1&query=2&query=3", "");
+		docStorage.storeDocument("http://www.example.com/page.php#tag", "");
+		docStorage.storeDocument("http://www.example.com/page.php?query#tag", "");
+
+		urlStats.runStats(docStorage);
+		long expectedCount = 1;
+		long actualCount = urlStats.getTotalUniquePages();
+
+		assertEquals(expectedCount, actualCount);
 	}
 
-	private String[] toStringArray(List<String> elements) {
-		return elements.toArray(new String[elements.size()]);
+	@Test
+	public void testCountUniquePages_Empty() {
+		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
+		urlStats.runStats(docStorage);
+		long expectedCount = 0;
+		long actualCount = urlStats.getTotalUniquePages();
+
+		assertEquals(expectedCount, actualCount);
+	}
+
+	@Test
+	public void testCountSubdomains() {
+		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
+		docStorage.storeDocument("http://vision.ics.uci.edu/", "");
+		docStorage.storeDocument("http://vision.ics.uci.edu/page.php", "");
+		docStorage.storeDocument("http://vision.ics.uci.edu/page.php?query", "");
+		docStorage.storeDocument("http://other.ics.uci.edu/", "");
+		docStorage.storeDocument("http://other.ics.uci.edu/page.php", "");
+
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		expected.add(new Frequency("http://other.ics.uci.edu", 2));
+		expected.add(new Frequency("http://vision.ics.uci.edu", 2));
+
+		urlStats.runStats(docStorage);
+		List<Frequency> actual = urlStats.getSubdomainFrequencies();
+
+		TestUtils.compareFrequencyLists(expected, actual);
+	}
+
+	@Test
+	public void testCountSubdomains_Tricky() {
+		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
+		docStorage.storeDocument("http://vision.ics.uci.edu", "");
+		docStorage.storeDocument("http://vision.ics.uci.edu/", "");
+		docStorage.storeDocument("http://vision.ics.uci.edu/page.php", "");
+		docStorage.storeDocument("http://vision.ics.uci.edu/page.php?query", "");
+
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+		expected.add(new Frequency("http://vision.ics.uci.edu", 3));
+
+		urlStats.runStats(docStorage);
+		List<Frequency> actual = urlStats.getSubdomainFrequencies();
+
+		TestUtils.compareFrequencyLists(expected, actual);
+	}
+
+	@Test
+	public void testCountSubdomains_EmptyList() {
+		MemoryDocumentStorage docStorage = new MemoryDocumentStorage();
+		ArrayList<Frequency> expected = new ArrayList<Frequency>();
+
+		urlStats.runStats(docStorage);
+		List<Frequency> actual = urlStats.getSubdomainFrequencies();
+
+		TestUtils.compareFrequencyLists(expected, actual);
 	}
 }
