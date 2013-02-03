@@ -8,10 +8,16 @@ import org.jsoup.select.Elements;
 public class HtmlDocument {
 	private final static String lineSeparator = System.getProperty("line.separator");
 	private Document parsedDoc;
+	private String url;
 
-	public HtmlDocument(String html) {
+	public HtmlDocument(String url, String html) {
 		// Parse document using jsoup (http://jsoup.org/)
 		this.parsedDoc = Jsoup.parse(html);
+		this.url = url;
+	}
+	
+	public String getUrl() {
+		return this.url;
 	}
 
 	public String getTitle() {

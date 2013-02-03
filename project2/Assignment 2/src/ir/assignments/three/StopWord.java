@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 public class StopWord {
 
 	private static final String stopListFile = System.getProperty("user.dir") + File.separator + "StopWordList.txt";
-	private static HashMap<String,String> stopMap = new HashMap<String,String>(); 
+	private static HashSet<String> stopWords = new HashSet<String>(); 
 
 	/*
 	 * Static class load - one-time file IO for reading in the
@@ -43,7 +44,7 @@ public class StopWord {
 
 				while ((line = input.readLine()) != null){
 					if (line != null)
-						stopMap.put(line.trim().toLowerCase(), "true");
+						stopWords.add(line.trim().toLowerCase());
 				}
 			}
 			finally {
@@ -62,9 +63,7 @@ public class StopWord {
 
 	// Checks whether or not a given word is part of the stop word list.
 	public static boolean isStopWord(String word) {
-		if(stopMap.containsKey(word))
-			return true;
-		return false;
+		return stopWords.contains(word.trim());
 	}
 }
 

@@ -1,15 +1,24 @@
 package ir.assignments.three;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class MemoryDocumentStorage implements IDocumentStorage {
-	private HashMap<String, HtmlDocument> urlPageDictionary = new HashMap<String, HtmlDocument>();	
-	
+	private HashSet<HtmlDocument> urlPageDictionary = new HashSet<HtmlDocument>();
+
 	public void storeDocument(String url, String text) {
-		this.urlPageDictionary.put(url, new HtmlDocument(text));
+		this.urlPageDictionary.add(new HtmlDocument(url, text));
+	}
+
+	public Iterable<HtmlDocument> getAll() {
+		return urlPageDictionary;
+	}
+
+	public void close() {
+		this.urlPageDictionary = null;
 	}
 	
-	public HtmlDocument getDocument(String url) {
-		return this.urlPageDictionary.get(url);
+	public List<String> getCrawledUrls() {
+		return null; //TODO
 	}
 }

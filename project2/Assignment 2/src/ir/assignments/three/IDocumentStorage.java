@@ -1,7 +1,8 @@
 package ir.assignments.three;
 
-public interface IDocumentStorage {
-	
+public interface IDocumentStorage {	
 	void storeDocument(String url, String text);	
-	HtmlDocument getDocument(String url);
+	public Iterable<HtmlDocument> getAll();
+	public Iterable<String> getCrawledUrls();
+	void close();
 }

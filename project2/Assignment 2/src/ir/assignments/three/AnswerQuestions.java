@@ -11,51 +11,44 @@ import java.util.Collections;
 import java.util.List;
 
 public class AnswerQuestions {
-	public static void Answer(double secondsElapsed, Collection<String> crawledUrls, IDocumentStorage documentStorage) {
-		File answers = new File("answers.txt");
-		File subdomains = new File("Subdomains.txt");
-		File commonWords = new File("CommonWords.txt");
-		File common2Grams = new File("Common2Grams.txt");
-
-		// Start
-		displayAndStore(answers, "Crawled " + crawledUrls.size() + " pages(s)");
-
-		// Question 1
-		displayAndStore(answers, "Seconds elapsed: " + secondsElapsed);
-
-		// Question 2
-		int uniquePages = UrlStatistics.countUniquePages(crawledUrls);
-		displayAndStore(answers, "Unique pages: " + uniquePages);
-
-		// Question 3
-		List<Frequency> countedSubdomains = UrlStatistics.countSubdomains(crawledUrls);
+	public static void Answer(IDocumentStorage documentStorage) {
+		File txtAnswers = new File("answers.txt");
+		File txtSubdomains = new File("Subdomains.txt");
+		File txtCommonWords = new File("CommonWords.txt");
+		File txtCommon2Grams = new File("Common2Grams.txt");
+		
+		// Analyze URLs first (Questions 2-3)
+		UrlStatistics urlStats = new UrlStatistics();
+		urlStats.runStats(documentStorage);
+		
+		//-- Results
+		displayAndStore(txtAnswers, "Total Pages Crawled: " + urlStats.getTotalPages());
+		displayAndStore(txtAnswers, "Total Unique Pages Crawled: " + urlStats.getTotalUniquePages());
+		displayAndStore(txtAnswers, "Total Unique Subdomains Crawled: " + urlStats.getSubdomainFrequencies().size());
+		
 		ArrayList<String> subdomainsDisplay = new ArrayList<String>();
-		for (Frequency freq : countedSubdomains) {
+		for (Frequency freq : urlStats.getSubdomainFrequencies()) {
 			subdomainsDisplay.add(freq.getText() + ", " + freq.getFrequency());
 		}
 		Collections.sort(subdomainsDisplay); // sort alphabetically
-		store(subdomains, subdomainsDisplay);
-
-		Result result = UrlStatistics.calculations(crawledUrls, documentStorage); // Calling calculations method for test processing 
+		store(txtSubdomains, subdomainsDisplay);
 		
-		// Question 4
-		//String longestPageUrlString = UrlStatistics.getLongestPage(crawledUrls, documentStorage);
-		String longestPageUrlString = result.getLongestPageUrlString();
-		displayAndStore(answers, "Longest page: " + longestPageUrlString);
-
-		// Question 5
-		//List<String> mostCommonWords = UrlStatistics.getMostCommonWords(crawledUrls, documentStorage);
-		List<String> mostCommonWords = result.getMostCommonWords();
-		store(commonWords, mostCommonWords);
-
-		// Question 6
-		//List<String> mostCommon2Grams = UrlStatistics.getMostCommon2Grams(crawledUrls, documentStorage);
-		List<String> mostCommon2Grams = result.getMostCommon2Grams();
-		store(common2Grams, mostCommon2Grams);
-	
+		if (true) return;
+		
+		// Analyze document content (Questions 4-6)
+		DocumentStatistics docStats = new DocumentStatistics();
+		docStats.runStats(documentStorage);
+		
+		//-- Results
+		displayAndStore(txtAnswers, "Longest page: " + docStats.getLongestDocumentUrl());		
+		store(txtCommonWords, docStats.getMostCommonWords());
+		store(txtCommon2Grams, docStats.getMostCommonTwoGrams());
+		
+		System.out.println("Done");
 	}
 
 	private static void displayAndStore(File file, String line) {
+		// Save to file and print to console
 		try {
 			FileHelper.appendToFile(file, line);
 		}
@@ -67,6 +60,7 @@ public class AnswerQuestions {
 	}
 
 	private static void store(File file, List<String> lines) {
+		// Save to file
 		try {
 			FileHelper.writeFile(file, lines.toArray(new String[lines.size()]));
 		}
