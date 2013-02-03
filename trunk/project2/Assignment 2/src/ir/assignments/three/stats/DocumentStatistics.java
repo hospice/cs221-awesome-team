@@ -37,17 +37,21 @@ public class DocumentStatistics {
 	}
 
 	public void runStats(IDocumentStorage docStorage) {
+		runStats(docStorage, "stats\\tokenFrequencies.jdb", "stats\\twoGramFrequencies.jdb");
+	}
+	
+	public void runStats(IDocumentStorage docStorage, String tokenFilePath, String twoGramFilePath) {
 		RecordManager tokenManager = null;
 		RecordManager twoGramManager = null;
 		
 		try {
 			// Initialize a file-based tree map (using jdbm2 [https://code.google.com/p/jdbm2/]) for tokens and 2-grams.
 			// Using a tree map gives faster insert performance since the tokens (keys) are pretty small (hashmap has too many collisions).
-			File statsDir = new File("stats");
-			statsDir.mkdir();			
+			new File(new File(tokenFilePath).getParent()).mkdir();
+			new File(new File(twoGramFilePath).getParent()).mkdir();
 			
-			tokenManager = RecordManagerFactory.createRecordManager("stats\\tokenFrequencies.jdb");
-			twoGramManager = RecordManagerFactory.createRecordManager("stats\\twoGramFrequencies.jdb");
+			tokenManager = RecordManagerFactory.createRecordManager(tokenFilePath);
+			twoGramManager = RecordManagerFactory.createRecordManager(twoGramFilePath);
 
 			PrimaryTreeMap<String, Integer> tokenMap = tokenManager.treeMap("tokenMap");
 			PrimaryTreeMap<String, Integer> twoGramMap = twoGramManager.treeMap("twoGramMap");
