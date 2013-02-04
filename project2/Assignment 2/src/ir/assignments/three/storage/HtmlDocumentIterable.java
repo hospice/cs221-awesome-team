@@ -1,45 +1,41 @@
 package ir.assignments.three.storage;
 
-import ir.assignments.three.CrawledDocument;
-
 import java.util.Iterator;
-
-import com.db4o.ObjectSet;
+import java.util.Map.Entry;
 
 public class HtmlDocumentIterable implements Iterable<HtmlDocument> {
-	private ObjectSet<CrawledDocument> results;
+	private Iterator<Entry<String, String>> iterator;
 
-	public HtmlDocumentIterable(ObjectSet<CrawledDocument> results) {
-		this.results = results;
+	public HtmlDocumentIterable(Iterator<Entry<String, String>> iterator) {
+		this.iterator = iterator;
 	}
 	
 	@Override
 	public Iterator<HtmlDocument> iterator() {
-		return new HtmlDocumentIterator(results);
+		return new HtmlDocumentIterator(iterator);
 	}
 	
 	public class HtmlDocumentIterator implements Iterator<HtmlDocument> {
-		private ObjectSet<CrawledDocument> results;
+		private Iterator<Entry<String, String>> iterator;
 
-		public HtmlDocumentIterator(ObjectSet<CrawledDocument> results) {
-			this.results = results;
+		public HtmlDocumentIterator(Iterator<Entry<String, String>> iterator) {
+			this.iterator = iterator;
 		}
 
 		@Override
 		public boolean hasNext() {
-			return results.hasNext();
+			return iterator.hasNext();
 		}
 
 		@Override
 		public HtmlDocument next() {
-			CrawledDocument doc = results.next();
-			return new HtmlDocument(doc.url, doc.content);
+			Entry<String, String> entry = iterator.next();
+			return new HtmlDocument(entry.getKey(), entry.getValue());			
 		}
 
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-
+			iterator.remove();
 		}
 	}
 }

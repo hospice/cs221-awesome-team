@@ -1,58 +1,64 @@
 package ir.assignments.three.storage;
 
+import java.io.File;
+import java.io.IOException;
 
-import ir.assignments.three.CrawledDocument;
-
-import java.util.List;
-
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.config.EmbeddedConfiguration;
-import com.db4o.query.Predicate;
+import jdbm.PrimaryHashMap;
+import jdbm.RecordManager;
+import jdbm.RecordManagerFactory;
 
 public class DocumentStorage implements IDocumentStorage {
-	private ObjectContainer database;
+	private RecordManager database;
+	private PrimaryHashMap<String, String> databaseMap;
+	private long storedCount;
 
 	public DocumentStorage(String storagePath) {
-		// Use db4o (http://www.db4o.com/) as an embedded database		
-		// Configure database
-		EmbeddedConfiguration dbConfig = Db4oEmbedded.newConfiguration();
-		dbConfig.common().objectClass(CrawledDocument.class).objectField("url").indexed(true);
-		dbConfig.file().blockSize(8);
-
-		// Create/Open database
-		database = Db4oEmbedded.openFile(dbConfig, storagePath);
+		try {
+			// Make sure storage directory exists
+			new File(new File(storagePath).getParent()).mkdir();
+			
+			// Initialize a file-based hash map (using jdbm2 [https://code.google.com/p/jdbm2/]) to store the visited pages
+			this.database = RecordManagerFactory.createRecordManager(storagePath);
+			this.databaseMap = this.database.hashMap("docStorage"); //docStorage is the "table" name
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void storeDocument(String url, String html) {
-		// Check if URL already stored
-		final String targetUrl = url;
-		List<CrawledDocument> existingEntries = database.query(new Predicate<CrawledDocument>() {
-			public boolean match(CrawledDocument storedDoc) {
-				return storedDoc.url.equals(targetUrl);
+		this.databaseMap.put(url, html);
+		storedCount++;
+		
+		// Commit after every 50 pages are added to release memory and save to disk (in case crawler is stopped)
+		if (storedCount % 50 == 0) {
+			try {
+				this.database.commit();
+				System.out.println("Committed");
 			}
-		});
-		CrawledDocument entryToAddOrUpdate = existingEntries.size() > 0 ? existingEntries.get(0) : null;
-
-		// Either add a new entry or update the existing entry
-		if (entryToAddOrUpdate == null)
-			entryToAddOrUpdate = new CrawledDocument(url, html); // new
-		else
-			entryToAddOrUpdate.content = html; // update
-
-		// Write to database
-		database.store(entryToAddOrUpdate);
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public Iterable<String> getCrawledUrls() {
-		return new UrlIterable(database.query(CrawledDocument.class));
+		// The keys are all URLs
+		return this.databaseMap.keySet();
 	}
 
 	public Iterable<HtmlDocument> getAll() {
-		return new HtmlDocumentIterable(database.query(CrawledDocument.class));
+		// The values are raw HTML, return an iterator that returns HtmlDocuments (which parse the HTML)
+		return new HtmlDocumentIterable(this.databaseMap.entrySet().iterator());
 	}
 
 	public void close() {
-		this.database.close();
+		try {
+			this.database.commit(); // commit any leftover pages
+			this.database.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

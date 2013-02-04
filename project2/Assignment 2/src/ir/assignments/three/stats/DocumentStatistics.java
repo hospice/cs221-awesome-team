@@ -37,7 +37,7 @@ public class DocumentStatistics {
 	}
 
 	public void runStats(IDocumentStorage docStorage) {
-		runStats(docStorage, "stats\\tokenFrequencies.jdb", "stats\\twoGramFrequencies.jdb");
+		runStats(docStorage, "stats\\tokenFrequencies", "stats\\twoGramFrequencies");
 	}
 	
 	public void runStats(IDocumentStorage docStorage, String tokenFilePath, String twoGramFilePath) {

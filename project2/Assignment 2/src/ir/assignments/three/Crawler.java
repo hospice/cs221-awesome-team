@@ -65,7 +65,7 @@ public class Crawler {
 			controller.setCustomData(params);
 			
 			// Start crawling
-			controller.start(ICSCrawler.class, 1); //TODO: increase 1?
+			controller.start(ICSCrawler.class, 5); // 5 threads
 
 			// Get list of crawled URLs for each crawler
 			List<Object> crawlersLocalData = controller.getCrawlersLocalData();
