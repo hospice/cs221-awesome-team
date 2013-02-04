@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 public class URLHelper {
 	public static String removeQuery(String url) {
 		try {
-			URI uri = new URI(url);
+			URI uri = new URI(url.replace(" ", "%20"));
 			return uri.getScheme() + "://" + uri.getAuthority() + uri.getPath();
 		}
 		catch (URISyntaxException e) {
@@ -19,7 +19,7 @@ public class URLHelper {
 
 	public static String removePath(String url) {
 		try {
-			URI uri = new URI(url);
+			URI uri = new URI(url.replace(" ", "%20"));
 			return uri.getScheme() + "://" + uri.getAuthority();
 		}
 		catch (URISyntaxException e) {
@@ -32,7 +32,7 @@ public class URLHelper {
 
 	public static String getDomain(String url) {
 		try {
-			URI uri = new URI(url);
+			URI uri = new URI(url.replace(" ", "%20"));
 			String host = uri.getHost();
 			if (host != null) {
 				host = host.toLowerCase();
