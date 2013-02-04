@@ -2,10 +2,9 @@ package ir.assignments.three;
 
 import ir.assignments.three.helpers.FileHelper;
 import ir.assignments.three.stats.DocumentStatistics;
+import ir.assignments.three.stats.Frequency;
 import ir.assignments.three.stats.UrlStatistics;
 import ir.assignments.three.storage.IDocumentStorage;
-import ir.assignments.two.a.Frequency;
-import ir.assignments.two.a.Utilities;
 
 import java.io.File;
 import java.io.IOException;
