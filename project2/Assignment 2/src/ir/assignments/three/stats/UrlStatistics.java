@@ -2,8 +2,6 @@ package ir.assignments.three.stats;
 
 import ir.assignments.three.helpers.URLHelper;
 import ir.assignments.three.storage.IDocumentStorage;
-import ir.assignments.two.a.*;
-import ir.assignments.two.b.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

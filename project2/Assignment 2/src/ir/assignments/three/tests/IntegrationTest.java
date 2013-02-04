@@ -2,11 +2,11 @@ package ir.assignments.three.tests;
 
 import static org.junit.Assert.*;
 import ir.assignments.three.*;
+import ir.assignments.three.helpers.TestUtils;
 import ir.assignments.three.stats.DocumentStatistics;
+import ir.assignments.three.stats.Frequency;
 import ir.assignments.three.stats.UrlStatistics;
 import ir.assignments.three.storage.DocumentStorage;
-import ir.assignments.two.a.Frequency;
-import ir.assignments.two.tests.TestUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

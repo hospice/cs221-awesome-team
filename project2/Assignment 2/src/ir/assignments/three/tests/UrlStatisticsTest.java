@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
 
+import ir.assignments.three.helpers.TestUtils;
+import ir.assignments.three.stats.Frequency;
 import ir.assignments.three.stats.UrlStatistics;
 import ir.assignments.three.storage.MemoryDocumentStorage;
-import ir.assignments.two.a.*;
-import ir.assignments.two.tests.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;

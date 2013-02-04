@@ -3,8 +3,6 @@ package ir.assignments.three.stats;
 import ir.assignments.three.helpers.StopWord;
 import ir.assignments.three.storage.HtmlDocument;
 import ir.assignments.three.storage.IDocumentStorage;
-import ir.assignments.two.a.Frequency;
-import ir.assignments.two.b.FrequencyComparator;
 
 import java.io.File;
 import java.io.IOException;

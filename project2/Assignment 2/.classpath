@@ -4,7 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/crawler4j-3.3.jar"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-core-0.7.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Assignment1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-dom-0.7.jar"/>
 	<classpathentry kind="lib" path="lib/asm-3.1.jar"/>
