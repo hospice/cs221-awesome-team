@@ -1,16 +1,16 @@
 http://alderis.ics.uci.edu, 7
 http://alumni.ics.uci.edu, 6
 http://ambassadors.ics.uci.edu, 1
-http://archive.ics.uci.edu, 917
+http://archive.ics.uci.edu, 918
 http://asterix.ics.uci.edu, 9
 http://auge.ics.uci.edu, 16
 http://awareness.ics.uci.edu, 89
-http://awareness.ics.uci.edu:8080, 440
+http://awareness.ics.uci.edu:8080, 484
 http://calendar.ics.uci.edu, 5
 http://calico.ics.uci.edu:27062, 1
 http://cbcl-1.ics.uci.edu, 9
 http://cbcl.ics.uci.edu, 70
-http://cert.ics.uci.edu, 29
+http://cert.ics.uci.edu, 30
 http://cgvw.ics.uci.edu, 3
 http://cherry.ics.uci.edu:8080, 1
 http://chime.ics.uci.edu, 1
@@ -21,7 +21,7 @@ http://computableplant.ics.uci.edu, 19
 http://cradl.ics.uci.edu, 15
 http://dblp.ics.uci.edu, 2
 http://deepthought.ics.uci.edu, 6
-http://djp3-pc2.ics.uci.edu, 1270
+http://djp3-pc2.ics.uci.edu, 1289
 http://drzaius.ics.uci.edu, 907
 http://dsm.ics.uci.edu, 2
 http://duttgroup.ics.uci.edu, 48
@@ -34,7 +34,7 @@ http://fr.ics.uci.edu, 10
 http://frost.ics.uci.edu, 59
 http://ftp.ics.uci.edu, 25160
 http://graphics.ics.uci.edu, 82
-http://graphmod.ics.uci.edu, 356
+http://graphmod.ics.uci.edu, 361
 http://hana.ics.uci.edu, 18
 http://hcc.ics.uci.edu, 3
 http://hci.ics.uci.edu, 1
@@ -88,7 +88,7 @@ http://wics.ics.uci.edu, 5
 http://www-db.ics.uci.edu, 25
 http://www-netra.ics.uci.edu, 2
 http://www.esl.ics.uci.edu, 1
-http://www.ics.uci.edu, 22839
+http://www.ics.uci.edu, 23106
 http://www.informatics.uci.edu, 43
 http://www.luci.ics.uci.edu, 1
 http://www1.ics.uci.edu, 5
