@@ -12,6 +12,8 @@ Assumptions:
       css,js,bmp,gif,jpg,jpeg,png,tif,tiff,mid,mp2,mp3,mp4,wav,avi,mov,mpeg,ram,m4v,pdf,rm,smil,wmv,swf,wma,zip,rar,gz,ico,pfm,c,h,o
     - Only visited documents with HTML content were saved
     - Only documents up to ~2MB were saved
+    - Entire domain could not be crawled due to time constraints
+
   > Analysis:
     - Stop words were filtered based on the "Default English stopwords list" in http://www.ranks.nl/resources/stopwords.html
     - Words that were shorter than 4 characters were considered uninteresting (and treated the same as stop words)
