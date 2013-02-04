@@ -18,45 +18,51 @@ public class DocumentStorageTest {
 
 	@Test
 	public void testWriteAndRead() {
-//		DocumentStorage docStorage = null;
-//		try {
-//			docStorage = new DocumentStorage(tmpFolder.newFile().getAbsolutePath());
-//			docStorage.storeDocument("http://www.google.com", "<html><title>Title</title><body>Body</body></html>");
-//
-//			
-//			
-//			HtmlDocument doc = docStorage.getDocument("http://www.google.com");
-//			assertEquals("Title", doc.getTitle());
-//			assertEquals("Body", doc.getBody());
-//		}
-//		catch (IOException e) {
-//			fail(e.getMessage());
-//		}
-//		finally {
-//			if (docStorage != null)
-//				docStorage.close();
-//		}
+		DocumentStorage docStorage = null;
+		try {
+			docStorage = new DocumentStorage(tmpFolder.newFile().getAbsolutePath());
+			docStorage.storeDocument("http://www.google.com", "<html><title>Title</title><body>Body</body></html>");
+
+			HtmlDocument doc = null;
+			for (HtmlDocument d : docStorage.getAll()) {
+				doc = d;
+			}
+			
+			assertEquals("Title", doc.getTitle());
+			assertEquals("Body", doc.getBody());
+		}
+		catch (IOException e) {
+			fail(e.getMessage());
+		}
+		finally {
+			if (docStorage != null)
+				docStorage.close();
+		}
 	}
 
 	@Test
-	public void testWriteSameLocation() {
-//		DocumentStorage docStorage = null;
-//		try {
-//			File tmpFile = tmpFolder.newFile();
-//			docStorage = new DocumentStorage(tmpFile.getAbsolutePath());
-//			docStorage.storeDocument("http://www.google.com", "<html><title>Title</title><body>Body</body></html>");
-//			docStorage.storeDocument("http://www.google.com", "<html><title>Title 2</title><body>Body 2</body></html>");
-//
-//			HtmlDocument doc = docStorage.getDocument("http://www.google.com");
-//			assertEquals("Title 2", doc.getTitle());
-//			assertEquals("Body 2", doc.getBody());
-//		}
-//		catch (IOException e) {
-//			fail(e.getMessage());
-//		}
-//		finally {
-//			if (docStorage != null)
-//				docStorage.close();
-//		}
+	public void testWriteSamePageTwice() {
+		DocumentStorage docStorage = null;
+		try {
+			File tmpFile = tmpFolder.newFile();
+			docStorage = new DocumentStorage(tmpFile.getAbsolutePath());
+			docStorage.storeDocument("http://www.google.com", "<html><title>Title</title><body>Body</body></html>");
+			docStorage.storeDocument("http://www.google.com", "<html><title>Title 2</title><body>Body 2</body></html>");
+
+			HtmlDocument doc = null;
+			for (HtmlDocument d : docStorage.getAll()) {
+				doc = d;
+			}
+			
+			assertEquals("Title 2", doc.getTitle());
+			assertEquals("Body 2", doc.getBody());
+		}
+		catch (IOException e) {
+			fail(e.getMessage());
+		}
+		finally {
+			if (docStorage != null)
+				docStorage.close();
+		}
 	}
 }
