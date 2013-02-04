@@ -29,4 +29,24 @@ public class URLHelper {
 
 		return null;
 	}
+
+	public static String getDomain(String url) {
+		try {
+			URI uri = new URI(url);
+			String host = uri.getHost();
+			if (host != null) {
+				host = host.toLowerCase();
+				if (host.startsWith("www."))
+					host = host.substring("www.".length());
+
+				return host;
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Error on url: " + url);
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 }

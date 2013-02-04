@@ -9,15 +9,21 @@ public class HtmlDocument {
 	private final static String lineSeparator = System.getProperty("line.separator");
 	private Document parsedDoc;
 	private String url;
+	private String html;
 
 	public HtmlDocument(String url, String html) {
 		// Parse document using jsoup (http://jsoup.org/)
 		this.parsedDoc = Jsoup.parse(html);
 		this.url = url;
+		this.html = html;
 	}
 	
 	public String getUrl() {
 		return this.url;
+	}
+	
+	public String getHtml() {
+		return this.html;
 	}
 
 	public String getTitle() {

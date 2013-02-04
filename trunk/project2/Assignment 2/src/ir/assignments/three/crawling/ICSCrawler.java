@@ -1,7 +1,7 @@
 package ir.assignments.three.crawling;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import ir.assignments.three.helpers.URLHelper;
+
 import java.util.regex.Pattern;
 
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -32,34 +32,16 @@ public class ICSCrawler extends WebCrawler {
 			return false;
 
 		// Only crawl within the domain of the seed URL
-		String currentUrlDomain = getDomain(url.getURL());
-		String seedUrlDomain = getDomain(this.params.getSeedUrl());
-		if (!currentUrlDomain.endsWith(seedUrlDomain))
+		String currentUrlDomain = URLHelper.getDomain(url.getURL());
+		String seedUrlDomain = URLHelper.getDomain(this.params.getSeedUrl());
+		if (currentUrlDomain == null || !currentUrlDomain.endsWith(seedUrlDomain))
 			return false;
-		
+
 		// Don't crawl the same pages too many times (avoid infinite loops)
 		if (!stats.intendToVisit(url.getURL()))
 			return false;
 
 		return true;
-	}
-	
-	private String getDomain(String url)
-	{
-		try {
-			URI uri = new URI(url);
-			String host = uri.getHost().toLowerCase();
-			if (host.startsWith("www."))
-				host = host.substring("www.".length());
-			
-			return host;
-		}
-		catch (URISyntaxException e) {
-			System.out.println("Error on url: " + url);
-			System.out.println("Error: " + e.getMessage());
-		}
-		
-		return null;
 	}
 
 	@Override
@@ -73,9 +55,12 @@ public class ICSCrawler extends WebCrawler {
 		if (page.getParseData() instanceof HtmlParseData) { // make sure document has HTML data
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String html = htmlParseData.getHtml();
-			
-			// Store the HTML
-			this.params.getDocumentStorage().storeDocument(url, html);
+
+			// Don't keep documents that are too big (bigger than 2MB)
+			if (html.length() <= 2097152) {
+				// Store the HTML
+				this.params.getDocumentStorage().storeDocument(url, html);
+			}
 		}
 	}
 
