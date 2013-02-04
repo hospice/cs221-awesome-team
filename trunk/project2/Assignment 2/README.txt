@@ -5,6 +5,7 @@ Team Members:
 How to Run:
   > To run the web crawler, run class MainCrawler
   > To run the analysis on the crawled documents, run class MainStatistics
+  > The class IntegrationTest runs a 1-depth crawl and analysis on www.vcskicks.com (Armando's site)
 
 Assumptions:
   > Crawling:
