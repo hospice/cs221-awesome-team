@@ -20,3 +20,11 @@ Assumptions:
     - Words that were shorter than 4 characters were considered uninteresting (and treated the same as stop words)
     - Words that contained at least one number (0-9) were considered uninteresting
     - The longest document length excluded stop and uninteresting words
+
+External Libraries Used:
+  > crawler4j (https://code.google.com/p/crawler4j/)
+    Library for crawling pages
+  > jdbm2 (https://code.google.com/p/jdbm2/)
+    Library for file-backed HashMap and TreeMap (used for storing and retrieving crawled pages)
+  > jsoup (http://jsoup.org/)
+    Library for parsing HTML documents (better results that crawler4j HTML parser)
