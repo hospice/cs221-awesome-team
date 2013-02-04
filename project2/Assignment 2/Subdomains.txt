@@ -4,7 +4,7 @@ http://ambassadors.ics.uci.edu, 1
 http://archive.ics.uci.edu, 917
 http://asterix.ics.uci.edu, 9
 http://auge.ics.uci.edu, 16
-http://awareness.ics.uci.edu, 87
+http://awareness.ics.uci.edu, 89
 http://awareness.ics.uci.edu:8080, 440
 http://calendar.ics.uci.edu, 5
 http://calico.ics.uci.edu:27062, 1
@@ -88,7 +88,7 @@ http://wics.ics.uci.edu, 5
 http://www-db.ics.uci.edu, 25
 http://www-netra.ics.uci.edu, 2
 http://www.esl.ics.uci.edu, 1
-http://www.ics.uci.edu, 22825
+http://www.ics.uci.edu, 22837
 http://www.informatics.uci.edu, 43
 http://www.luci.ics.uci.edu, 1
 http://www1.ics.uci.edu, 5

@@ -1,4 +1,5 @@
-Total Pages Crawled: 121088
-Total Unique Pages Crawled: 97358
+Time to crawl: ~26.5 hours
+Total Pages Crawled: 121106
+Total Unique Pages Crawled: 97372
 Total Unique Subdomains Crawled: 96
 Longest page: http://www.ics.uci.edu/~xhx/project/MotifMap/SNP/motif_sites_overlap_db_snp.list.html
