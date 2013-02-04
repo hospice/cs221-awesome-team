@@ -30,7 +30,7 @@ public class UrlStatistics {
 	}
 
 	public void runStats(IDocumentStorage docStorage) {
-		
+
 		// Keep track of all pages and unique pages (don't count different URL queries as different pages)
 		long totalCount = 0;
 		HashSet<String> uniquePages = new HashSet<String>();
@@ -51,6 +51,8 @@ public class UrlStatistics {
 		HashMap<String, Integer> subdomainMap = new HashMap<String, Integer>();
 		for (String uniqueUrl : uniquePages) {
 			String urlWithoutPath = URLHelper.removePath(uniqueUrl);
+			if (urlWithoutPath == null)
+				continue;
 
 			// Increment count
 			Integer currentCount = subdomainMap.get(urlWithoutPath);
