@@ -21,7 +21,7 @@ http://computableplant.ics.uci.edu, 19
 http://cradl.ics.uci.edu, 15
 http://dblp.ics.uci.edu, 2
 http://deepthought.ics.uci.edu, 6
-http://djp3-pc2.ics.uci.edu, 109
+http://djp3-pc2.ics.uci.edu, 1270
 http://drzaius.ics.uci.edu, 907
 http://dsm.ics.uci.edu, 2
 http://duttgroup.ics.uci.edu, 48
@@ -34,7 +34,7 @@ http://fr.ics.uci.edu, 10
 http://frost.ics.uci.edu, 59
 http://ftp.ics.uci.edu, 25160
 http://graphics.ics.uci.edu, 82
-http://graphmod.ics.uci.edu, 351
+http://graphmod.ics.uci.edu, 356
 http://hana.ics.uci.edu, 18
 http://hcc.ics.uci.edu, 3
 http://hci.ics.uci.edu, 1
@@ -68,7 +68,7 @@ http://rss.ics.uci.edu, 4
 http://sami.ics.uci.edu, 9
 http://sconce.ics.uci.edu, 16
 http://sdcl.ics.uci.edu, 121
-http://seraja.ics.uci.edu, 18478
+http://seraja.ics.uci.edu, 18479
 http://sherlock.ics.uci.edu, 4
 http://sli.ics.uci.edu, 123
 http://snekker.ics.uci.edu, 1
@@ -88,9 +88,9 @@ http://wics.ics.uci.edu, 5
 http://www-db.ics.uci.edu, 25
 http://www-netra.ics.uci.edu, 2
 http://www.esl.ics.uci.edu, 1
-http://www.ics.uci.edu, 22837
+http://www.ics.uci.edu, 22839
 http://www.informatics.uci.edu, 43
 http://www.luci.ics.uci.edu, 1
 http://www1.ics.uci.edu, 5
 http://xtune.ics.uci.edu, 6
-null, 321
+null, 338
