@@ -9,7 +9,7 @@ public class MainCrawler {
 		// Do crawl
 		DocumentStorage documentStorage = new DocumentStorage("docStorage\\docStorage");
 		try {
-			Collection<String> crawledUrls = Crawler.crawl("http://www.ics.uci.edu/", documentStorage);
+			Collection<String> crawledUrls = Crawler.crawl("http://www.ics.uci.edu", documentStorage);
 			System.out.println("Finished crawling " + crawledUrls.size() + " page(s)");
 		}
 		finally {
