@@ -2,6 +2,10 @@ package ir.assignments.four;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -16,6 +20,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import ir.assignments.three.helpers.StopWord;
 import ir.assignments.three.storage.DocumentStorage;
 import ir.assignments.three.storage.HtmlDocument;
 import ir.assignments.three.storage.IDocumentStorage;
@@ -59,7 +64,7 @@ public class Indexer {
 					
 					indexDoc.add(new StringField("url", crawledDoc.getUrl(), Field.Store.YES));
 					indexDoc.add(new TextField("title", crawledDoc.getTitle(), Field.Store.YES));
-					indexDoc.add(new TextField("content", crawledDoc.getBody(), Field.Store.NO));
+					indexDoc.add(new TextField("content", tokenize(crawledDoc.getBody()), Field.Store.NO));
 
 					// Update document based on URL
 					indexWriter.updateDocument(new Term("url",  crawledDoc.getUrl()), indexDoc);
@@ -74,5 +79,30 @@ public class Indexer {
 		}
 
 		System.out.println("Done");
+	}
+	
+	private static Pattern EXACTLY_ONE_NUMBER = Pattern.compile("^[^\\d]*\\d[^\\d]*$"); // compile only use
+	private static Matcher EXACTLY_ONE_NUMBER_MATCHER = EXACTLY_ONE_NUMBER.matcher("");
+	
+	private String tokenize(String input) {
+		// Tokenize by filtering out words and returning a single string for lucene to tokenize
+		StringBuilder tokens = new StringBuilder();
+		if (input == null)
+			return tokens.toString();
+
+		input = input.toLowerCase();
+		String[] parts = input.split("[^a-zA-Z0-9'-]+"); // alphanumeric words
+		for (String part : parts) {
+			String tmp = part.trim();
+			if (isInterestingWord(tmp))
+				tokens.append(tmp);
+		}
+		
+		return tokens.toString();
+	}	
+
+	private boolean isInterestingWord(String token) {
+		return token.length() >= 3 && // filter out words shorter than 3 letters
+			   !EXACTLY_ONE_NUMBER_MATCHER.reset(token).matches(); // don't allow tokens with a single number
 	}
 }
