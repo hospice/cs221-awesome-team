@@ -34,7 +34,7 @@ public class DocumentStorage implements IDocumentStorage {
 		if (storedCount % 50 == 0) {
 			try {
 				this.database.commit();
-				System.out.println("Committed");
+				System.out.println("Committed " + storedCount);
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -50,6 +50,10 @@ public class DocumentStorage implements IDocumentStorage {
 	public Iterable<HtmlDocument> getAll() {
 		// The values are raw HTML, return an iterator that returns HtmlDocuments (which parse the HTML)
 		return new HtmlDocumentIterable(this.databaseMap.entrySet().iterator());
+	}
+	
+	public int getSize() {
+		return this.databaseMap.size();
 	}
 
 	public void close() {
