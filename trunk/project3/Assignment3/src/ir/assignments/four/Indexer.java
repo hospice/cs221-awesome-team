@@ -95,7 +95,10 @@ public class Indexer {
 		for (String part : parts) {
 			String tmp = part.trim();
 			if (isInterestingWord(tmp))
+			{
 				tokens.append(tmp);
+				tokens.append(" ");
+			}
 		}
 		
 		return tokens.toString();
