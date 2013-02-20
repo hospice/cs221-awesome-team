@@ -6,10 +6,10 @@ import java.util.List;
 public class NDCG {
 	
 	public static void main(String[] args) {
-		List<String> urls = Arrays.asList(new String[] { "1", "2", "3", "4", "5" });
+		List<String> urls = Arrays.asList(new String[] { "2", "3", "1", "4", "5" });
 		List<String> oracleUrls = Arrays.asList(new String[] { "1", "2", "3", "4", "5" });
 		
-		System.out.println(NDCG.getNDCG(urls, oracleUrls, 5));
+		System.out.println(NDCG.getNDCG(urls, oracleUrls, 5));	
 	}
 
 	public static double getNDCG(List<String> urls, List<String> oracleUrls, int r) {
@@ -25,22 +25,18 @@ public class NDCG {
 	}
 	
 	private static double getDCG(List<String> urls, List<String> oracleUrls, int p) {
-		double[] scores = new double[p];
+		double score = 0;
 		
 		for (int i = 0; i < p; i++) {
-			scores[i] = getRelevance(urls.get(i), oracleUrls);
+			double relevance = getRelevance(urls.get(i), oracleUrls);
+			int ranking = i + 1;
 			
-			if (i > 0) {
-				// for all positions after the first one, reduce the "gain"
-				double logValue = (Math.log(i + 1) / Math.log(2));
-				scores[i] /= (Math.log(i + 1) / Math.log(2)); // log base 2
+			if (ranking > 1) {
+				// for all positions after the first one, reduce the "gain" as ranking increases
+				relevance /= logBase2(ranking);
 			}
-		}
-		
-		// Score is the sum
-		double score = 0;
-		for (int i = 0; i < scores.length; i++) {
-			score += scores[i];
+			
+			score += relevance;
 		}
 		
 		return score;
@@ -49,5 +45,9 @@ public class NDCG {
 	private static double getRelevance(String url, List<String> oracleUrls) {
 		// Use the position in the oracle ranking as the relevance
 		return oracleUrls.size() - oracleUrls.indexOf(url);
+	}
+	
+	private static double logBase2(double value) {
+		return Math.log(value) / Math.log(2);
 	}
 }
