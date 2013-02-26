@@ -18,15 +18,6 @@ import org.jsoup.select.Elements;
 
 public class GoogleSearcher {
 
-	public static void main(String[] args) {
-		// For testing purposes
-		GoogleSearcher searcher = new GoogleSearcher();
-		List<String> results = searcher.getSearchResults("machine learning", 5);
-		for (String url : results) {
-			System.out.println(url);
-		}
-	}
-
 	private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search?q=[QUERY]&hl=en&start=0&btnG=Google+Search&gbv=1";
 
 	public List<String> getSearchResults(String query, int count) {
