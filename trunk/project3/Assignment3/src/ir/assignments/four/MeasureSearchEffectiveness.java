@@ -4,9 +4,17 @@ import java.util.List;
 
 public class MeasureSearchEffectiveness {
 
-
 	public static void main(String[] args) {
-		System.out.println(getScore("machine learning", true));
+		System.out.println("mondego: " + getScore("mondego", false));
+		System.out.println("machine learning: " + getScore("machine learning", false));
+		System.out.println("software engineering: " + getScore("software engineering", false));
+		System.out.println("security: " + getScore("security", false));
+		System.out.println("student affairs: " + getScore("student affairs", false));
+		System.out.println("graduate courses: " + getScore("graduate courses", false));
+		System.out.println("Crista Lopes: " + getScore("Crista Lopes", false));
+		System.out.println("REST: " + getScore("REST", false));
+		System.out.println("computer games: " + getScore("computer games", false));
+		System.out.println("information retrieval: " + getScore("information retrieval", false));
 	}
 	
 	private static double getScore(String query, boolean printResults) {
