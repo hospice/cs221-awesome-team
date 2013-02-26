@@ -1,5 +1,8 @@
 package ir.assignments.four;
 
+import ir.assignments.three.helpers.FileHelper;
+
+import java.io.File;
 import java.util.List;
 
 public class MeasureSearchEffectiveness {
@@ -11,7 +14,10 @@ public class MeasureSearchEffectiveness {
 		double totalScore = 0;
 		for (String query : queries) {
 			double score = getScore(query, false);
-			System.out.println(query + ": " + score);
+			double originalScore = getOriginalScore(query);
+			double improvement = originalScore != -1 ? Math.round(((score - originalScore) / originalScore) * 100) : -1;
+			
+			System.out.println(query + ": " + score + (improvement != -1 ? " (" + improvement + "%)" : ""));
 			
 			totalScore += score;
 		}
@@ -34,6 +40,31 @@ public class MeasureSearchEffectiveness {
 			}
 			
 			return NDCG.getNDCG(localResults, googleResults, 5);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return -1;
+	}
+	
+	private static double getOriginalScore(String query) {
+		try {
+			File originalScores = new File("originalNDCG@5.txt");
+			if (originalScores.exists()) {
+				String content = FileHelper.readFile(originalScores, 0);
+				String[] lines = content.split(FileHelper.lineSeparator);
+				
+				for (String line : lines) {
+					if (line.startsWith(query)) {
+						int startIndex = line.indexOf(":");
+						if (startIndex > -1) {
+							startIndex += 2;
+							return Double.parseDouble(line.substring(startIndex));
+						}
+					}						
+				}
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
