@@ -6,7 +6,7 @@ import java.util.List;
 public class NDCG {
 
 	public static void main(String[] args) {
-		List<String> urls = Arrays.asList(new String[] { "8", "3", "1", "4", "5" });
+		List<String> urls = Arrays.asList(new String[] { "2", "3", "1", "4", "5" });
 		List<String> oracleUrls = Arrays.asList(new String[] { "1", "2", "3", "4", "5" });
 
 		System.out.println(NDCG.getNDCG(urls, oracleUrls, 5));

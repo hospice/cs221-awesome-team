@@ -2,8 +2,6 @@ package ir.assignments.four;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,7 +18,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import ir.assignments.three.helpers.StopWord;
 import ir.assignments.three.storage.DocumentStorage;
 import ir.assignments.three.storage.HtmlDocument;
 import ir.assignments.three.storage.IDocumentStorage;
@@ -34,7 +31,7 @@ public class Indexer {
 		DocumentStorage docStorage = new DocumentStorage("docStorage\\docStorage");
 		try {
 			Indexer indexer = new Indexer();
-			indexer.indexDocuments(docStorage, "docIndex");
+			indexer.indexDocumentsEnhanced(docStorage, "docIndexEnhanced");
 		}
 		finally {
 			docStorage.close();
@@ -66,6 +63,55 @@ public class Indexer {
 					indexDoc.add(new TextField("title", crawledDoc.getTitle(), Field.Store.YES));
 					indexDoc.add(new TextField("content", tokenize(crawledDoc.getBody()), Field.Store.NO));
 
+					// Update document based on URL
+					indexWriter.updateDocument(new Term("url",  crawledDoc.getUrl()), indexDoc);
+				}
+			}
+			finally {
+				indexWriter.close();
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Done");
+	}
+	
+	public void indexDocumentsEnhanced(IDocumentStorage docStorage, String indexPath) {
+		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
+
+		try {
+			Directory indexDir = FSDirectory.open(new File(indexPath));
+			IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41, analyzer);
+			IndexWriter indexWriter = new IndexWriter(indexDir, config);
+
+			try {
+				int i = 0;
+				for (HtmlDocument crawledDoc : docStorage.getAll()) {
+					
+					if (i % 500 == 0)
+						System.out.println(i + "");
+					
+					i++;
+//					if (i >= 1000)
+//						break;
+
+					Document indexDoc = new Document();
+					
+					Field url = new TextField("url", crawledDoc.getUrl(), Field.Store.YES);
+					url.setBoost(1.1f);
+					Field title = new TextField("title", crawledDoc.getTitle(), Field.Store.YES);
+					title.setBoost(2.0f);
+					Field content = new TextField("content", tokenize(crawledDoc.getBody()), Field.Store.NO);
+					Field importantContent = new TextField("important_content", tokenize(crawledDoc.getImportantBody()), Field.Store.NO);
+					importantContent.setBoost(1.3f);
+					
+					indexDoc.add(url);
+					indexDoc.add(title);
+					indexDoc.add(content);
+					indexDoc.add(importantContent);
+					
 					// Update document based on URL
 					indexWriter.updateDocument(new Term("url",  crawledDoc.getUrl()), indexDoc);
 				}
