@@ -5,16 +5,19 @@ import java.util.List;
 public class MeasureSearchEffectiveness {
 
 	public static void main(String[] args) {
-		System.out.println("mondego: " + getScore("mondego", false));
-		System.out.println("machine learning: " + getScore("machine learning", false));
-		System.out.println("software engineering: " + getScore("software engineering", false));
-		System.out.println("security: " + getScore("security", false));
-		System.out.println("student affairs: " + getScore("student affairs", false));
-		System.out.println("graduate courses: " + getScore("graduate courses", false));
-		System.out.println("Crista Lopes: " + getScore("Crista Lopes", false));
-		System.out.println("REST: " + getScore("REST", false));
-		System.out.println("computer games: " + getScore("computer games", false));
-		System.out.println("information retrieval: " + getScore("information retrieval", false));
+		String[] queries = new String[] { "mondego", "machine learning", "software engineering", "security", "student affairs",
+				                          "graduate courses", "Crista Lopes", "REST", "computer games", "information retrieval" };
+		
+		double totalScore = 0;
+		for (String query : queries) {
+			double score = getScore(query, false);
+			System.out.println(query + ": " + score);
+			
+			totalScore += score;
+		}
+		
+		System.out.println("");
+		System.out.println("Average Score: " + (totalScore / queries.length));
 	}
 	
 	private static double getScore(String query, boolean printResults) {
@@ -26,8 +29,8 @@ public class MeasureSearchEffectiveness {
 			List<String> localResults = localSearch.search(query, 5);
 			
 			if (printResults) {
-				printResults("Google", googleResults);
-				printResults("Local", localResults);
+				printResults("Google", query, googleResults);
+				printResults("Local", query, localResults);
 			}
 			
 			return NDCG.getNDCG(localResults, googleResults, 5);
@@ -39,8 +42,8 @@ public class MeasureSearchEffectiveness {
 		return -1;
 	}
 	
-	private static void printResults(String header, List<String> results) {
-		System.out.println(header + ":");
+	private static void printResults(String header, String query, List<String> results) {
+		System.out.println(header + "(" + query + "):");
 		int rank = 1;
 		for (String result : results) {
 			System.out.println(" " + rank + ": " + result);
