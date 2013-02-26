@@ -49,6 +49,20 @@ public class HtmlDocument {
 			return this.parsedDoc.body().text();
 		return ""; 
 	}
+	
+	public String getImportantBody() {
+		StringBuilder text = new StringBuilder();
+		
+		Elements elements = this.parsedDoc.select("h1,h2,b,strong");
+		if (elements != null) {
+			for (Element element : elements) {
+				text.append(element.text());
+				text.append(lineSeparator);
+			}
+		}
+		
+		return text.toString();
+	}
 
 	public String getAllText() {
 		return getTitle() + lineSeparator + getDescription() + lineSeparator + getBody();
