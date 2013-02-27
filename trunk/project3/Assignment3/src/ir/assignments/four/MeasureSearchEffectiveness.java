@@ -42,9 +42,11 @@ public class MeasureSearchEffectiveness {
 	}
 	
 	private static double getScore(String query, boolean printResults) {
+		SearchFiles localSearch = null;
+		
 		try {
 			GoogleSearcher google = new GoogleSearcher();
-			SearchFiles localSearch = new SearchFiles("docIndexEnhanced");
+			localSearch = new SearchFiles("docIndexEnhanced");
 			
 			List<String> googleResults = google.getSearchResults(query, 5);
 			List<String> localResults = localSearch.search(query, 5);
@@ -59,6 +61,10 @@ public class MeasureSearchEffectiveness {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			if (localSearch != null)
+				localSearch.close();
 		}
 		
 		return -1;
