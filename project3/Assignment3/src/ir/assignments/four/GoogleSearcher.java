@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 public class GoogleSearcher {
 
 	private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search?q=[QUERY]&hl=en&start=[START]&btnG=Google+Search&gbv=1";
-	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|rm|smil|wmv|swf|wma|zip|rar|gz|ico|pfm|c|h|o|py|cc|txt|jnlp))$");
+	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|rm|smil|wmv|swf|wma|zip|rar|gz|ico|pfm|c|h|o|py|cc|txt|jnlp|ppt|pptx))$");
 	
 	public List<String> getSearchResults(String query, int count) {
 		
