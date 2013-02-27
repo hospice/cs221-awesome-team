@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,8 +19,9 @@ import org.jsoup.select.Elements;
 
 public class GoogleSearcher {
 
-	private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search?q=[QUERY]&hl=en&start=0&btnG=Google+Search&gbv=1";
-
+	private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search?q=[QUERY]&hl=en&start=[START]&btnG=Google+Search&gbv=1";
+	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|rm|smil|wmv|swf|wma|zip|rar|gz|ico|pfm|c|h|o|py|cc|txt))$");
+	
 	public List<String> getSearchResults(String query, int count) {
 		
 		// First check if results cached locally (prevent requesting Google searches too much)
@@ -34,22 +36,47 @@ public class GoogleSearcher {
 		// Do search until we have enough results
 		ArrayList<String> urlResults = new ArrayList<String>();
 		try {
-			// Download the page using jsoup
-			// (use Firefox's user agent string so google doesn't block request)
-			Document pageDoc = Jsoup.connect(searchUrl).userAgent("Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1").get();
+			int start = 0;
+			while (urlResults.size() < count) {
+				// Search the current page
+				String currentPageSearchUrl = searchUrl.replace("[START]", start + "");
+				
+				// Download the page using jsoup
+				// (use Firefox's user agent string so google doesn't block request)
+				Document pageDoc = Jsoup.connect(currentPageSearchUrl).userAgent("Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1").get();
 
-			// Get the URLs of the search results
-			Elements searchResults = pageDoc.select("li[class=g] a");
-			for (Element result : searchResults) {
-				if (result.text().equals("Cached") || result.text().equals("Similar")) // don't include cached or related links
-					continue;
+				// Get the URLs of the search results
+				Elements searchResults = pageDoc.select("li[class=g] a");
+				for (Element result : searchResults) {
+					if (result.text().equals("Cached") || result.text().equals("Similar")) // don't include cached or related links
+						continue;
 
-				String href = result.attr("href");
-				String extractedUrl = extractUrl(href);
-				urlResults.add(extractedUrl);
-				if (urlResults.size() >= count)
-					break;
-			}
+					String href = result.attr("href");
+					String extractedUrl = extractUrl(href);
+					
+					// Filter URLs with the same types used for crawling
+					if (FILTERS.matcher(extractedUrl).matches())
+						continue;
+					
+					// Filter HTTPS URLs since crawler did not visit those
+					if (extractedUrl.contains("https"))
+						continue;
+					
+					// All good, keep URL for results
+					urlResults.add(extractedUrl);
+					if (urlResults.size() >= count)
+						break;
+				}
+				
+				if (urlResults.size() < count) {
+					start += 10;
+					try {
+						Thread.sleep(1000); // wait a second to be polite to google	
+					}
+					catch (InterruptedException  e) {						
+					}
+				}					
+			}		
 		}
 		catch (IOException e) {
 			e.printStackTrace();
