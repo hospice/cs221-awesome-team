@@ -22,6 +22,8 @@ public class MeasureSearchEffectiveness {
 			totalScore += score;
 		}
 		
+		System.out.println(getScore("software engineering", true));
+		
 		System.out.println("");
 		System.out.println("Average Score: " + (totalScore / queries.length));
 	}
@@ -35,10 +37,11 @@ public class MeasureSearchEffectiveness {
 			List<String> localResults = localSearch.search(query, 5);
 			
 			if (printResults) {
-				printResults("Google", query, googleResults);
-				printResults("Local", query, localResults);
+				printResults("Google", query, googleResults, true);
+				printResults("Local", query, localResults, false);
 			}
 			
+			// Calculate NDCG@5
 			return NDCG.getNDCG(localResults, googleResults, 5);
 		}
 		catch (Exception e) {
@@ -73,11 +76,16 @@ public class MeasureSearchEffectiveness {
 		return -1;
 	}
 	
-	private static void printResults(String header, String query, List<String> results) {
+	private static void printResults(String header, String query, List<String> results, boolean checkLocalExistance) {
 		System.out.println(header + "(" + query + "):");
 		int rank = 1;
 		for (String result : results) {
-			System.out.println(" " + rank + ": " + result);
+			boolean existsLocal = false;
+			if (checkLocalExistance) {
+				existsLocal = checkDocStorage.check(result);
+			}
+			
+			System.out.println(" " + rank + ": " + result + (checkLocalExistance ? " (crawled? " + existsLocal + ")" : ""));
 			rank++;
 		}
 	}
