@@ -3,6 +3,9 @@ package ir.assignments.four;
 import ir.assignments.three.helpers.FileHelper;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MeasureSearchEffectiveness {
@@ -15,23 +18,33 @@ public class MeasureSearchEffectiveness {
 		for (String query : queries) {
 			double score = getScore(query, false);
 			double originalScore = getOriginalScore(query);
-			double improvement = originalScore != -1 ? Math.round(((score - originalScore) / originalScore) * 100) : -1;
+			double improvement = (originalScore != -1) ? getImprovement(originalScore, score) : -1;
 			
 			System.out.println(query + ": " + score + (improvement != -1 ? " (" + improvement + "%)" : ""));
 			
 			totalScore += score;
 		}
 		
-		//System.out.println(getScore("software engineering", true));
+		double average = totalScore / queries.length;
+		double originalAverage = getOriginalScore("Average Score");
+		double averageImprovement = (originalAverage != -1) ? getImprovement(originalAverage, average) : -1;
 		
 		System.out.println("");
-		System.out.println("Average Score: " + (totalScore / queries.length));
+		System.out.println("Average Score: " + average + (averageImprovement != -1 ? " (" + averageImprovement + "%)" : ""));
+		
+		//System.out.println(getScore("software engineering", true));
+	}
+	
+	private static double getImprovement(double original, double newScore) {
+		double improvement = (newScore - original) / (original + 0.0000001) * 100.0;
+		BigDecimal bd = new BigDecimal(improvement).setScale(2, RoundingMode.HALF_EVEN);
+		return bd.doubleValue();
 	}
 	
 	private static double getScore(String query, boolean printResults) {
 		try {
 			GoogleSearcher google = new GoogleSearcher();
-			SearchFiles localSearch = new SearchFiles("docIndex");
+			SearchFiles localSearch = new SearchFiles("docIndexEnhanced");
 			
 			List<String> googleResults = google.getSearchResults(query, 5);
 			List<String> localResults = localSearch.search(query, 5);
