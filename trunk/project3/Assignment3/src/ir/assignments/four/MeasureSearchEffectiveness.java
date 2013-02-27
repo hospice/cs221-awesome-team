@@ -22,7 +22,7 @@ public class MeasureSearchEffectiveness {
 			totalScore += score;
 		}
 		
-		System.out.println(getScore("software engineering", true));
+		//System.out.println(getScore("software engineering", true));
 		
 		System.out.println("");
 		System.out.println("Average Score: " + (totalScore / queries.length));
@@ -31,7 +31,7 @@ public class MeasureSearchEffectiveness {
 	private static double getScore(String query, boolean printResults) {
 		try {
 			GoogleSearcher google = new GoogleSearcher();
-			SearchFiles localSearch = new SearchFiles("docIndexEnhanced");
+			SearchFiles localSearch = new SearchFiles("docIndex");
 			
 			List<String> googleResults = google.getSearchResults(query, 5);
 			List<String> localResults = localSearch.search(query, 5);
