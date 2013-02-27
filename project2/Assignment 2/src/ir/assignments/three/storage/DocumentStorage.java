@@ -31,7 +31,7 @@ public class DocumentStorage implements IDocumentStorage {
 		storedCount++;
 		
 		// Commit after every 50 pages are added to release memory and save to disk (in case crawler is stopped)
-		if (storedCount % 5000 == 0) {
+		if (storedCount % 50 == 0) {
 			try {
 				this.database.commit();
 				System.out.println("Committed " + storedCount);
