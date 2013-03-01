@@ -36,7 +36,12 @@ public class MeasureSearchEffectiveness {
 	}
 	
 	private static double getImprovement(double original, double newScore) {
-		double improvement = (newScore - original) / (original + 0.0000001) * 100.0;
+		double improvement = (newScore - original);
+		if (original > 0)
+			improvement /= original;
+		
+		improvement *= 100.0;
+		
 		BigDecimal bd = new BigDecimal(improvement).setScale(2, RoundingMode.HALF_EVEN);
 		return bd.doubleValue();
 	}
