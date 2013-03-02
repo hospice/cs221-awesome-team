@@ -100,7 +100,7 @@ public class HtmlDocument {
 		this.load();
 		StringBuilder text = new StringBuilder();
 
-		Elements elements = this.parsedDoc.select("h1,h2,div[id*=title],div[class*=title],span[id*=title],span[class*=title]");
+		Elements elements = this.parsedDoc.select("h1,h2,h3,h4,div[id*=title],div[class*=title],span[id*=title],span[class*=title]");
 		if (elements != null) {
 			for (Element element : elements) {
 				text.append(element.text());
