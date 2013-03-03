@@ -2,10 +2,14 @@ package ir.assignments.four;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -24,16 +28,17 @@ import ir.assignments.three.storage.HtmlDocument;
 import ir.assignments.three.storage.IDocumentStorage;
 import ir.assignments.three.storage.LinkDataStorage;
 
+/**
+ * Creates the Lucene index from the locally stored crawled pages.
+ */
 public class Indexer {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		DocumentStorage docStorage = new DocumentStorage("docStorage\\docStorage");
 		LinkDataStorage linkDataStorage = new LinkDataStorage("linkDataStorage\\linkDataStorage");
 		try {
 			Indexer indexer = new Indexer();
+			//indexer.indexDocuments(docStorage, linkDataStorage, "docIndex");
 			indexer.indexDocumentsEnhanced(docStorage, linkDataStorage, "docIndexEnhanced");
 		}
 		finally {
@@ -41,8 +46,8 @@ public class Indexer {
 			linkDataStorage.close();
 		}
 	}
-
 	public void indexDocuments(IDocumentStorage docStorage, String indexPath) {
+		// This is the original indexing code
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
 
 		try {
@@ -58,8 +63,6 @@ public class Indexer {
 						System.out.println(i + "");
 					
 					i++;
-//					if (i >= 1000)
-//						break;
 
 					Document indexDoc = new Document();
 					
@@ -83,8 +86,19 @@ public class Indexer {
 	}
 	
 	public void indexDocumentsEnhanced(IDocumentStorage docStorage, LinkDataStorage linkDataStorage, String indexPath) {		
-		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
+		
+		// This is the indexing code for the improved version
+		Analyzer regularAnalyzer = new StandardAnalyzer(Version.LUCENE_41);	
+		Analyzer stemAnalyzer = new EnglishAnalyzer(Version.LUCENE_41);
+		
+		// Use the stem analyzer for some fields, the regular analyzer for the rest
+		Map<String,Analyzer> analyzerPerField = new HashMap<String,Analyzer>();
+		analyzerPerField.put("stemcontent", stemAnalyzer);
+		analyzerPerField.put("stemtitle", stemAnalyzer);
+		analyzerPerField.put("stemanchortext", stemAnalyzer);
 
+		PerFieldAnalyzerWrapper analyzer = new PerFieldAnalyzerWrapper(regularAnalyzer, analyzerPerField);
+		
 		try {
 			Directory indexDir = FSDirectory.open(new File(indexPath));
 			IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41, analyzer);
@@ -93,31 +107,47 @@ public class Indexer {
 			try {
 				int i = 0;
 	
-				for (HtmlDocument crawledDoc : docStorage.getAll()) {
-					
+				// Index all the crawled documents
+				for (HtmlDocument crawledDoc : docStorage.getAll()) {					
+					// Display the current number to track progress
 					if (i % 500 == 0)
 						System.out.println(i + "");
 					
 					i++;
-//					if (i >= 1000)
-//						break;
 					
+					// Get the link data for the current page (want anchor text and outgoing links' text)
 					DocumentLinkData linkData = linkDataStorage.getDocumentLinkData(crawledDoc.getUrl());
-					String anchorText = (linkData != null && linkData.anchorText != null) ? linkData.anchorText : "";
-
-					Document indexDoc = new Document();
+					String anchorText = (linkData != null && linkData.anchorText != null) ? linkData.anchorText : "";					
+					String outgoingLinkText = "";
+					for (String text : crawledDoc.getOutgoingLinks().values()) {
+						outgoingLinkText += " " + text;
+					}
 					
-					Field url = new TextField("url", crawledDoc.getUrl(), Field.Store.YES);
-					Field title = new TextField("title", crawledDoc.getTitle(), Field.Store.YES);
-					Field content = new TextField("content", crawledDoc.getBody(), Field.Store.NO);
-					Field importantContent = new TextField("importantcontent", crawledDoc.getImportantBody(), Field.Store.NO);
-					Field anchorTextField = new TextField("anchortext", anchorText, Field.Store.NO);
+					// Create index document with the several fields
+					// Note: Fields are not boosted since they will be boosted at query-time
+					Document indexDoc = new Document();					
+					Field[] fields = new Field[]
+					{
+						new TextField("url", crawledDoc.getUrl(), Field.Store.YES),
+						new TextField("urldomain", crawledDoc.getUrlDomain(), Field.Store.NO),
+						
+						new TextField("title", crawledDoc.getTitle(), Field.Store.YES),
+						new TextField("stemtitle", crawledDoc.getTitle(), Field.Store.NO),
+						
+						new TextField("content", crawledDoc.getBody(), Field.Store.NO),
+						new TextField("stemcontent", crawledDoc.getBody(), Field.Store.NO),						
+						
+						new TextField("contentheaders", crawledDoc.getHeaders(), Field.Store.NO),						
+						new TextField("importantcontent", crawledDoc.getImportantBody(), Field.Store.NO),
+						
+						new TextField("outgoingtext", outgoingLinkText, Field.Store.NO), // anchor text from this page to another
+						new TextField("anchortext", anchorText, Field.Store.NO), // anchor text from other pages to this page
+						new TextField("stemanchortext", anchorText, Field.Store.NO)
+					};
 					
-					indexDoc.add(url);
-					indexDoc.add(title);
-					indexDoc.add(content);
-					indexDoc.add(importantContent);
-					indexDoc.add(anchorTextField);
+					for (Field field : fields) {
+						indexDoc.add(field);
+					}
 					
 					// Update document based on URL
 					indexWriter.updateDocument(new Term("url",  crawledDoc.getUrl()), indexDoc);
@@ -125,6 +155,7 @@ public class Indexer {
 			}
 			finally {
 				indexWriter.close();
+				analyzer.close();
 			}
 		}
 		catch (IOException e) {

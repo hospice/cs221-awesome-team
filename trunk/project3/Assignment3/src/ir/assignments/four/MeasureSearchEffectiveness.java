@@ -5,7 +5,6 @@ import ir.assignments.three.helpers.FileHelper;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class MeasureSearchEffectiveness {
@@ -16,7 +15,7 @@ public class MeasureSearchEffectiveness {
 		
 		double totalScore = 0;
 		for (String query : queries) {
-			double score = getScore(query, false);
+			double score = getScore(query, false); // true = display search results, false = only display search scores
 			double originalScore = getOriginalScore(query);
 			double improvement = (originalScore != -1) ? getImprovement(originalScore, score) : -1;
 			
@@ -31,8 +30,6 @@ public class MeasureSearchEffectiveness {
 		
 		System.out.println("");
 		System.out.println("Average Score: " + average + (averageImprovement != -1 ? " (" + averageImprovement + "%)" : ""));
-		
-		//System.out.println(getScore("software engineering", true));
 	}
 	
 	private static double getImprovement(double original, double newScore) {
@@ -113,5 +110,4 @@ public class MeasureSearchEffectiveness {
 			rank++;
 		}
 	}
-
 }
