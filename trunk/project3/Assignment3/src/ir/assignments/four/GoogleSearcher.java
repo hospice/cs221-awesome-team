@@ -1,6 +1,6 @@
 package ir.assignments.four;
 
-import ir.assignments.three.helpers.FileHelper;
+import ir.assignments.four.helpers.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/*
+ * Retrieves search results (URLs) from Google
+ */
 public class GoogleSearcher {
 
 	private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search?q=[QUERY]&hl=en&start=[START]&btnG=Google+Search&gbv=1";
@@ -29,7 +32,7 @@ public class GoogleSearcher {
 		if (cachedResults != null)
 			return Arrays.asList(cachedResults);
 
-		// Get the search url
+		// Get the search URL
 		String encodedQuery = getQueryString(query);
 		String searchUrl = GOOGLE_SEARCH_URL.replace("[QUERY]", encodedQuery);
 

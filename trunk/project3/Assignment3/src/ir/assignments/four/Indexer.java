@@ -1,5 +1,10 @@
 package ir.assignments.four;
 
+import ir.assignments.four.storage.DocumentLinkData;
+import ir.assignments.four.storage.DocumentStorage;
+import ir.assignments.four.storage.HtmlDocument;
+import ir.assignments.four.storage.LinkDataStorage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,12 +27,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import ir.assignments.three.storage.DocumentLinkData;
-import ir.assignments.three.storage.DocumentStorage;
-import ir.assignments.three.storage.HtmlDocument;
-import ir.assignments.three.storage.IDocumentStorage;
-import ir.assignments.three.storage.LinkDataStorage;
-
 /**
  * Creates the Lucene index from the locally stored crawled pages.
  */
@@ -46,7 +45,7 @@ public class Indexer {
 			linkDataStorage.close();
 		}
 	}
-	public void indexDocuments(IDocumentStorage docStorage, String indexPath) {
+	public void indexDocuments(DocumentStorage docStorage, String indexPath) {
 		// This is the original indexing code
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
 
@@ -85,7 +84,7 @@ public class Indexer {
 		System.out.println("Done");
 	}
 	
-	public void indexDocumentsEnhanced(IDocumentStorage docStorage, LinkDataStorage linkDataStorage, String indexPath) {		
+	public void indexDocumentsEnhanced(DocumentStorage docStorage, LinkDataStorage linkDataStorage, String indexPath) {		
 		
 		// This is the indexing code for the improved version
 		Analyzer regularAnalyzer = new StandardAnalyzer(Version.LUCENE_41);	

@@ -15,7 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-core-4.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jdbm-2.4.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Assignment2"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-analyzers-common-4.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-queries-4.1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-queryparser-4.1.0.jar"/>
