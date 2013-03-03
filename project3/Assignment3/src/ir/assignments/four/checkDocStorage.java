@@ -1,6 +1,6 @@
 package ir.assignments.four;
 
-import ir.assignments.three.storage.DocumentStorage;
+import ir.assignments.four.storage.DocumentStorage;
 
 public class checkDocStorage {
 	public static Boolean check(String targetUrl){

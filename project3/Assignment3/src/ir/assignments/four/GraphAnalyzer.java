@@ -1,11 +1,11 @@
 package ir.assignments.four;
 
-import java.util.HashMap;
+import ir.assignments.four.storage.DocumentLinkData;
+import ir.assignments.four.storage.DocumentStorage;
+import ir.assignments.four.storage.HtmlDocument;
+import ir.assignments.four.storage.LinkDataStorage;
 
-import ir.assignments.three.storage.DocumentLinkData;
-import ir.assignments.three.storage.DocumentStorage;
-import ir.assignments.three.storage.HtmlDocument;
-import ir.assignments.three.storage.LinkDataStorage;
+import java.util.HashMap;
 
 /*
  * Analyzes the crawled documents for pages' incoming anchor text
@@ -72,5 +72,4 @@ public class GraphAnalyzer {
 		if (this.linkDataStorage != null)
 			linkDataStorage.close();
 	}
-
 }
