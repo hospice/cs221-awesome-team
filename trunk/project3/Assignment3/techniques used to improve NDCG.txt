@@ -1,0 +1,37 @@
+General Techniques:
+ > Added the following indexed fields (in addition to the fields used originally) to all indexed documents:
+   - urldomain: The domain of the document's URL.
+   - stemtitle: The document's stemmed title.
+   - stemcontent: The document's stemmed content.
+   - contentheaders: The content of the following HTML tags in a document: 
+      -- h1,h2,h3,h4,div[id*=title],div[class*=title],span[id*=title],span[class*=title]
+   - importantcontent: The content of the following HTML tags in a document:
+      -- b,strong,em
+   - outgoingtext: The text of outgoing links from the document.
+   - anchortext: The text of incoming links to the document.
+   - stemanchortext: The stemmed text of incoming links to the document.
+ 
+We believe these fields are generic and can be used to improve the performance of a wide range of documents and queries.
+
+Test-Query Set Specific Techniques:
+ > Crawled missing pages
+ > Automatically optimized query-time field boosting weights against the test queries using hill-climb algorithm
+
+
+
+The final scoring formula (boosted at query-time) is:
+ - urldomain (default query): 27.1
+ - title (default query): 45.9
+ - title (preference to occurrence at beginning of the field): 57.35
+ - stemtitle (default query): 2.5
+ - stemtitle (preference to beginning of field): 86.0
+ - content (default query): 56.2
+ - stemcontent (default query): 44.5
+ - content (phrase query): 39.4
+ - contentheaders (default query): 28.4
+ - importantcontent (default query): 81.8
+ - outgoingtext (default query): 22.0
+ - anchortext (default query): 2.6
+ - stemanchortext (default query): 69.0
+
+Note: For the "stem" fields, the query is also stemmed
