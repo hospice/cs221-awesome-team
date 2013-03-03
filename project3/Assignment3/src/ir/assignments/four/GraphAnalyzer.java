@@ -5,22 +5,24 @@ import java.util.HashMap;
 import ir.assignments.three.storage.DocumentLinkData;
 import ir.assignments.three.storage.DocumentStorage;
 import ir.assignments.three.storage.HtmlDocument;
-import ir.assignments.three.storage.IDocumentStorage;
 import ir.assignments.three.storage.LinkDataStorage;
 
+/*
+ * Analyzes the crawled documents for pages' incoming anchor text
+ */
 public class GraphAnalyzer {
 
 	public static void main(String[] args) {
-		GraphAnalyzer k = new GraphAnalyzer();
+		GraphAnalyzer analyzer = new GraphAnalyzer();
 		try {
-			k.runAnchorTextAnalysis();
+			analyzer.runAnchorTextAnalysis();
 		}
 		finally {
-			k.close();
+			analyzer.close();
 		}
 	}
 
-	private IDocumentStorage docStorage;
+	private DocumentStorage docStorage;
 	private LinkDataStorage linkDataStorage;
 
 	public GraphAnalyzer() {
@@ -30,18 +32,22 @@ public class GraphAnalyzer {
 
 	public void runAnchorTextAnalysis() {
 
-		long start = System.currentTimeMillis();
 		int i = 0;
-		for (HtmlDocument doc : docStorage.getAll()) {
+		for (HtmlDocument crawledDoc : docStorage.getAll()) {
 
 			if (i % 100 == 0)
 				System.out.println(i + "");
 
 			i++;
 
-			// Update entries for outgoing link's docs
-			HashMap<String, String> outgoingLinks = doc.getOutgoingLinks();			
+			// Propagate the current documents anchor text to the corresponding link
+			HashMap<String, String> outgoingLinks = crawledDoc.getOutgoingLinks();			
 			for (String outgoingUrl : outgoingLinks.keySet()) {
+				// Only worry about links to pages that were crawled
+				if (!checkDocStorage.check(outgoingUrl))
+					continue;
+				
+				// Either update or create the entry for the outgoing URL
 				DocumentLinkData outgoingLinkData = linkDataStorage.getDocumentLinkData(outgoingUrl);
 				if (outgoingLinkData == null)
 					outgoingLinkData = new DocumentLinkData();
@@ -55,8 +61,8 @@ public class GraphAnalyzer {
 				linkDataStorage.putDocumentLinkData(outgoingLinkData);
 			}
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("Done, took " + (end - start) + " milliseconds");
+
+		System.out.println("Done");
 	}
 
 	public void close() {

@@ -1,19 +1,13 @@
 package ir.assignments.four;
 
-import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Calculates the NDCG score using Google as both the oracle AND the relevance score (first document is relevance 5, second is 4, etc.)
+ */
 public class NDCG {
-
-	public static void main(String[] args) {
-		List<String> urls = Arrays.asList(new String[] { "2", "3", "1", "4", "5" });
-		List<String> oracleUrls = Arrays.asList(new String[] { "1", "2", "3", "4", "5" });
-
-		System.out.println(NDCG.getNDCG(urls, oracleUrls, 5));
-	}
-
 	public static double getNDCG(List<String> urls, List<String> oracleUrls, int r) {
-		// get DCG of urls
+		// get DCG of the target URLs
 		double urlDCG = getDCG(urls, oracleUrls, r);
 
 		// get DCG of perfect ranking
