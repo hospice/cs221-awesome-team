@@ -15,6 +15,7 @@ Important Classes:
  > Indexer.java: Creates the Lucene index.
  > SearchFiles.java: Performs searches on the Lucene index
  > MeasureSearchEffectiveness.java: Generates a summary of the NDCG@5 scores for the test queries provided in the project description.
+ > SearchOptimizer.java: Uses hill-climb to maximize the average NDCG@5 score of the test queries.
 
 External Libraries Used:
  > Lucene
