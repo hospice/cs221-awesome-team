@@ -40,7 +40,7 @@ public class HtmlDocument {
 				if (content.contains("=")) {
 					String[] parts = content.split("=");
 					if (parts.length > 1) {
-						String redirectUrl = parts[1];
+						String redirectUrl = parts[1].trim();
 						String mergedUrl = combineUrls(url, redirectUrl);
 						if (mergedUrl != null) {
 							this.parsedDoc = Jsoup.connect(mergedUrl.toString()).get();
