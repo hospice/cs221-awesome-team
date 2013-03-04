@@ -2,11 +2,6 @@ Team Members:
   1) Armando Pensado Valle <apensado@uci.edu>
   2) Vibhor Mathur <mathurv@uci.edu>
 
-Deliverables:
- > The initial scores are in: originalNDCG@5.txt
- > The final scores are in: finalNDCG@5.txt
- > Techniques used to improve scores are in: techniques used to improve NDCG.txt
-
 Important Classes:
  > GoogleSearcher.java: Gets search results from Google
    - Assumptions: Exclude documents that were not part of the initial crawl goals or were inaccessible to the crawler
