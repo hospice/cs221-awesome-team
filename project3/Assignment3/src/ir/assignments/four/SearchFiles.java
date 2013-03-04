@@ -28,6 +28,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.spans.SpanFirstQuery;
+import org.apache.lucene.search.spans.SpanNearQuery;
+import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -57,30 +59,26 @@ public class SearchFiles {
 	public List<String> search(String queryString, int count) {
 		
 		// Do search by combining the query among different fields with different boosting weights
-		
 		try {
 			// Build query
 			Query[] queries = new Query[]
 			{
-				getFieldQuery(queryString, "url", 0.0f),
-				getFieldQuery(queryString, "urldomain", 27.1f),
+				getFieldQuery(queryString, "urldomain", 5.3f),
 				
-				getFieldQuery(queryString, "title", 45.9f),
-				getFieldSpanQuery(queryString, "title", 57.35f),
-				getFieldQuery(queryString, "stemtitle", 2.5f),
-				getFieldSpanQuery(queryString, "stemtitle", 86.0f),
+				getFieldSpanQuery(queryString, "title", 240.5f),
+				getFieldSpanQuery(queryString, "stemtitle", 77.7f),
+				getFieldNearQuery(queryString, "stemtitle", 1.0f),
 				
-				getFieldQuery(queryString, "content", 56.2f),
-				getFieldQuery(queryString, "stemcontent", 44.5f),
-				getFieldPhraseQuery(queryString, "content", 39.4f),
+				getFieldQuery(queryString, "content", 116.2f),
+				getFieldQuery(queryString, "stemcontent", 331.4f),
+				getFieldNearQuery(queryString, "stemcontent", 91.0f),
 				
-				getFieldQuery(queryString, "contentheaders", 28.4f),
-				getFieldQuery(queryString, "importantcontent", 81.8f),
+				getFieldQuery(queryString, "contentheaders", 15.3f),
+				getFieldQuery(queryString, "importantcontent", 129.9f),
 				
-				getFieldQuery(queryString, "outgoingtext", 22.0f),
-				getFieldQuery(queryString, "anchortext", 2.6f),
-				getFieldQuery(queryString, "stemanchortext", 69.0f)
-			};
+				getFieldQuery(queryString, "anchortext", 17.6f),
+				getFieldQuery(queryString, "stemanchortext", 74.6f)
+		    };
 			
 			BooleanQuery finalQuery = new BooleanQuery();
 			for (Query query : queries) {
@@ -121,7 +119,14 @@ public class SearchFiles {
 				
 				getFieldQuery(queryString, "outgoingtext", weightVector[11]),
 				getFieldQuery(queryString, "anchortext", weightVector[12]),
-				getFieldQuery(queryString, "stemanchortext", weightVector[13])
+				getFieldQuery(queryString, "stemanchortext", weightVector[13]),
+				
+				getFieldNearQuery(queryString, "title", weightVector[14]),
+				getFieldNearQuery(queryString, "stemtitle", weightVector[15]),
+				getFieldNearQuery(queryString, "content", weightVector[16]),
+				getFieldNearQuery(queryString, "stemcontent", weightVector[17]),
+				getFieldNearQuery(queryString, "contentheaders", weightVector[18]),
+				getFieldNearQuery(queryString, "importantcontent", weightVector[19])
 			};
 
 			BooleanQuery finalQuery = new BooleanQuery();
@@ -187,6 +192,25 @@ public class SearchFiles {
 		
 		return query;
 	}
+	
+	private Query getFieldNearQuery(String queryString, String field, float boost) throws ParseException, IOException {
+		// Build a query that matches the query terms close to each other
+		ArrayList<SpanQuery> clausesList = new ArrayList<SpanQuery>();
+        TokenStream tokens = this.analyzer.tokenStream(field, new StringReader(queryString));
+        tokens.reset();
+        
+        while (tokens.incrementToken()) {
+        	String word = tokens.getAttribute(CharTermAttribute.class).toString();
+        	Term term = new Term(field, word);
+        	clausesList.add(new SpanTermQuery(term));
+        }
+        
+        SpanQuery[] clauses = clausesList.toArray(new SpanQuery[clausesList.size()]);
+
+        SpanNearQuery spannearQuery = new SpanNearQuery(clauses, 5, true);
+        spannearQuery.setBoost(boost);
+        return spannearQuery;    
+    }
 	
 	private List<String> doPagingSearch(Query query, int topNResults) throws IOException {
 
