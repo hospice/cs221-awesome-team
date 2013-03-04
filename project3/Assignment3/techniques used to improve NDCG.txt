@@ -20,18 +20,21 @@ Test-Query Set Specific Techniques:
 
 
 The final scoring formula (boosted at query-time) is:
- - urldomain (default query): 27.1
- - title (default query): 45.9
- - title (preference to occurrence at beginning of the field): 57.35
- - stemtitle (default query): 2.5
- - stemtitle (preference to beginning of field): 86.0
- - content (default query): 56.2
- - stemcontent (default query): 44.5
- - content (phrase query): 39.4
- - contentheaders (default query): 28.4
- - importantcontent (default query): 81.8
- - outgoingtext (default query): 22.0
- - anchortext (default query): 2.6
- - stemanchortext (default query): 69.0
+ - urldomain (default query): 5.3
+
+ - title (preference to occurrence at beginning of the field): 240.5
+ - stemtitle (preference to beginning of field): 77.7
+ - stemtile (proximity query): 1.0
+
+ - content (default query): 116.2
+ - stemcontent (default query): 331.4
+ - stemcontent (proximity query): 91.0
+
+ - contentheaders (default query): 15.3
+ - importantcontent (default query): 129.9
+ 
+ - anchortext (default query): 17.6
+ - stemanchortext (default query): 74.6
 
 Note: For the "stem" fields, the query is also stemmed
+Note: Fields not listed had an effective weight of 0
