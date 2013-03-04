@@ -19,8 +19,7 @@ public class SearchOptimizer {
 	
 	public void optimize() {
 		// Start with random boosting values
-		float[] initialVector = // new float[] { 33.686916f, 37.590523f, 0.0f, 28.735641f, 64.83772f, 0.0f, 29.557884f, 23.744904f, 50.83342f, 67.613594f, 0.0f, 5.4735813f, 15.810482f, 72.63219f, 0.0f, 6.62932f, 0.0f, 11.03945f, 65.786446f, 0.0f };
-		randomStartWeights(20);
+		float[] initialVector = randomStartWeights(20);
 		 
 		float[] bestVector = initialVector;
 		double bestVectorScore = getOverallScore(initialVector);
@@ -88,8 +87,8 @@ public class SearchOptimizer {
 			HashSet<Integer> indexes = new HashSet<Integer>();
 			for (int i = 0; i < fieldsToTweak; i++) {
 				// Random step size between -20 and 20
-				float min = -20.0f;
-				float max = 20.0f;
+				float min = -100.0f;
+				float max = 100.0f;
 				float stepSize = (rand.nextFloat() * (max - min)) + min;
 				
 				// Change random field (no duplicates)
