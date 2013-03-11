@@ -7,6 +7,7 @@
 	
 	<!-- Style sheets -->
 	<link href="styles/bootstrap-button.css" rel="stylesheet" type="text/css" />
+	<link href="styles/bootstrap-pagination.css" rel="stylesheet" type="text/css" />
 	<link href="styles/style.css" rel="stylesheet" type="text/css" />	
 	
 	<!-- Javascript -->
