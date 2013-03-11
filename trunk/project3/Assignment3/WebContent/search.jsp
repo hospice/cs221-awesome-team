@@ -26,7 +26,7 @@
 	<div id="loading-image-container">
 		<img src="images/loading.gif" /> <!-- No search results by default, these are loaded with JavaScript so page displays quickly -->
 	</div>	
-	<div id="search-results-container">
+	<div id="search-results-container" data-currentpage="<%= request.getParameter("page") != null ? request.getParameter("page") : "1" %>">
 	</div>
 </body>
 </html>

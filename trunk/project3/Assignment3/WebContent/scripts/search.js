@@ -8,9 +8,10 @@ $(document).ready(function() {
 
 	// Do actual request
 	$.ajax({
-		url : "services/search.jsp",
+		url : "services/search-service.jsp",
 		data : {
-			query : query
+			query : query,
+			page: $("#search-results-container").data("currentpage")
 		},
 		method : "POST",
 		success : function(response) {

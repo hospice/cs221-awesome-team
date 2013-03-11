@@ -56,7 +56,7 @@ public class SearchFiles {
 		this.analyzer = new PerFieldAnalyzerWrapper(regularAnalyzer, analyzerPerField);
 	}
 	
-	public List<String> search(String queryString, int count) {
+	public ResultSet search(String queryString, int page, int maxPerPage) {
 		
 		// Do search by combining the query among different fields with different boosting weights
 		try {
@@ -86,7 +86,7 @@ public class SearchFiles {
 					finalQuery.add(query, Occur.SHOULD);
 			}
 
-			return doPagingSearch(finalQuery, count);
+			return doPagingSearch(finalQuery, page, maxPerPage);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class SearchFiles {
 		return null;
 	}
 	
-	public List<String> search(String queryString, int count, float[] weightVector) {
+	public ResultSet search(String queryString, int page, int maxPerPage, float[] weightVector) {
 		// Used by SearchOptimizer.java to find the best weights for the test queries
 		
 		try {
@@ -136,7 +136,7 @@ public class SearchFiles {
 				}
 			}
 			
-			return doPagingSearch(finalQuery, count);
+			return doPagingSearch(finalQuery, page, maxPerPage);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -212,14 +212,17 @@ public class SearchFiles {
         return spannearQuery;    
     }
 	
-	private List<String> doPagingSearch(Query query, int topNResults) throws IOException {
-
-		// Do the search and collect the top N results
-		TopDocs results = searcher.search(query, topNResults);
+	private ResultSet doPagingSearch(Query query, int page, int maxPerPage) throws IOException {
+		
+		// Do the search
+		TopDocs results = searcher.search(query, (page * maxPerPage) + maxPerPage);
 		ScoreDoc[] hits = results.scoreDocs;
 		
+		int start = page * maxPerPage; // first page is page 0
+		int end = Math.min((page + 1) * maxPerPage, results.totalHits);
+		
 		ArrayList<String> urls = new ArrayList<String>();		
-		for (int i = 0; i < Math.min(topNResults, hits.length); i++) {
+		for (int i = start; i < end; i++) {
 			// Results are in docIds, find the indexed document
 			Document doc = searcher.doc(hits[i].doc);
 			
@@ -228,7 +231,7 @@ public class SearchFiles {
 			urls.add(url);
 		}
 		
-		return urls;
+		return new ResultSet(urls, results.totalHits);
 	}
 	
 	public void close(){
