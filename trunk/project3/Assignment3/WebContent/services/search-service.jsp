@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" language="java"
-	import="java.sql.*" errorPage="" import="ir.assignments.four.web.*"%>
+	import="ir.assignments.four.web.*"
+	import="java.net.URLEncoder" %>
 <%
 	// This is the service that performs the search on the server and then returns the results
 
@@ -55,8 +56,20 @@
 
 			out.println("</div>");
 		}
-		out.println("<strong>Page: " + results.getCurrentPage() + "</strong>");
-		out.println("<strong>Pages: " + results.getTotalPages(maxPerPage) + "</strong>");
+		
+		// Page selector
+		out.println("<div class=\"pagination\">");
+		out.println("<ul>");
+		int totalPages = results.getTotalPages(maxPerPage);
+		for (int i = 0; i < totalPages; i++) {
+			if (i == currentPage) {
+				out.println("<li class=\"active\"><a href=\"search.jsp?query=" + URLEncoder.encode(query, "UTF-8") + "&page=" + (i + 1) + "" + "\">" + (i + 1) + "</a></li>");
+			} else {
+				out.println("<li><a href=\"search.jsp?query=" + URLEncoder.encode(query, "UTF-8") + "&page=" + (i + 1) + "" + "\">" + (i + 1) + "</a></li>");
+			}
+		}
+		out.println("</ul>");
+		out.println("</div>");
 	} else {
 		out.println("<div class=\"no-results\">No search results found</div>");
 	}
