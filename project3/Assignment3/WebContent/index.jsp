@@ -20,7 +20,7 @@
 				<input type="text" name="query" id="txtQuery" />
 				<input type="submit" id="btnSearch" class="btn" value="Search" />
 			</div>
-		</div>
+		</div>		
 	</form>
 </body>
 </html>

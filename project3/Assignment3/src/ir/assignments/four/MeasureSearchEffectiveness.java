@@ -51,7 +51,7 @@ public class MeasureSearchEffectiveness {
 			localSearch = new SearchFiles("docIndexEnhanced");
 			
 			List<String> googleResults = google.getSearchResults(query, 5);
-			List<String> localResults = localSearch.search(query, 5);
+			List<String> localResults = localSearch.search(query, 0, 5).getUrls();
 			
 			if (printResults) {
 				printResults("Google", query, googleResults, true);

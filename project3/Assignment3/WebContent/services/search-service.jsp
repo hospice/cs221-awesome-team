@@ -5,22 +5,28 @@
 
 	// Input Parameters
 	String query = request.getParameter("query");
-	String pageStr = request.getParameter("page");
+	String pageStr = request.getParameter("page");	
+	int maxPerPage = 10;
 
 	int currentPage = 0;
 	try {
 		if (pageStr != null)
-			currentPage = Integer.parseInt(pageStr);
+			currentPage = Integer.parseInt(pageStr) - 1;
+		
+		if (currentPage < 0)
+			currentPage = 0;
+		else if (currentPage > 20) // limit to top 20 pages
+			currentPage = 20;
 	}
 	catch (Exception e) {
 	}
 
 	// Do search
 	WebSearch searcher = null;
-	SearchResult[] results = null;
+	WebResultSet results = null;
 	try {
 		searcher = new WebSearch();
-		results = searcher.search(query, currentPage);
+		results = searcher.search(query, currentPage, maxPerPage);
 	}
 	finally {
 		if (searcher != null)
@@ -28,8 +34,8 @@
 	}
 
 	// Render the results
-	if (results != null && results.length > 0) {
-		for (SearchResult result : results) {
+	if (results != null && results.getResults().length > 0) {
+		for (SearchResult result : results.getResults()) {
 			out.println("<div class=\"search-result\">");
 
 			// Title
@@ -49,6 +55,8 @@
 
 			out.println("</div>");
 		}
+		out.println("<strong>Page: " + results.getCurrentPage() + "</strong>");
+		out.println("<strong>Pages: " + results.getTotalPages(maxPerPage) + "</strong>");
 	} else {
 		out.println("<div class=\"no-results\">No search results found</div>");
 	}

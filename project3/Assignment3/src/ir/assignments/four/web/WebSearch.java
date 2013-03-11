@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.assignments.four.ResultSet;
 import ir.assignments.four.SearchFiles;
 import ir.assignments.four.storage.DocumentStorage;
 import ir.assignments.four.storage.HtmlDocument;
@@ -22,12 +23,12 @@ public class WebSearch {
 		}
 	}
 	
-	public SearchResult[] search(String query, int page) {
-		List<String> urlResults = this.indexSearch.search(query, 10);
+	public WebResultSet search(String query, int page, int maxPerPage) {
+		ResultSet results = this.indexSearch.search(query, page, maxPerPage);
 		
 		// Create the results 
-		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
-		for (String url : urlResults) {
+		ArrayList<SearchResult> displayResults = new ArrayList<SearchResult>();
+		for (String url : results.getUrls()) {
 			String html = docStorage.getDocument(url);
 			HtmlDocument doc = new HtmlDocument(url, html);
 			
@@ -36,10 +37,11 @@ public class WebSearch {
 			description = description.substring(0, Math.min(100, description.length())).trim() + "...";
 			
 			SearchResult result = new SearchResult(title, url, description);
-			results.add(result);
+			displayResults.add(result);
 		}
 		
-		return results.toArray(new SearchResult[results.size()]);
+		SearchResult[] displayResultsArray = displayResults.toArray(new SearchResult[displayResults.size()]);
+		return new WebResultSet(displayResultsArray, results.getTotalHits(), page); 
 	}
 
 	public void close() {

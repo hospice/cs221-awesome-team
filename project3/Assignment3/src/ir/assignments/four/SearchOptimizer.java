@@ -136,7 +136,7 @@ public class SearchOptimizer {
 			localSearch = new SearchFiles("docIndexEnhanced");
 			
 			List<String> googleResults = google.getSearchResults(query, 5);
-			List<String> localResults = localSearch.search(query, 5, weightVector);
+			List<String> localResults = localSearch.search(query, 0, 5, weightVector).getUrls();
 			
 			// Calculate NDCG@5
 			return NDCG.getNDCG(localResults, googleResults, 5);
