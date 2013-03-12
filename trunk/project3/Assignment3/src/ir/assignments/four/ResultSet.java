@@ -4,18 +4,30 @@ import java.util.List;
 
 public class ResultSet {
 	private List<String> urls;
+	private List<Integer> ids;
 	private int totalHits;
 	
-	public ResultSet(List<String> urls, int totalHits) {
+	
+	public ResultSet(List<String> urls, List<Integer> ids, int totalHits) {
 		this.urls = urls;
+		this.ids = ids;
 		this.totalHits = totalHits;
+		
 	}
 	
 	public List<String> getUrls() { 
 		return this.urls;
 	}
 	
+	public List<Integer> getIds() { 
+		return this.ids;
+	}
+	
 	public int getTotalHits() {
 		return this.totalHits;
 	}
+	
+
+	
+	
 }
