@@ -11,16 +11,19 @@
 	
 	<!-- Javascript -->
 	<script type="text/javascript" src="scripts/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="scripts/autocomplete.js"></script>
 </head>
 <body>
-	<form method="GET" action="search.jsp"> <!-- Pass the query to the search results page -->
+	<form id="frmSearch" method="GET" action="search.jsp"> <!-- Pass the query to the search results page -->
 		<div id="search-container">
 			<h1 id="header">ArVi</h1>
 			<div class="inputGroup">
-				<input type="text" name="query" id="txtQuery" />
+				<input type="text" name="query" id="txtQuery" autocomplete="off" />
 				<input type="submit" id="btnSearch" class="btn" value="Search" />
 			</div>
 		</div>		
 	</form>
+	<div id="autocomplete">
+	</div>
 </body>
 </html>

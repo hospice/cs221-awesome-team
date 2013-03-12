@@ -62,8 +62,10 @@ public class DocumentStorage implements IDocumentStorage {
 
 	public void close() {
 		try {
-			this.database.commit(); // commit any leftover pages
-			this.database.close();
+			if (this.database != null) {
+				this.database.commit(); // commit any leftover pages
+				this.database.close();
+			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();
