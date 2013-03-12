@@ -2,12 +2,10 @@ package ir.assignments.four.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-
-import ir.assignments.four.HighlighterUtility;
 import ir.assignments.four.ResultSet;
 import ir.assignments.four.SearchFiles;
 import ir.assignments.four.storage.DocumentStorage;
@@ -19,8 +17,8 @@ public class WebSearch {
 
 	public WebSearch() {
 		try {
-			this.indexSearch = new SearchFiles("C:\\Users\\Vibhor Mathur\\Documents\\IR\\Project\\project3\\Assignment3\\docIndexstoring");
-			this.docStorage = new DocumentStorage("C:\\Users\\Vibhor Mathur\\Documents\\IR\\Project\\project3\\Assignment3\\docStorage\\docStorage");
+			this.indexSearch = new SearchFiles("docIndexEnhanced", "docIndexAutoComplete");
+			this.docStorage = new DocumentStorage("docStorage\\docStorage");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -40,24 +38,15 @@ public class WebSearch {
 			HtmlDocument doc = new HtmlDocument(url, html);
 
 			String title = doc.getTitle();
-			String description="";
-
+			
+			// Generate a description fragment using Lucene
+			String description = "";
 			try {
-				description = this.indexSearch.getHighlights(url, query, results.getIds().get(i), doc.getBody());
+				description = this.indexSearch.getHighlights(url, query, results.getDocIds().get(i), doc.getBody());
 			}
-			catch (ParseException e) {
-				// TODO Auto-generated catch block
+			catch (Exception e) {
 				e.printStackTrace();
 			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (InvalidTokenOffsetsException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 
 			SearchResult result = new SearchResult(title, url, description);
 			displayResults.add(result);
@@ -65,6 +54,27 @@ public class WebSearch {
 
 		SearchResult[] displayResultsArray = displayResults.toArray(new SearchResult[displayResults.size()]);
 		return new WebResultSet(displayResultsArray, results.getTotalHits(), page); 
+	}
+	
+	public String[] getAutoCompleteSuggestions(String query) {
+		Set<String> completions = new HashSet<String>();
+		
+		// Use only the last term since we can only autocomplete a single word
+		String[] terms = query.trim().split(" ");
+		if (terms.length > 0) {
+			String termToComplete = terms[terms.length - 1];
+			Set<String> completeTerms = this.indexSearch.suggestTerms(termToComplete);
+			for (String completeTerm : completeTerms) {
+				if (completeTerm.equals(termToComplete))
+					continue; // no need to autocomplete
+				
+				// Just keep the completion (the part missing from the current query)
+				String completion = completeTerm.substring(termToComplete.length());
+				completions.add(completion);
+			}
+		}
+		
+		return completions.toArray(new String[completions.size()]);
 	}
 
 	public void close() {

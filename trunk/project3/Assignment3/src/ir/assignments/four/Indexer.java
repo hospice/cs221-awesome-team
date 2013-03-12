@@ -7,24 +7,40 @@ import ir.assignments.four.storage.LinkDataStorage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.spell.LuceneDictionary;
+import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.BytesRef;
+import org.apache.lucene.util.BytesRefIterator;
 import org.apache.lucene.util.Version;
 
 /**
@@ -33,18 +49,22 @@ import org.apache.lucene.util.Version;
 public class Indexer {
 
 	public static void main(String[] args) {
-		DocumentStorage docStorage = new DocumentStorage("docStorage\\docStorage");
-		LinkDataStorage linkDataStorage = new LinkDataStorage("linkDataStorage\\linkDataStorage");
-		try {
-			Indexer indexer = new Indexer();
-			//indexer.indexDocuments(docStorage, linkDataStorage, "docIndex");
-			indexer.indexDocumentsEnhanced(docStorage, linkDataStorage, "docIndexEnhanced");
-		}
-		finally {
-			docStorage.close();
-			linkDataStorage.close();
-		}
+//		DocumentStorage docStorage = new DocumentStorage("docStorage\\docStorage");
+//		LinkDataStorage linkDataStorage = new LinkDataStorage("linkDataStorage\\linkDataStorage");
+//		try {
+//			Indexer indexer = new Indexer();
+//			//indexer.indexDocuments(docStorage, linkDataStorage, "docIndex");
+//			indexer.indexDocumentsEnhanced(docStorage, linkDataStorage, "docIndexEnhanced");
+//		}
+//		finally {
+//			docStorage.close();
+//			linkDataStorage.close();
+//		}
+		
+		Indexer indexer = new Indexer();
+		indexer.indexAutoComplete("C:\\Users\\Mando\\Desktop\\New folder\\docIndexEnhanced", "C:\\Users\\Mando\\Desktop\\New folder\\docIndexAutoComplete");		
 	}
+	
 	public void indexDocuments(DocumentStorage docStorage, String indexPath) {
 		// This is the original indexing code
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
@@ -155,6 +175,73 @@ public class Indexer {
 			finally {
 				indexWriter.close();
 				analyzer.close();
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Done");
+	}
+	
+	// Code borrowed from: http://stackoverflow.com/questions/120180/how-to-do-query-auto-completion-suggestions-in-lucene
+	public void indexAutoComplete(String indexPath, String autoCompleteIndexPath) {
+		
+		// Use an existing index to create an n-gram index to use for autocomplete
+		try {
+			Directory originalIndexDir = FSDirectory.open(new File(indexPath));			
+			DirectoryReader originalIndexReader = DirectoryReader.open(originalIndexDir);
+			
+			AutoCompleteAnalyzer autoCompleteAnalyzer = new AutoCompleteAnalyzer();
+			//ShingleAnalyzerWrapper analyzer = new ShingleAnalyzerWrapper(new StandardAnalyzer(Version.LUCENE_41), 3);
+			Directory newIndexDir = FSDirectory.open(new File(autoCompleteIndexPath));	
+			IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41, autoCompleteAnalyzer);
+			IndexWriter newIndexWriter = new IndexWriter(newIndexDir, config);
+
+			try {
+				int i = 0;
+				
+				// Build a dictionary of all the terms in the "content" field
+				LuceneDictionary contentDict = new LuceneDictionary(originalIndexReader, "title");
+				
+				// For all the terms in the dictionary, store the word, it's n-grams, and it's doc frequency
+				BytesRefIterator wordIterator = contentDict.getWordsIterator();
+				BytesRef currentTermBytes = null;
+				while ((currentTermBytes = wordIterator.next()) != null) {
+					// Display the current number to track progress
+					if (i % 1000 == 0)
+						System.out.println(i + "");
+					
+					i++;
+					
+					String currentTerm = currentTermBytes.utf8ToString();
+					for (String term : tokenize(currentTerm).split(" ")) {
+						
+						// Remove non-letters
+						String filteredTerm = "";
+						for (char c : term.toCharArray()) {
+							if (Character.isLetter(c))
+								filteredTerm += c;
+						}
+
+						if (filteredTerm.length() < 4) // skip short words
+							continue;
+						
+						int docFreq = originalIndexReader.docFreq(new Term("title", filteredTerm));
+						
+						// Index
+						Document doc = new Document();
+						doc.add(new StringField("original", filteredTerm, Field.Store.YES)); // indexed, not tokenized
+						doc.add(new TextField("ngram", filteredTerm, Field.Store.YES)); // indexed and tokenized (by n-gram analyzer)
+						doc.add(new IntField("docFreq", docFreq, Field.Store.NO));
+						
+						newIndexWriter.addDocument(doc);
+					}
+				}				
+			}
+			finally {
+				originalIndexReader.close();
+				newIndexWriter.close();
 			}
 		}
 		catch (IOException e) {
