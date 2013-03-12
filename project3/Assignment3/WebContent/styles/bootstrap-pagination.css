@@ -37,6 +37,11 @@
 .pagination {
   margin: 20px 0;
 }
+.pagination a {
+  color: #0088cc;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
 .pagination ul {
   display: inline-block;
   *display: inline;
