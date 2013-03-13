@@ -33,6 +33,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.apache.lucene.search.highlight.NullFragmenter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.search.spans.SpanFirstQuery;
@@ -287,7 +288,7 @@ public class SearchFiles {
 		return terms;
 	}
 	
-	public String getHighlights(String fieldName, String queryString, String contentText) throws IOException, InvalidTokenOffsetsException, ParseException{
+	public String getHighlights(String fieldName, String queryString, String contentText, boolean entireDocument) throws IOException, InvalidTokenOffsetsException, ParseException{
 		StringBuilder output = new StringBuilder();
 		
 		// The highlighter takes in the HTML formatter (since we want to bold the terms)
@@ -295,15 +296,26 @@ public class SearchFiles {
 		SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
 		Query query = getFieldQuery(queryString, fieldName, 1.0f);		
 		Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+		if (entireDocument) {
+			highlighter.setTextFragmenter(new NullFragmenter()); // don't break up the text
+		}
 		
 		// Concatenate the top fragment matches
 		int maxFragments = 2;
 		String[] fragments = highlighter.getBestFragments(this.analyzer, fieldName, contentText, maxFragments);		
 		for (String fragment : fragments) {
-			output.append(fragment.trim() + "... ");
+			output.append(fragment.trim());
+			if (!entireDocument)
+				output.append("... ");
+			else
+				output.append(" ");
 		}
 		
-		return output.toString();
+		String outputStr = output.toString().trim();
+		if (outputStr.equals(""))
+			outputStr = contentText; // return original text if nothing was found to highlight
+		
+		return outputStr;
 	}
 	
 	public void close(){

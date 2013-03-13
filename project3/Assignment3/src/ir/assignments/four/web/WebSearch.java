@@ -37,12 +37,12 @@ public class WebSearch {
 			String html = docStorage.getDocument(url);
 			HtmlDocument doc = new HtmlDocument(url, html);
 
-			String title = doc.getTitle();
-			
-			// Generate a description fragment using Lucene
+			// Use Lucene to highlight terms in the title and extract relevant fragments from the content
+			String title = "";
 			String description = "";
 			try {
-				description = this.indexSearch.getHighlights("content", query, doc.getBody());
+				title = this.indexSearch.getHighlights("title", query, doc.getTitle(), true); // entire "document"
+				description = this.indexSearch.getHighlights("content", query, doc.getBody(), false); // get fragments
 			}
 			catch (Exception e) {
 				e.printStackTrace();
