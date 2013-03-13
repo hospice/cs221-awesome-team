@@ -1,6 +1,7 @@
 var lastQuery = "";
 
 $(document).ready(function() {
+	lastQuery = $("#txtQuery").val(); // don't show autocomplete when page loads
 	
 	setInterval(function(){
 		var currentQuery = $("#txtQuery").val();
@@ -38,8 +39,8 @@ function updateAndShowSuggest(itemsHtml) {
 	
 	$("#autocomplete").html(itemsHtml)
 	                  .width(txtQuery.outerWidth()) // match the length of the search box
-	                  .css("top", txtQuery.position().top + txtQuery.outerHeight()) // position right below
-	                  .css("left", txtQuery.position().left) // align to the left side
+	                  .css("top", txtQuery.offset().top + txtQuery.outerHeight()) // position right below
+	                  .css("left", txtQuery.offset().left) // align to the left side
 	                  .show();
 	
 	// Attach events to items
