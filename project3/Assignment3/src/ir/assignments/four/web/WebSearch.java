@@ -42,7 +42,7 @@ public class WebSearch {
 			// Generate a description fragment using Lucene
 			String description = "";
 			try {
-				description = this.indexSearch.getHighlights(url, query, results.getDocIds().get(i), doc.getBody());
+				description = this.indexSearch.getHighlights("content", query, doc.getBody());
 			}
 			catch (Exception e) {
 				e.printStackTrace();
