@@ -45,8 +45,8 @@ function updateAndShowSuggest(itemsHtml) {
 	$("#autocomplete").html(itemsHtml)
 	                  .width(txtQuery.outerWidth()) // match the length of the search box
 	                  .css("top", txtQuery.offset().top + txtQuery.outerHeight()) // position right below
-	                  .css("left", txtQuery.offset().left) // align to the left side
-	                  .show();
+	                  .show() // show first because if the scrollbar appears, the left side of the textbox will change
+	                  .css("left", txtQuery.offset().left); // align to the left side	                  
 	
 	// Attach events to items
 	$("#autocomplete .item").click(function() {
