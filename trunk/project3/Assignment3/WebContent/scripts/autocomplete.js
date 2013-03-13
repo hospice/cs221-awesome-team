@@ -30,7 +30,7 @@ $(document).ready(function() {
 			});
 		}
 		
-	}, 1000);
+	}, 600);
 });
 
 function updateAndShowSuggest(itemsHtml) {

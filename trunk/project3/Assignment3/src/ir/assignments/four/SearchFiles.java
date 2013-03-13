@@ -6,7 +6,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
-import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
@@ -25,11 +23,9 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
-import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SortField;
@@ -39,8 +35,6 @@ import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.apache.lucene.search.highlight.TextFragment;
-import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.search.spans.SpanFirstQuery;
 import org.apache.lucene.search.spans.SpanNearQuery;
 import org.apache.lucene.search.spans.SpanQuery;
@@ -246,8 +240,7 @@ public class SearchFiles {
 		int start = page * maxPerPage; // first page is page 0
 		int end = Math.min((page + 1) * maxPerPage, results.totalHits);
 
-		ArrayList<String> urls = new ArrayList<String>();	
-		ArrayList<Integer> docIds = new ArrayList<Integer>();
+		ArrayList<String> urls = new ArrayList<String>();
 		
 		for (int i = start; i < end; i++) {
 			// Results are in docIds, find the indexed document
@@ -257,10 +250,9 @@ public class SearchFiles {
 			// Save the URL of the document
 			String url = doc.get("url");			
 			urls.add(url);
-			docIds.add(docId);
 		}
 		
-		return new ResultSet(urls, docIds, results.totalHits);
+		return new ResultSet(urls, results.totalHits);
 	}
 	
 	// Code borrowed from: http://stackoverflow.com/questions/120180/how-to-do-query-auto-completion-suggestions-in-lucene
@@ -274,12 +266,12 @@ public class SearchFiles {
 			// Search the "ngram" field (using the ngram analyzer) and return the
 			// few top results
 			TermQuery query = new TermQuery(new Term("ngram", term.toLowerCase()));
-			Sort docFreqSort = new Sort(new SortField("docFreq", SortField.Type.INT));
+			Sort docFreqSort = new Sort(new SortField("docFreq", SortField.Type.INT)); // order by doc frequency (more common terms first)
 			
 			TopDocs results = autoCompleteSearcher.search(query, 10, docFreqSort);
 			ScoreDoc[] hits = results.scoreDocs;
 			
-			for (int i = 0; i < Math.min(10,hits.length); i++) {
+			for (int i = 0; i < Math.min(10, hits.length); i++) {
 				// Results are in docIds, find the indexed document
 				Document doc = autoCompleteSearcher.doc(hits[i].doc);
 				
@@ -295,25 +287,23 @@ public class SearchFiles {
 		return terms;
 	}
 	
-	public String getHighlights(String url, String queryString, int id, String contentText) throws IOException, InvalidTokenOffsetsException, ParseException{
-		StringBuilder stringBuilder = new StringBuilder();
+	public String getHighlights(String fieldName, String queryString, String contentText) throws IOException, InvalidTokenOffsetsException, ParseException{
+		StringBuilder output = new StringBuilder();
+		
+		// The highlighter takes in the HTML formatter (since we want to bold the terms)
+		// and the query string parsed (using the default query parser with default boost 1.0)
 		SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
-		Query query = getFieldQuery(queryString, "content" , 1.0f);
-
+		Query query = getFieldQuery(queryString, fieldName, 1.0f);		
 		Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-
-		TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), id, "content", analyzer);
-		TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, contentText, false, 4);
-
-		for (int j = 0; j < frag.length; j++) {
-			if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-				stringBuilder.append((frag[j].toString()));
-				stringBuilder.append("...");
-				stringBuilder.append("\n");
-			}
+		
+		// Concatenate the top fragment matches
+		int maxFragments = 2;
+		String[] fragments = highlighter.getBestFragments(this.analyzer, fieldName, contentText, maxFragments);		
+		for (String fragment : fragments) {
+			output.append(fragment.trim() + "... ");
 		}
-
-		return((stringBuilder.toString()));
+		
+		return output.toString();
 	}
 	
 	public void close(){
