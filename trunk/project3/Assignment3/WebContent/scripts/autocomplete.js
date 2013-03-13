@@ -3,12 +3,14 @@ var lastQuery = "";
 $(document).ready(function() {
 	lastQuery = $("#txtQuery").val(); // don't show autocomplete when page loads
 	
-	setInterval(function(){
+	$("#txtQuery").keyup(function() {
 		var currentQuery = $("#txtQuery").val();
 		if (lastQuery !== currentQuery) {
 			lastQuery = currentQuery;
-			if (currentQuery === "")
+			if (currentQuery === "") {
+				hideSuggest();
 				return;
+			}
 			
 			$.ajax({
 				url : "services/autocomplete-service.jsp",
@@ -30,8 +32,7 @@ $(document).ready(function() {
 				}
 			});
 		}
-		
-	}, 600);
+	});
 });
 
 function updateAndShowSuggest(itemsHtml) {
