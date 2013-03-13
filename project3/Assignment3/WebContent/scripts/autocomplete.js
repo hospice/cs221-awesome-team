@@ -3,7 +3,7 @@ var lastQuery = "";
 $(document).ready(function() {
 	lastQuery = $("#txtQuery").val(); // don't show autocomplete when page loads
 	
-	$("#txtQuery").keyup(function() {
+	setInterval(function() {
 		var currentQuery = $("#txtQuery").val();
 		if (lastQuery !== currentQuery) {
 			lastQuery = currentQuery;
@@ -32,7 +32,7 @@ $(document).ready(function() {
 				}
 			});
 		}
-	});
+	}, 500);
 });
 
 function updateAndShowSuggest(itemsHtml) {
