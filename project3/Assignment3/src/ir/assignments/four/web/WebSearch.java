@@ -59,18 +59,20 @@ public class WebSearch {
 	public String[] getAutoCompleteSuggestions(String query) {
 		Set<String> completions = new HashSet<String>();
 		
-		// Use only the last term since we can only autocomplete a single word
-		String[] terms = query.trim().split(" ");
-		if (terms.length > 0) {
-			String termToComplete = terms[terms.length - 1];
-			Set<String> completeTerms = this.indexSearch.suggestTerms(termToComplete);
-			for (String completeTerm : completeTerms) {
-				if (completeTerm.equals(termToComplete))
-					continue; // no need to autocomplete
-				
-				// Just keep the completion (the part missing from the current query)
-				String completion = completeTerm.substring(termToComplete.length());
-				completions.add(completion);
+		if (!query.endsWith(" ")) { // no "last term"
+			// Use only the last term since we can only autocomplete a single word
+			String[] terms = query.trim().split(" ");
+			if (terms.length > 0) {
+				String termToComplete = terms[terms.length - 1];
+				Set<String> completeTerms = this.indexSearch.suggestTerms(termToComplete);
+				for (String completeTerm : completeTerms) {
+					if (completeTerm.equals(termToComplete))
+						continue; // no need to autocomplete
+					
+					// Just keep the completion (the part missing from the current query)
+					String completion = completeTerm.substring(termToComplete.length());
+					completions.add(completion);
+				}
 			}
 		}
 		
