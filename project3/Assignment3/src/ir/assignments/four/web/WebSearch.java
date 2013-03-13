@@ -43,6 +43,8 @@ public class WebSearch {
 			try {
 				title = this.indexSearch.getHighlights("title", query, doc.getTitle(), true); // entire "document"
 				description = this.indexSearch.getHighlights("content", query, doc.getBody(), false); // get fragments
+				if (description.length() > 200)
+					description = description.substring(0, 200);
 			}
 			catch (Exception e) {
 				e.printStackTrace();

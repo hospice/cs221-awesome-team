@@ -33,6 +33,10 @@ $(document).ready(function() {
 			});
 		}
 	}, 500);
+	
+	$("#txtQuery").blur(function() {
+		hideSuggest();
+	});
 });
 
 function updateAndShowSuggest(itemsHtml) {
