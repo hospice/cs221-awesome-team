@@ -71,6 +71,11 @@ body
 	margin-left: 60px;
 }
 
+#search-results-container .suggestion
+{
+	margin-bottom: 20px;	
+}
+
 .search-result
 {
 	margin-bottom: 23px;
