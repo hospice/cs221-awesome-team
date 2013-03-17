@@ -46,24 +46,11 @@ public class WebSearch {
 			// Use Lucene to highlight terms in the title and extract relevant fragments from the content
 			String title = "";
 			String description = "";
+
 			try {
 				title = this.indexSearch.getHighlights("title", query, doc.getTitle(), true); // entire "document"
-				description = this.indexSearch.getHighlights("content", query, doc.getBody(), false); // get fragments
-				if (description.length() > 250) {
-					// Too long, shorten
-					int cutoffIndex = 250;
-					
-					// Make sure not cutting off a bold tag (or it'll make the rest of the page bold)
-					String lowerCaseDescription = description.toLowerCase();
-					int lastBoldIndex = lowerCaseDescription.lastIndexOf("<b>");
-					if (lastBoldIndex > -1) {
-						int lastBoldClosingIndex = lowerCaseDescription.indexOf("</b>", lastBoldIndex);
-						if (lastBoldClosingIndex + "</b>".length() > cutoffIndex)
-							cutoffIndex = lastBoldClosingIndex + "</b>".length();
-					}
-					
-					description = description.substring(0, cutoffIndex) + "...";					
-				}
+				description = this.indexSearch.getHighlights("content", query, cleanBody(doc.getBody()), false); // get fragments
+				description = cleanDescription(description);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -75,6 +62,51 @@ public class WebSearch {
 
 		SearchResult[] displayResultsArray = displayResults.toArray(new SearchResult[displayResults.size()]);
 		return new WebResultSet(displayResultsArray, results.getTotalHits(), page, suggestedQuery); 
+	}
+	
+	private String cleanBody(String body) {
+		body = body.replace("Please enable javascript on your browser.", "");
+		body = body.replace("&nbsp;", " ");
+		
+		return body;
+	}
+	
+	private String cleanDescription(String description) {
+		// Make sure description not too long
+		int maxLength = 250;
+		if (description.length() > maxLength) {
+			// Too long, shorten
+			int cutoffIndex = maxLength;
+			
+			// Make sure not cutting off a bold tag (or it'll make the rest of the page bold)
+			String lowerCaseDescription = description.toLowerCase();
+			int lastBoldIndex = lowerCaseDescription.lastIndexOf("<b>");
+			if (lastBoldIndex > -1) {
+				int lastBoldClosingIndex = lowerCaseDescription.indexOf("</b>", lastBoldIndex);
+				if (lastBoldClosingIndex + "</b>".length() > cutoffIndex)
+					cutoffIndex = lastBoldClosingIndex + "</b>".length();
+			}
+			
+			description = description.substring(0, cutoffIndex) + "...";					
+		}
+		
+		// Make sure starts with letter or digits (or a tag)
+		char firstChar = description.charAt(0);
+		if (firstChar != '<' && !Character.isLetterOrDigit(firstChar)) {
+			int firstLetterOrDigitIndex = -1;
+			for (int i = 1; i < 100; i++) { // only check the first 30 characters or just give up
+				if (Character.isLetterOrDigit(description.charAt(i))) {
+					firstLetterOrDigitIndex = i;
+					break;
+				}
+			}
+			
+			if (firstLetterOrDigitIndex > -1) {
+				description = description.substring(firstLetterOrDigitIndex);
+			}
+		}
+		
+		return description;
 	}
 	
 	public String[] getAutoCompleteSuggestions(String query) {
