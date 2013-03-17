@@ -2,6 +2,15 @@ Team Members:
   1) Armando Pensado Valle <apensado@uci.edu>
   2) Vibhor Mathur <mathurv@uci.edu>
 
+Setup:
+ The setup of the search engine would consist of:
+   > Running the crawler (see previous project)
+   > Running "Indexer.java search" to create the Lucene index
+   > Running "Indexer.java autocomplete" to create the autocomplete index
+   > Running "Indexer.java spellchecker" to create the spellcheck index
+   > Deploying the app to an Apache Tomcat 7 server
+   Note: Paths are set by default to be within the project folder.
+
 External Libraries Used:
  > Lucene
  > jdbm2 (https://code.google.com/p/jdbm2/)
