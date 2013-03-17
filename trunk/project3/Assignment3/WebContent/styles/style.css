@@ -116,8 +116,7 @@ body
 	padding: 1px 10px;
 }
 
-#autocomplete .item:hover,
-#autocomplete .item:focus
+#autocomplete .item.hover
 {
 	background-color: #EEE;
 	cursor: pointer;
