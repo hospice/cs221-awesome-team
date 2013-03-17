@@ -34,8 +34,14 @@ $(document).ready(function() {
 		}
 	}, 500);
 	
-	$("#txtQuery").blur(function() {
-		hideSuggest();
+	$(document).click(function(e) {
+		// Check if mouse click was on search textbox or on the autosuggest dropdown
+		var inSearchElements = $(e.target).is("#txtQuery") || $(e.target).is("#autocomplete") || $(e.target).is("#autocomplete *");
+		
+		// Hide the autosuggest
+		if (!inSearchElements) {
+			hideSuggest();
+		}
 	});
 });
 
