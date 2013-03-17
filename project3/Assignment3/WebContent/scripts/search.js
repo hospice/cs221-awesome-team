@@ -13,7 +13,7 @@ $(document).ready(function() {
 			query : query,
 			page: $("#search-results-container").data("currentpage")
 		},
-		method : "POST",
+		method : "GET",
 		success : function(response) {
 			$("#loading-image-container").hide();
 			$("#search-results-container").html(response).fadeIn(400);
