@@ -7,20 +7,14 @@ import ir.assignments.four.storage.LinkDataStorage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
-import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -28,14 +22,11 @@ import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.spell.LuceneDictionary;
+import org.apache.lucene.search.spell.PlainTextDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -49,20 +40,31 @@ import org.apache.lucene.util.Version;
 public class Indexer {
 
 	public static void main(String[] args) {
-//		DocumentStorage docStorage = new DocumentStorage("docStorage\\docStorage");
-//		LinkDataStorage linkDataStorage = new LinkDataStorage("linkDataStorage\\linkDataStorage");
-//		try {
-//			Indexer indexer = new Indexer();
-//			//indexer.indexDocuments(docStorage, linkDataStorage, "docIndex");
-//			indexer.indexDocumentsEnhanced(docStorage, linkDataStorage, "docIndexEnhanced");
-//		}
-//		finally {
-//			docStorage.close();
-//			linkDataStorage.close();
-//		}
+		if (args == null || args.length == 0) {
+			System.out.println("");
+			return;
+		}
 		
-		Indexer indexer = new Indexer();
-		indexer.indexAutoComplete("C:\\Users\\Mando\\Desktop\\New folder\\docIndexEnhanced", "C:\\Users\\Mando\\Desktop\\New folder\\docIndexAutoComplete");		
+		String indexType = args[0].toLowerCase();
+		if (indexType.equals("search")) {
+			DocumentStorage docStorage = new DocumentStorage("docStorage\\docStorage");
+			LinkDataStorage linkDataStorage = new LinkDataStorage("linkDataStorage\\linkDataStorage");
+			try {
+				Indexer indexer = new Indexer();
+				//indexer.indexDocuments(docStorage, linkDataStorage, "docIndex");
+				indexer.indexDocumentsEnhanced(docStorage, linkDataStorage, "docIndexEnhanced");
+			}
+			finally {
+				docStorage.close();
+				linkDataStorage.close();
+			}
+		} else if (indexType.equals("autocomplete")) {
+			Indexer indexer = new Indexer();
+			indexer.indexAutoComplete("docIndexEnhanced", "docIndexAutoComplete");
+		} else if (indexType.equals("spellchecker")) {
+			Indexer indexer = new Indexer();
+			indexer.indexSpellChecker("spellChecker");
+		}	
 	}
 	
 	public void indexDocuments(DocumentStorage docStorage, String indexPath) {
@@ -189,7 +191,7 @@ public class Indexer {
 		
 		// Use an existing index to create an n-gram index to use for autocomplete
 		try {
-			Directory originalIndexDir = FSDirectory.open(new File(indexPath));			
+			Directory originalIndexDir = FSDirectory.open(new File(indexPath));
 			DirectoryReader originalIndexReader = DirectoryReader.open(originalIndexDir);
 			
 			AutoCompleteAnalyzer autoCompleteAnalyzer = new AutoCompleteAnalyzer();
@@ -249,6 +251,29 @@ public class Indexer {
 		}
 
 		System.out.println("Done");
+	}
+	
+	// Code borrowed from: http://www.javacodegeeks.com/2010/05/did-you-mean-feature-lucene-spell.html
+	public void indexSpellChecker(String spellCheckerIndexPath) {
+		// Build an index from a dictionary of English words		
+		try {
+			
+			Directory spellCheckIndexDir = FSDirectory.open(new File(spellCheckerIndexPath));
+			IndexWriterConfig indexConfig = new IndexWriterConfig(Version.LUCENE_41, new StandardAnalyzer(Version.LUCENE_41));
+			SpellChecker spellChecker = new SpellChecker(spellCheckIndexDir);
+			
+			try {
+				boolean fullMerge = false;
+				spellChecker.indexDictionary(new PlainTextDictionary(new File("wordlistDictionary.txt")), indexConfig, fullMerge);
+			}
+			finally {
+				spellChecker.close();
+				spellCheckIndexDir.close();
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static Pattern EXACTLY_ONE_NUMBER = Pattern.compile("^[^\\d]*\\d[^\\d]*$"); // compile only use

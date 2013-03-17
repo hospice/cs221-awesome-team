@@ -36,6 +36,12 @@
 
 	// Render the results
 	if (results != null && results.getResults().length > 0) {
+		String suggestedQuery = results.getSuggestedQuery();
+		if (suggestedQuery != null && !suggestedQuery.equals("")) {
+			String urlSuggestedQuery = URLEncoder.encode(suggestedQuery.replace("<b><i>", "").replace("</i></b>", ""), "UTF-8");
+			out.println("<div class=\"suggestion\">Did you mean: <a href=\"search.jsp?query=" + urlSuggestedQuery + "\">" + suggestedQuery + "</a></div>");
+		}
+		
 		for (SearchResult result : results.getResults()) {
 			out.println("<div class=\"search-result\">");
 

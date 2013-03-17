@@ -17,7 +17,7 @@ public class WebSearch {
 
 	public WebSearch() {
 		try {
-			this.indexSearch = new SearchFiles("docIndexEnhanced", "docIndexAutoComplete");
+			this.indexSearch = new SearchFiles("docIndexEnhanced", "docIndexAutoComplete", "docIndexSpellChecker");
 			this.docStorage = new DocumentStorage("docStorage\\docStorage");
 		}
 		catch (IOException e) {
@@ -28,9 +28,15 @@ public class WebSearch {
 	public WebResultSet search(String query, int page, int maxPerPage) {
 		ResultSet results = this.indexSearch.search(query, page, maxPerPage);
 
-		// Create the results 
+		// Create the results
 		ArrayList<SearchResult> displayResults = new ArrayList<SearchResult>();
 		List<String> urls = results.getUrls();
+		
+		// If there is a misspelled word, suggest a fixed query
+		String suggestedQuery = null;		
+		if (this.indexSearch.hasMisspelledWords(query)) {
+			suggestedQuery = this.indexSearch.spellChecker(query, 300); // must have at least 300 results
+		}
 
 		for (int i = 0; i < urls.size(); i++) {
 			String url = urls.get(i);
@@ -68,7 +74,7 @@ public class WebSearch {
 		}
 
 		SearchResult[] displayResultsArray = displayResults.toArray(new SearchResult[displayResults.size()]);
-		return new WebResultSet(displayResultsArray, results.getTotalHits(), page); 
+		return new WebResultSet(displayResultsArray, results.getTotalHits(), page, suggestedQuery); 
 	}
 	
 	public String[] getAutoCompleteSuggestions(String query) {

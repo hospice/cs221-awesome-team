@@ -4,11 +4,13 @@ public class WebResultSet {
 	private SearchResult[] results;
 	private int totalHits;
 	private int currentPage;
+	private String suggestedQuery;
 	
-	public WebResultSet(SearchResult[] results, int totalHits, int currentPage) {
+	public WebResultSet(SearchResult[] results, int totalHits, int currentPage, String suggestedQuery) {
 		this.results = results;
 		this.totalHits = totalHits;
 		this.currentPage = currentPage;
+		this.suggestedQuery = suggestedQuery;
 	}
 	
 	public SearchResult[] getResults() {
@@ -21,5 +23,9 @@ public class WebResultSet {
 	
 	public int getCurrentPage() { 
 		return this.currentPage;
+	}
+	
+	public String getSuggestedQuery() {
+		return this.suggestedQuery;
 	}
 }
