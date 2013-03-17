@@ -93,21 +93,24 @@ public class SearchFiles {
 			// Build query
 			Query[] queries = new Query[]
 			{
-				getFieldQuery(queryString, "urldomain", 5.3f),
+				getFieldQuery(queryString, "urldomain", 123.3f),
 				
-				getFieldSpanQuery(queryString, "title", 240.5f),
-				getFieldSpanQuery(queryString, "stemtitle", 77.7f),
-				getFieldNearQuery(queryString, "stemtitle", 1.0f),
+				getFieldPhraseQuery(queryString, "title", 3.4f),
+				getFieldQuery(queryString, "stemtitle", 51.2f),
 				
-				getFieldQuery(queryString, "content", 116.2f),
-				getFieldQuery(queryString, "stemcontent", 331.4f),
-				getFieldNearQuery(queryString, "stemcontent", 91.0f),
+				getFieldQuery(queryString, "content", 211.9f),
+				getFieldQuery(queryString, "stemcontent", 19.2f),
+
+				getFieldQuery(queryString, "importantcontent", 296.0f),
 				
-				getFieldQuery(queryString, "contentheaders", 15.3f),
-				getFieldQuery(queryString, "importantcontent", 129.9f),
+				getFieldQuery(queryString, "outgoingtext", 3.9f),
+				getFieldQuery(queryString, "anchortext", 2.3f),
+				getFieldQuery(queryString, "stemanchortext", 214.5f),
 				
-				getFieldQuery(queryString, "anchortext", 17.6f),
-				getFieldQuery(queryString, "stemanchortext", 74.6f)
+				getFieldNearQuery(queryString, "title", 4.8f),
+				getFieldNearQuery(queryString, "stemtitle", 112.2f),
+				getFieldNearQuery(queryString, "content", 91.0f),
+				getFieldNearQuery(queryString, "importantcontent", 1.1f)
 		    };
 			
 			BooleanQuery finalQuery = new BooleanQuery();
@@ -136,9 +139,9 @@ public class SearchFiles {
 				getFieldQuery(queryString, "urldomain", weightVector[1]),
 				
 				getFieldQuery(queryString, "title", weightVector[2]),
-				getFieldSpanQuery(queryString, "title", weightVector[3]),
+				getFieldPhraseQuery(queryString, "title", weightVector[3]),
 				getFieldQuery(queryString, "stemtitle", weightVector[4]),
-				getFieldSpanQuery(queryString, "stemtitle", weightVector[5]),
+				getFieldPhraseQuery(queryString, "stemtitle", weightVector[5]),
 				
 				getFieldQuery(queryString, "content", weightVector[6]),
 				getFieldQuery(queryString, "stemcontent", weightVector[7]),
